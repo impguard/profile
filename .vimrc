@@ -146,7 +146,7 @@ set sidescroll=1
 
 " ================ Custom Commands ==================
 
-command -nargs=1 SetTab set shiftwidth=<args> softtabstop=<args> tabstop=<args>
+command! -nargs=1 SetTab set shiftwidth=<args> softtabstop=<args> tabstop=<args>
 
 " ================ Custom Mappings ==================
 let mapleader = ","
