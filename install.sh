@@ -53,3 +53,6 @@ ask_and_do 'Install docker-compose?'       'brew install docker-compose'
 ask_and_do 'Install git?'                  'brew install git'
 ask_and_do 'Install hub?'                  'brew install hub'
 ask_and_do 'Install hub completions?'      'mkdir ~/.zsh/completions && curl https://raw.githubusercontent.com/github/hub/master/etc/hub.zsh_completion > ~/.zsh/completions/'
+
+ask_and_do 'Install python?'               'brew install python pyenv pyenv-virtualenv'
+ask_and_do 'Install chrome?'               'brew cask install chrome'
