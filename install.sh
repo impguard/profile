@@ -25,7 +25,7 @@ done
 ask_permission()
 {
     local message=$1
-    read -p "$message [y/n] " -n 1 reply
+    read -p "$message [y/n] " reply
     echo $reply
 }
 
@@ -42,6 +42,9 @@ ask_and_do()
     echo
 }
 
+echo 'It may be useful to have another window open to run various commands ' \
+     'homebrew asks you to run as things are installed.'
+
 ask_and_do 'Install homebrew?'             '/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"'
 ask_and_do 'Upgrade zsh?'                  'brew install zsh zsh-completions'
 ask_and_do 'Install oh-my-zsh?'            'sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"'
@@ -54,5 +57,8 @@ ask_and_do 'Install git?'                  'brew install git'
 ask_and_do 'Install hub?'                  'brew install hub'
 ask_and_do 'Install hub completions?'      'mkdir ~/.zsh/completions && curl https://raw.githubusercontent.com/github/hub/master/etc/hub.zsh_completion > ~/.zsh/completions/'
 
+ask_and_do 'Install iterm?'                'brew install iterm2'
+
 ask_and_do 'Install python?'               'brew install python pyenv pyenv-virtualenv'
 ask_and_do 'Install chrome?'               'brew cask install chrome'
+ask_and_do 'Install sublime?'              'brew cask install sublime-text'

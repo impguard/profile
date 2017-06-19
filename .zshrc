@@ -36,7 +36,7 @@ unsetopt rm_star_silent # ask for confirmation for `rm *' or `rm path/*'
 # COMPLETIONS
 ############################################################
 
-fpath=(~/.zsh/completions $fpath)
+fpath=(/usr/local/share/zsh-completions ~/.zsh/completions $fpath)
 autoload -U compinit && compinit
 
 ############################################################
@@ -65,9 +65,6 @@ antigen bundle zsh-users/zsh-syntax-highlighting
 
 # Bundle autojump
 antigen bundle robbyrussell/oh-my-zsh plugins/autojump
-
-# A lot of autocompletions
-antigen bundle zsh-users/zsh-completions src
 
 antigen apply
 
