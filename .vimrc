@@ -1,8 +1,4 @@
-﻿" ================ General Config ====================
-set number                      "Line numbers are good
-set cursorline                  "Show which line I'm on
-set history=1000                "Store lots of :cmdline history
-set showcmd                     "Show incomplete cmds down the bottom
+﻿set history=1000                "Store lots of :cmdline history
 set showmode                    "Show current mode down the bottom
 set gcr=a:blinkon0              "Disable cursor blink
 set visualbell                  "No sounds
@@ -12,12 +8,14 @@ set laststatus=2                "Turn on status line
 set exrc                        "Enable per-directory .vimrc files
 set secure                      "Disable unsafe commands in local .vimrc files
 set incsearch                   "Search incrementally instead of after I press enter
+set number                      "Show line numbers
+set nofoldenable                "Disable folding
 
 " Use Vim settings, rather then Vi settings (much better!).
 " This must be first, because it changes other options as a side effect.
 set nocompatible
 " Adjust esckeys option timeout length
-set timeoutlen=500
+set timeoutlen=300
 
 " This makes vim act like all other editors, buffers can
 " exist in the background without being in a window.
@@ -36,43 +34,69 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 " Vundle setup
 Plugin 'gmarik/Vundle.vim'
-" Coffeescript support
-Plugin 'kchmck/vim-coffee-script'
-" Scala support
-Plugin 'derekwyatt/vim-scala'
-" Tabular to help tabularize code (required for markdown support)
-Plugin 'godlygeek/tabular'
+
+" Javascript support
+Plugin 'pangloss/vim-javascript'
+" JSX support
+Plugin 'mxw/vim-jsx'
+" PostCSS support
+Plugin 'alexlafroscia/postcss-syntax.vim'
 " Markdown support
 Plugin 'plasticboy/vim-markdown'
-" IR Black theme
-Plugin 'wesgibbs/vim-irblack'
+
+" Python indentation
+Plugin 'Vimjas/vim-python-pep8-indent'
+" Tabular to help tabularize code (required for markdown support)
+Plugin 'godlygeek/tabular'
+" Emmet for cool html coding
+Plugin 'mattn/emmet-vim'
 " Airline status bar
 Plugin 'bling/vim-airline'
 " Git gutter
 Plugin 'airblade/vim-gitgutter'
-" Easy motion plugin for augmented motion controls
-Plugin 'easymotion/vim-easymotion'
-" Surround plugin to to handle 'surroundings'
-Plugin 'tpope/vim-surround'
-" Autocompletion helper
+" Autocomplete with tab
 Plugin 'ervandew/supertab'
 " File search
 Plugin 'ctrlpvim/ctrlp.vim'
+" NERD Tree
+Plugin 'scrooloose/nerdtree'
 " Hard time mode to help learn vim
 Plugin 'takac/vim-hardtime'
+" Asynchronous Linting Engine
+Plugin 'w0rp/ale'
+
+" IR Black theme
+Plugin 'wesgibbs/vim-irblack'
+
 call vundle#end()
 filetype on
 
-" ================ Easy Motion Settings =============
-map  / <Plug>(easymotion-sn)
-omap / <Plug>(easymotion-tn)
+" ================ Syntax association ===============
+au BufRead,BufNewFile Jenkinsfile set filetype=groovy
+au BufRead,BufNewFile .flake8 set filetype=dosini
+
+" ================ Emmet Settings ===================
+imap <expr> <c-j> emmet#expandAbbrIntelligent("\<c-j>")
+
+" ================ Hard Time Settings ===============
+" let g:hardtime_default_on = 1
 
 " ================ CtrlP Settings ===================
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_extensions = ['bookmarkdir']
 let g:ctrlp_open_new_file = 'r'
+let g:ctrlp_custom_ignore = 'node_modules\|\.git$\|\.pyc$|.cache|.DS_Store|.terraform'
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_show_hidden = 1
 
-" ================ Setup Colors =====================
+" ================ NERDTree Settings ================
+let NERDTreeIgnore = ['__pycache__', 'node_modules', '\.git$', '\.pyc$', '.cache', '.DS_Store', '.terraform']
+let NERDTreeShowHidden=1
+
+" ================ GitGutter Settings ===============
+let g:gitgutter_sign_column_always = 1
+
+" ================ Theme =====================
 colorscheme ir_black
 
 " ================ Turn Off Swap Files ==============
@@ -82,7 +106,6 @@ set nowb
 
 " ================ Indentation ======================
 set autoindent
-" set smartindent " Disable when using filetype indentation
 set smarttab
 set shiftwidth=4
 set softtabstop=4
@@ -97,12 +120,6 @@ set list listchars=trail:·,tab:»·
 
 set nowrap       "Don't wrap lines
 set linebreak    "Wrap lines at convenient points
-
-" ================ Folds ============================
-
-set foldmethod=indent   "fold based on indent
-set foldnestmax=3       "deepest fold is 3 levels
-set nofoldenable        "dont fold by default
 
 " ================ Completion =======================
 
@@ -119,6 +136,8 @@ set wildignore+=log/**
 set wildignore+=tmp/**
 set wildignore+=*.png,*.jpg,*.gif
 
+set wildignore+=__pycache__
+
 " ================ Scrolling ========================
 
 set scrolloff=8         "Start scrolling when we're 8 lines away from margins
@@ -131,3 +150,8 @@ command -nargs=1 SetTab set shiftwidth=<args> softtabstop=<args> tabstop=<args>
 
 " ================ Custom Mappings ==================
 let mapleader = ","
+
+" Close a buffer permanently
+map <leader>q :bp<bar>sp<bar>bn<bar>bd<CR>
+" Shortcut to toggle NERDTree
+map <leader>n :NERDTreeToggle<CR>
