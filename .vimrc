@@ -94,7 +94,8 @@ let NERDTreeIgnore = ['__pycache__', 'node_modules', '\.git$', '\.pyc$', '.cache
 let NERDTreeShowHidden=1
 
 " ================ GitGutter Settings ===============
-let g:gitgutter_sign_column_always = 1
+set signcolumn=yes
+
 
 " ================ Theme =====================
 colorscheme ir_black
