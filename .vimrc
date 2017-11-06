@@ -1,7 +1,7 @@
 ﻿set history=1000                "Store lots of :cmdline history
 set showmode                    "Show current mode down the bottom
 set gcr=a:blinkon0              "Disable cursor blink
-set visualbell                  "No sounds
+set errorbells                  "Beep when error occurs
 set autoread                    "Reload files changed outside vim
 set backspace=indent,eol,start  "Make backspace work properly
 set laststatus=2                "Turn on status line
