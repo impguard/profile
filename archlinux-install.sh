@@ -32,8 +32,13 @@ function ask_permission()
 {
     local message=$1
 
-    read -p "$message [y/n] " reply
-    echo $reply
+    if [ "$YES" == "yes" ]; then
+        echo "$message [y/n] y" >&2
+        echo "y"
+    else
+        read -p "$message [y/n] " reply
+        echo $reply
+    fi
 }
 
 function ask_and_do()
@@ -42,27 +47,38 @@ function ask_and_do()
     local action=$2
     local output=${3:-"$action"}
 
-    if [ "$YES" == "yes" ]; then
+    local reply
+    reply=$(ask_permission "$message")
+
+    if [[ "$reply" =~ ^[Yy]$ ]]; then
         echo "$output"
         eval "$action"
-        return
-    else
-        local reply=$(ask_permission "$message")
-        if [[ "$reply" =~ ^[Yy]$ ]]; then
-            echo "$output"
-            eval "$action"
-        fi
     fi
 
     echo
 }
 
+function has_been_setup()
+{
+    local string=$1
+    local file=$2
+    local item=$3
+
+    if grep "$string" "$file" &>/dev/null; then
+        echo "$item already setup...skipping"
+        echo "$message"
+        return 0
+    fi
+
+    return 1
+}
+
 function setup_vim()
 {
-    local command="source $(pwd)/.vimrc"
+    local command
+    command="source $(pwd)/.vimrc"
 
-    if grep "$command" ~/.vimrc &>/dev/null; then
-        echo 'vim already setup...skipping'
+    if has_been_setup "$command" ~/.vimrc vim; then
         return 0
     fi
 
@@ -72,22 +88,40 @@ function setup_vim()
 
 function setup_bashrc()
 {
-    local command="source $(pwd)/.bashrc"
+    local command
+    command="source $(pwd)/.bashrc"
 
-    if grep "$command" ~/.bashrc &>/dev/null; then
-        echo 'bash already setup...skipping'
+    if has_been_setup "$command" ~/.bashrc bash; then
         return 0
     fi
 
-    echo source "$(pwd)/.bashrc" >> ~/.bashrc
+    echo "$command" >> ~/.bashrc
 }
 
 function setup_autojump()
 {
-    echo 'ignoring setup currently until bashrc setup finished'
-    return 0
-    pacman -S autojump
-    echo source /etc/profile.d/autojump.bash >> ~/.bashrc
+    local command
+    command="source /etc/profile.d/autojump.bash"
+
+    if has_been_setup "$command" ~/.bashrc autojump; then
+        return 0
+    fi
+
+    sudo pacman -S autojump
+    echo "$command" >> ~/.bashrc
+}
+
+function setup_screen()
+{
+    local command
+    command="source $(pwd)/.screenrc"
+
+    if has_been_setup "$command" ~/.screenrc screen; then
+        return 0
+    fi
+
+    sudo pacman -S screen
+    echo "$command" >> ~/.screenrc
 }
 
 cat <<'EOM'
@@ -104,4 +138,8 @@ EOM
 ask_and_do 'Link .vimrc?' "setup_vim" "Sourcing local .vimrc in ~/.vimrc"
 ask_and_do 'Link .gitconfig?' "git config --global include.path $(pwd)/.gitconfig" "Including local .gitconfig in ~/.gitconfig"
 ask_and_do 'Link .bashrc?' 'setup_bashrc' "Sourcing local .bashrc in ~/.bashrc"
+ask_and_do 'Install shellcheck?' 'packer -S shellcheck' "Installing shellcheck with packer"
 ask_and_do 'Install jump?' 'setup_autojump' "Installing autojump and sourcing in ~/.bashrc"
+ask_and_do 'Install screen?' 'setup_screen' "Installing screen and sourcing local .screenrc in ~/.screenrc"
+
+echo 'Finished!'
