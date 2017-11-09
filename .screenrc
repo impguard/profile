@@ -1,33 +1,20 @@
-escape ^]a
+escape          ^]a                # set default command key
+startup_message off                # disable startup message
+defscrollback   10000              # scrollback limit
+shell           -/bin/bash         # shell to startup
+term            xterm-256color     # which term to use by default
+altscreen       on                 # Turn on altscreen
 
-bell_msg '^GBell in window %n'
+# status line settings
+# See: https://www.gnu.org/software/screen/manual/html_node/String-Escapes.html
+hardstatus alwayslastline
+hardstatus string '%{= kg}[ %{G}%H %{g}][%= %{= kw}%?%-Lw%?%{=b kR} (%{W}%n*%f %t%?(%u)%?%{=b kR})%{= kw}%?%+Lw%?%= %{g}][%{Y}%l%{g}] %{=b C}[ %m/%d %C%a ]'
 
-width 80
-height 24
-defscrollback 1000000
-
-shell -/bin/bash
-
+# default screens
 screen -t editor
 screen -t build
-screen -t admin
-screen -t services
-screen -t top
-screen -t services2
-screen -t local
-screen -t remote
-select 1
+screen -t test
+screen -t bash
+screen -t bash
+
 select 0
-
-startup_message off
-hardstatus alwayslastline
-hardstatus string '%{gk}[ %{G}%H %{g}][%= %{wk}%?%-Lw%?%{=b kR} (%{W}%n*%f %t%?(%u)%?%{=b kR})%{= kw}%?%+Lw%?%?%= %{g}][%{Y}%l%{g}] %{=b C}[ %m/%d %c ]%{W}'
-
-attrcolor b ".I"
-termcapinfo xterm 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
-defbce "on"
-# set TERM
-term xterm-256color
-vbell on
-vbell_msg ''
-termcapinfo *  vb=:
