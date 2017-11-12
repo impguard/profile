@@ -17,5 +17,6 @@ screen -t test
 screen -t bash
 screen -t bash
 
+# ensures that the default ^]] jumps between screen 1 and 0
 select 1
 select 0
