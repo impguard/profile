@@ -17,4 +17,5 @@ screen -t test
 screen -t bash
 screen -t bash
 
+select 1
 select 0
