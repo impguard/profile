@@ -43,6 +43,8 @@ Plugin 'mxw/vim-jsx'
 Plugin 'alexlafroscia/postcss-syntax.vim'
 " Markdown support
 Plugin 'plasticboy/vim-markdown'
+" Kotlin support
+Plugin 'udalov/kotlin-vim'
 
 " Python indentation
 Plugin 'Vimjas/vim-python-pep8-indent'

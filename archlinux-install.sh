@@ -124,6 +124,30 @@ function setup_screen()
     echo "$command" >> ~/.screenrc
 }
 
+function setup_codepath()
+{
+    mkdir -p $HOME/Code
+}
+
+function setup_codebin()
+{
+    local command
+    command="export PATH=$PATH:$HOME/Code/bin"
+
+    if has_been_setup "$command" ~/.bashrc codebin; then
+        return 0
+    fi
+
+    mkdir -p $HOME/Code/bin
+    echo "$command" >> ~/.bashrc
+}
+
+function setup_bake()
+{
+    curl https://raw.githubusercontent.com/kyleburton/bake/master/bake > $HOME/Code/bin/bake
+    chmod 755 $HOME/Code/bin/bake
+}
+
 cat <<'EOM'
 Current limitations
 
@@ -141,5 +165,8 @@ ask_and_do 'Link .bashrc?' 'setup_bashrc' "Sourcing local .bashrc in ~/.bashrc"
 ask_and_do 'Install shellcheck?' 'packer -S shellcheck' "Installing shellcheck with packer"
 ask_and_do 'Install jump?' 'setup_autojump' "Installing autojump and sourcing in ~/.bashrc"
 ask_and_do 'Install screen?' 'setup_screen' "Installing screen and sourcing local .screenrc in ~/.screenrc"
+
+ask_and_do 'Setup local code workspace (Note: this is required for the following commands)?' 'mkdir -p $HOME/Code/bin' "Creating $HOME/Code/bin"
+ask_and_do 'Setup bake?' 'setup_bake' "Loading bake into the local code bin at $HOME/Code/bin/bake"
 
 echo 'Finished!'

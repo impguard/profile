@@ -6,9 +6,26 @@ PS1='
 GIT_PS1_SHOWDIRTYSTATE=true
 
 ############################################################
+# Environment variables
+############################################################
+
+export CODEPATH=$HOME/Code
+export EDITOR=vim
+
+############################################################
+# Modify the PATH
+############################################################
+
+PATH=$PATH:$HOME/Code/bin
+
+############################################################
 # Useful helper functions
 ############################################################
 
-function doczap() {
+function dzap() {
     docker rm -f $1
+}
+
+function dprune() {
+    docker system prune
 }
