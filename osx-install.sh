@@ -1,64 +1,97 @@
 #!/usr/bin/env bash
 
-set -o errexit
-set -o pipefail
-set -o nounset
+source base-install.sh
 
-function usage() {
-    cat <<'EOM'
-Usage: ./install.sh
+cat <<'EOM'
+Current limitations
 
-This script should install a variety of packages to set up a typical OSX
-environment.
+- Expects homebrew already installed
+- Assumes git already installed
+- Assumes xcode-select already setup
+
+OSX works strange in that bash_profile is sourced instead of bashrc.
+
+(press ctrl-c to quit)
+
 EOM
-    exit 2
-}
 
-while getopts "h" opt; do
-    case "$opt" in
-        h)
-            usage
-            ;;
-    esac
-done
-
-ask_permission()
+function setup_bash()
 {
-    local message=$1
-    read -p "$message [y/n] " reply
-    echo $reply
-}
+    local command
+    command='/usr/local/bin/bash'
 
-ask_and_do()
-{
-    local message=$1
-    local action=$2
-
-    local reply=$(ask_permission "$message")
-    if [[ "$reply" =~ ^[Yy]$ ]]; then
-        echo "$action"
-        eval "$action"
+    if has_been_setup "$command" /etc/shells bash; then
+        return 0
     fi
-    echo
+
+    brew install bash bash-completion
+    echo 'test -f /usr/local/etc/bash_completion && . /usr/local/etc/bash_completion' >> ~/.bash_profile
+
+    sudo sh -c "echo $command >> /etc/shells"
+    chsh -s /usr/local/bin/bash
 }
 
-echo 'It may be useful to have another window open to run various commands ' \
-     'homebrew asks you to run as things are installed.'
+function setup_bash_profile()
+{
+    local command
+    command="source $(pwd)/.bashrc"
 
-ask_and_do 'Install homebrew?'             '/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"'
-ask_and_do 'Upgrade zsh?'                  'brew install zsh zsh-completions'
-ask_and_do 'Install oh-my-zsh?'            'sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"'
-ask_and_do 'Change to zsh?'                'chsh -s $(which zsh)'
-ask_and_do 'Link .vimrc?'                  'ln -sf $(pwd)/.vimrc ~/.vimrc'
-ask_and_do 'Link .zshrc?'                  'ln -sf $(pwd)/.zshrc ~/.zshrc'
-ask_and_do 'Install docker?'               'brew cask install docker'
-ask_and_do 'Install docker-compose?'       'brew install docker-compose'
-ask_and_do 'Install git?'                  'brew install git'
-ask_and_do 'Install hub?'                  'brew install hub'
-ask_and_do 'Install hub completions?'      'mkdir ~/.zsh/completions && curl https://raw.githubusercontent.com/github/hub/master/etc/hub.zsh_completion > ~/.zsh/completions/'
+    if has_been_setup "$command" ~/.bash_profile bash_profile; then
+        return 0
+    fi
 
-ask_and_do 'Install iterm?'                'brew install iterm2'
+    echo "$command" >> ~/.bash_profile
+}
 
-ask_and_do 'Install python?'               'brew install python pyenv pyenv-virtualenv'
-ask_and_do 'Install chrome?'               'brew cask install chrome'
-ask_and_do 'Install sublime?'              'brew cask install sublime-text'
+function setup_vim()
+{
+    local command
+    command="source $(pwd)/.vimrc"
+
+    if has_been_setup "$command" ~/.vimrc vim; then
+        return 0
+    fi
+
+    git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+    echo "$command" >> ~/.vimrc
+    echo 'Make sure you run :PluginInstall in vim!'
+}
+
+function setup_autojump()
+{
+    local command
+    command="test -f /usr/local/etc/profile.d/autojump.sh && . /usr/local/etc/profile.d/autojump.sh"
+
+    if has_been_setup "$command" ~/.bash_profile autojump; then
+        return 0
+    fi
+
+    brew install autojump
+    echo "$command" >> ~/.bash_profile
+}
+
+function setup_screen()
+{
+    local command
+    command="source $(pwd)/.screenrc"
+
+    if has_been_setup "$command" ~/.screenrc screen; then
+        return 0
+    fi
+
+    brew install screen
+    echo "$command" >> ~/.screenrc
+}
+
+ask_and_do 'Update bash?' 'setup_bash' 'Updating to latest version of bash'
+ask_and_do 'Link .bash_profile?' 'setup_bash_profile' "Sourcing local .bashrc in ~/.bash_profile"
+ask_and_do 'Setup vim?' 'setup_vim' 'Linking .vimrc and setting up Vundle'
+ask_and_do 'Link .gitconfig?' "git config --global include.path $(pwd)/.gitconfig" "Including local .gitconfig in ~/.gitconfig"
+ask_and_do 'Install jump?' 'setup_autojump' "Installing autojump"
+ask_and_do 'Install shellcheck?' 'brew install shellcheck' 'Installing shellcheck'
+ask_and_do 'Install screen?' 'setup_screen' "Installing screen and sourcing local .screenrc in ~/.screenrc"
+
+ask_and_do 'Install iterm?' 'brew cask install iterm2' 'Installing iterm2'
+ask_and_do 'Install chrome?' 'brew cask install google-chrome' 'Installing chrome'
+ask_and_do 'Install docker?' 'brew cask install docker' 'Installing docker'
+ask_and_do 'Install alfred?' 'brew cask install alfred' 'Installing alfred'

@@ -66,7 +66,6 @@ function has_been_setup()
 
     if grep "$string" "$file" &>/dev/null; then
         echo "$item already setup...skipping"
-        echo "$message"
         return 0
     fi
 
@@ -159,6 +158,7 @@ Current limitations
 
 EOM
 
+ask_and_do 'Update bash?' 'brew install bash' 'Updating bash to the latest version'
 ask_and_do 'Link .vimrc?' "setup_vim" "Sourcing local .vimrc in ~/.vimrc"
 ask_and_do 'Link .gitconfig?' "git config --global include.path $(pwd)/.gitconfig" "Including local .gitconfig in ~/.gitconfig"
 ask_and_do 'Link .bashrc?' 'setup_bashrc' "Sourcing local .bashrc in ~/.bashrc"
