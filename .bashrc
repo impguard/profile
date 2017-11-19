@@ -23,7 +23,7 @@ PATH=$PATH:$HOME/Code/bin
 ############################################################
 
 function dzap() {
-    docker rm -f $1
+    docker rm -f "$1"
 }
 
 function dprune() {
