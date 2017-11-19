@@ -9,13 +9,25 @@ you need to set things up.
 
 ```
 .bashrc         # Configuration for a bash environment
-.zshrc          # [DEPRECATED] Configuration for a zsh environment
 .screenrc       # Configuration for a screen environment
 .vimrc          # Configuration for vim
 .gitconfig      # Configuration for git
+.zshrc          # [DEPRECATED] Configuration for a zsh environment
 ```
 
-Some useful tools I always find useful include:
+Additional Spplications
+-----------------------
+
+Some additional tools I find useful included in each environment are:
 
 - `autojump`
 - `shellcheck`
+- `bake`
+
+Some additional applications I install if possible through automation are:
+
+- `Chrome`
+- `Docker`
+- `Alfred` for OSX
+- `Iterm` for OSX
+- `Alfred` for OSX
