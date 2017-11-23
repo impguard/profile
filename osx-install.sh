@@ -81,6 +81,9 @@ function setup_screen()
 
     brew install screen
     echo "$command" >> ~/.screenrc
+    echo 'If you are using iTerm go to Preferences > Profiles > Terminal'
+    echo 'and disable "Save lines to scrollback when an app status bar'
+    echo 'is present."'
 }
 
 function setup_bake()
