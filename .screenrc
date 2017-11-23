@@ -3,6 +3,7 @@ startup_message off                # disable startup message
 defscrollback   10000              # scrollback limit
 shell           -/bin/bash         # shell to startup
 term            xterm-256color     # which term to use by default
+# termcapinfo xterm* ti@:te@         # this fixes scrollback in some terminals (Uncomment if needed)
 altscreen       on                 # Turn on altscreen
 
 # status line settings
