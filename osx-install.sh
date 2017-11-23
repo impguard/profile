@@ -83,6 +83,20 @@ function setup_screen()
     echo "$command" >> ~/.screenrc
 }
 
+function setup_bake()
+{
+    local command
+    command="test -f /usr/local/opt/bake/bin/bake-completion.sh && . /usr/local/opt/bake/bin/bake-completion.sh"
+
+    if has_been_setup "$command" ~/.bash_profile bake; then
+        return 0
+    fi
+
+    brew tap --full github/kyleburton https://github.com/kyleburton/homebrew-kyleburton.git
+    brew install kyleburton/kyleburton/bake
+    echo "$command" >> ~/.bash_profile
+}
+
 ask_and_do 'Update bash?' 'setup_bash' 'Updating to latest version of bash'
 ask_and_do 'Link .bash_profile?' 'setup_bash_profile' "Sourcing local .bashrc in ~/.bash_profile"
 ask_and_do 'Setup vim?' 'setup_vim' 'Linking .vimrc and setting up Vundle'
@@ -90,6 +104,9 @@ ask_and_do 'Link .gitconfig?' "git config --global include.path $(pwd)/.gitconfi
 ask_and_do 'Install jump?' 'setup_autojump' "Installing autojump"
 ask_and_do 'Install shellcheck?' 'brew install shellcheck' 'Installing shellcheck'
 ask_and_do 'Install screen?' 'setup_screen' "Installing screen and sourcing local .screenrc in ~/.screenrc"
+
+ask_and_do 'Setup local code workspace' "mkdir -p $HOME/Code/bin" "Creating $HOME/Code/bin"
+ask_and_do 'Setup bake?' 'setup_bake' "Loading bake into the local code bin at $HOME/Code/bin/bake"
 
 ask_and_do 'Install iterm?' 'brew cask install iterm2' 'Installing iterm2'
 ask_and_do 'Install chrome?' 'brew cask install google-chrome' 'Installing chrome'
