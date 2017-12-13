@@ -11,6 +11,7 @@ GIT_PS1_SHOWDIRTYSTATE=true
 
 export CODEPATH=$HOME/Code
 export EDITOR=vim
+export HISTCONTROL=ignorespace
 
 ############################################################
 # Modify the PATH
