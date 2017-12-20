@@ -113,6 +113,7 @@ function setup_bake()
 
 ask_and_do 'Update bash?' 'setup_bash' 'Updating to latest version of bash'
 ask_and_do 'Link .bash_profile?' 'setup_bash_profile' "Sourcing local .bashrc in ~/.bash_profile"
+ask_and_do 'Install vim?' 'brew install vim' 'Updating to latest version of vim'
 ask_and_do 'Setup vim?' 'setup_vim' 'Linking .vimrc and setting up Vundle'
 ask_and_do 'Link .gitconfig?' "git config --global include.path $(pwd)/.gitconfig" "Including local .gitconfig in ~/.gitconfig"
 ask_and_do 'Install jump?' 'setup_autojump' "Installing autojump"
