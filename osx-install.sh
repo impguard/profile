@@ -100,6 +100,17 @@ function setup_bake()
     echo "$command" >> ~/.bash_profile
 }
 
+function setup_bake()
+{
+    if [ -f "$HOME/Code/bin/bake" ]; then
+        echo 'bake already installed...skipping'
+        return 0
+    fi
+
+    curl https://raw.githubusercontent.com/kyleburton/bake/master/bake > "$HOME/Code/bin/bake"
+    chmod 755 "$HOME/Code/bin/bake"
+}
+
 ask_and_do 'Update bash?' 'setup_bash' 'Updating to latest version of bash'
 ask_and_do 'Link .bash_profile?' 'setup_bash_profile' "Sourcing local .bashrc in ~/.bash_profile"
 ask_and_do 'Setup vim?' 'setup_vim' 'Linking .vimrc and setting up Vundle'

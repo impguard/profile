@@ -36,8 +36,8 @@ function ask_permission()
         echo "$message [y/n] y" >&2
         echo "y"
     else
-        read -p "$message [y/n] " reply
-        echo $reply
+        read -rp "$message [y/n] " reply
+        echo "$reply"
     fi
 }
 
@@ -125,7 +125,7 @@ function setup_screen()
 
 function setup_codepath()
 {
-    mkdir -p $HOME/Code
+    mkdir -p "$HOME/Code"
 }
 
 function setup_codebin()
@@ -137,14 +137,14 @@ function setup_codebin()
         return 0
     fi
 
-    mkdir -p $HOME/Code/bin
+    mkdir -p "$HOME/Code/bin"
     echo "$command" >> ~/.bashrc
 }
 
 function setup_bake()
 {
-    curl https://raw.githubusercontent.com/kyleburton/bake/master/bake > $HOME/Code/bin/bake
-    chmod 755 $HOME/Code/bin/bake
+    curl https://raw.githubusercontent.com/kyleburton/bake/master/bake > "$HOME/Code/bin/bake"
+    chmod 755 "$HOME/Code/bin/bake"
 }
 
 cat <<'EOM'
@@ -166,7 +166,7 @@ ask_and_do 'Install shellcheck?' 'packer -S shellcheck' "Installing shellcheck w
 ask_and_do 'Install jump?' 'setup_autojump' "Installing autojump and sourcing in ~/.bashrc"
 ask_and_do 'Install screen?' 'setup_screen' "Installing screen and sourcing local .screenrc in ~/.screenrc"
 
-ask_and_do 'Setup local code workspace (Note: this is required for the following commands)?' 'mkdir -p $HOME/Code/bin' "Creating $HOME/Code/bin"
+ask_and_do 'Setup local code workspace (Note: this is required for the following commands)?' "mkdir -p $HOME/Code/bin" "Creating $HOME/Code/bin"
 ask_and_do 'Setup bake?' 'setup_bake' "Loading bake into the local code bin at $HOME/Code/bin/bake"
 
 echo 'Finished!'

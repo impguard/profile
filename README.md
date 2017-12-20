@@ -1,4 +1,5 @@
-# profile
+profile
+=======
 
 Storing some standard profile settings for a linux-flavored environment.
 
@@ -15,7 +16,16 @@ you need to set things up.
 .zshrc          # [DEPRECATED] Configuration for a zsh environment
 ```
 
-Additional Spplications
+Code Directory
+--------------
+
+I default to a particular code directory structure that I setup in each
+environment.
+
+A common `Code` directory in the root directory which stores various Code
+projects as well as a shared bin path for useful utilities.
+
+Additional Applications
 -----------------------
 
 Some additional tools I find useful included in each environment are:
