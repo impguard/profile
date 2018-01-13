@@ -13,8 +13,6 @@ export CODEPATH=$HOME/Code
 export EDITOR=vim
 # Allows ignoring history by typing a space before a command
 export HISTCONTROL=ignorespace
-# Allows screen to automatically save history
-export PROMPT_COMMAND="history -a; history -n; ${PROMPT_COMMAND}"
 
 ############################################################
 # Modify the PATH
