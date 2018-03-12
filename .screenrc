@@ -15,8 +15,8 @@ hardstatus string '%{= kg}[ %{G}%H %{g}][%= %{= kw}%?%-Lw%?%{=b kR} (%{W}%n*%f %
 # default screens
 screen -t editor
 screen -t build
-screen -t test
-screen -t bash
+screen -t playground
+screen -t run
 screen -t bash
 
 # ensures that the default ^]] jumps between screen 1 and 0
