@@ -40,6 +40,8 @@ Plugin 'gmarik/Vundle.vim'
 Plugin 'pangloss/vim-javascript'
 " Typescript support
 Plugin 'leafgarland/typescript-vim'
+" Typescript autocompletion
+Plugin 'Quramy/tsuquyomi'
 " JSX support
 Plugin 'mxw/vim-jsx'
 " PostCSS support
