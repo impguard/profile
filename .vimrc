@@ -38,6 +38,8 @@ Plugin 'gmarik/Vundle.vim'
 
 " Javascript support
 Plugin 'pangloss/vim-javascript'
+" Typescript support
+Plugin 'leafgarland/typescript-vim'
 " JSX support
 Plugin 'mxw/vim-jsx'
 " PostCSS support
