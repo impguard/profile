@@ -153,6 +153,7 @@ Current limitations
 - Expects packer already installed
 - Expects docker already installed
 - Expects git already installed
+- Expects vim already installed
 
 (press ctrl-c to quit)
 
