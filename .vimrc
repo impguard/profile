@@ -40,8 +40,6 @@ Plugin 'gmarik/Vundle.vim'
 Plugin 'pangloss/vim-javascript'
 " Typescript support
 Plugin 'leafgarland/typescript-vim'
-" Typescript autocompletion
-Plugin 'Quramy/tsuquyomi'
 " JSX support
 Plugin 'mxw/vim-jsx'
 " PostCSS support
@@ -61,8 +59,8 @@ Plugin 'mattn/emmet-vim'
 Plugin 'bling/vim-airline'
 " Git gutter
 Plugin 'airblade/vim-gitgutter'
-" Autocomplete with tab
-Plugin 'ervandew/supertab'
+" Autocompletion
+Plugin 'Valloric/YouCompleteMe'
 " File search
 Plugin 'ctrlpvim/ctrlp.vim'
 " NERD Tree
@@ -81,6 +79,10 @@ filetype on
 " ================ Syntax association ===============
 au BufRead,BufNewFile Jenkinsfile set filetype=groovy
 au BufRead,BufNewFile .flake8 set filetype=dosini
+
+" ================ YCM Settings =====================
+set completeopt-=preview
+let g:ycm_add_preview_to_completeopt = 0
 
 " ================ Emmet Settings ===================
 imap <expr> <c-j> emmet#expandAbbrIntelligent("\<c-j>")
