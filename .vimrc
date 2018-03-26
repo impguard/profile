@@ -72,8 +72,9 @@ Plugin 'takac/vim-hardtime'
 " Asynchronous Linting Engine
 Plugin 'w0rp/ale'
 
-" IR Black theme
-Plugin 'wesgibbs/vim-irblack'
+" Color scheme
+Plugin 'tomasiser/vim-code-dark'
+
 
 call vundle#end()
 filetype on
@@ -107,9 +108,11 @@ let NERDTreeShowHidden=1
 " ================ GitGutter Settings ===============
 set signcolumn=yes
 
-
 " ================ Theme =====================
-colorscheme ir_black
+set t_Co=256
+set t_ut=
+colorscheme codedark
+let g:airline_theme = 'codedark'
 
 " ================ Turn Off Swap Files ==============
 set noswapfile
