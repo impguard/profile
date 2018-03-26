@@ -73,7 +73,7 @@ Plugin 'takac/vim-hardtime'
 Plugin 'w0rp/ale'
 
 " Color scheme
-Plugin 'tomasiser/vim-code-dark'
+Plugin 'morhetz/gruvbox'
 
 
 call vundle#end()
@@ -109,10 +109,9 @@ let NERDTreeShowHidden=1
 set signcolumn=yes
 
 " ================ Theme =====================
-set t_Co=256
-set t_ut=
-colorscheme codedark
-let g:airline_theme = 'codedark'
+" set t_Co=256
+" set t_ut=
+colorscheme gruvbox
 
 " ================ Turn Off Swap Files ==============
 set noswapfile
