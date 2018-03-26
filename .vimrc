@@ -55,6 +55,8 @@ Plugin 'Vimjas/vim-python-pep8-indent'
 Plugin 'godlygeek/tabular'
 " Emmet for cool html coding
 Plugin 'mattn/emmet-vim'
+" Adding Adding commenting functionality
+Plugin 'scrooloose/nerdcommenter'
 " Airline status bar
 Plugin 'bling/vim-airline'
 " Git gutter
