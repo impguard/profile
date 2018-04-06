@@ -36,6 +36,8 @@ call vundle#begin()
 " Vundle setup
 Plugin 'gmarik/Vundle.vim'
 
+" Terraform support
+Plugin 'hashivim/vim-terraform'
 " Javascript support
 Plugin 'pangloss/vim-javascript'
 " Typescript support
@@ -44,8 +46,6 @@ Plugin 'leafgarland/typescript-vim'
 Plugin 'mxw/vim-jsx'
 " PostCSS support
 Plugin 'alexlafroscia/postcss-syntax.vim'
-" Markdown support
-Plugin 'plasticboy/vim-markdown'
 " Kotlin support
 Plugin 'udalov/kotlin-vim'
 
@@ -81,6 +81,7 @@ filetype on
 
 " ================ Syntax association ===============
 au BufRead,BufNewFile Jenkinsfile set filetype=groovy
+au BufRead,BufNewFile *.jenkinsfile set filetype=groovy
 au BufRead,BufNewFile .flake8 set filetype=dosini
 
 " ================ YCM Settings =====================
@@ -109,8 +110,8 @@ let NERDTreeShowHidden=1
 set signcolumn=yes
 
 " ================ Theme =====================
-" set t_Co=256
-" set t_ut=
+set t_Co=256
+set t_ut=
 colorscheme gruvbox
 
 " ================ Turn Off Swap Files ==============
