@@ -103,7 +103,7 @@ let g:ctrlp_map = '<c-p>'
 let g:ctrlp_show_hidden = 1
 
 " ================ NERDTree Settings ================
-let NERDTreeIgnore = ['__pycache__', 'node_modules', '\.git$', '\.pyc$', '.cache', '.DS_Store', '.terraform']
+let NERDTreeIgnore = ['\.\.$', '\.$', '__pycache__', 'node_modules', '\.git$', '\.pyc$', '.cache', '.DS_Store', '.terraform']
 let NERDTreeShowHidden=1
 
 " ================ GitGutter Settings ===============
