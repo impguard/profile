@@ -14,6 +14,7 @@ hardstatus string '%{= kg}[ %{G}%H %{g}][%= %{= kw}%?%-Lw%?%{=b kR} (%{W}%n*%f %
 
 # default screens
 screen -t editor
+screen -t admin
 screen -t build
 screen -t service
 screen -t database
