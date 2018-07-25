@@ -112,6 +112,8 @@ set signcolumn=yes
 " ================ Theme =====================
 set t_Co=256
 set t_ut=
+set background=dark
+let g:gruvbox_contrast_dark = 'hard'
 colorscheme gruvbox
 
 " ================ Turn Off Swap Files ==============
