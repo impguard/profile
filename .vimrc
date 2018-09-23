@@ -36,25 +36,29 @@ call vundle#begin()
 " Vundle setup
 Plugin 'gmarik/Vundle.vim'
 
-" Terraform support
+" Terraform
 Plugin 'hashivim/vim-terraform'
-" Javascript support
+" Typescript
+Plugin 'leafgarland/typescript-vim'         " Syntax highlighting
+Plugin 'Quramy/tsuquyomi'                   " Auto-completion
+" Python
+Plugin 'Vimjas/vim-python-pep8-indent'      " Auto-indentation
+Plugin 'davidhalter/jedi-vim'               " Auto-completion
+" Javascript
 Plugin 'pangloss/vim-javascript'
-" Typescript support
-Plugin 'leafgarland/typescript-vim'
-" JSX support
+" JSX
 Plugin 'mxw/vim-jsx'
-" PostCSS support
+" PostCSS
 Plugin 'alexlafroscia/postcss-syntax.vim'
-" Kotlin support
+" Kotlin
 Plugin 'udalov/kotlin-vim'
 
-" Python indentation
-Plugin 'Vimjas/vim-python-pep8-indent'
+" Asynchronous Linting Engine
+Plugin 'w0rp/ale'
+" Supertab
+Plugin 'ervandew/supertab'
 " Tabular to help tabularize code (required for markdown support)
 Plugin 'godlygeek/tabular'
-" Emmet for cool html coding
-Plugin 'mattn/emmet-vim'
 " Adding Adding commenting functionality
 Plugin 'scrooloose/nerdcommenter'
 " Airline status bar
@@ -67,8 +71,6 @@ Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'scrooloose/nerdtree'
 " Hard time mode to help learn vim
 Plugin 'takac/vim-hardtime'
-" Asynchronous Linting Engine
-Plugin 'w0rp/ale'
 
 " Color scheme
 Plugin 'morhetz/gruvbox'
