@@ -84,9 +84,12 @@ au BufRead,BufNewFile Jenkinsfile set filetype=groovy
 au BufRead,BufNewFile *.jenkinsfile set filetype=groovy
 au BufRead,BufNewFile .flake8 set filetype=dosini
 
-" ================ YCM Settings =====================
-set completeopt-=preview
-let g:ycm_add_preview_to_completeopt = 0
+" ================ Supertab Settings=================
+let g:SuperTabDefaultCompletionType = 'context'
+let g:SuperTabContextDefaultCompletionType = '<c-x><c-o>'
+
+" ================ Tsuquyomi Settings================
+let g:tsuquyomi_disable_default_mappings = 1
 
 " ================ Emmet Settings ===================
 imap <expr> <c-j> emmet#expandAbbrIntelligent("\<c-j>")
