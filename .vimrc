@@ -61,8 +61,6 @@ Plugin 'scrooloose/nerdcommenter'
 Plugin 'bling/vim-airline'
 " Git gutter
 Plugin 'airblade/vim-gitgutter'
-" Autocompletion
-Plugin 'Valloric/YouCompleteMe'
 " File search
 Plugin 'ctrlpvim/ctrlp.vim'
 " NERD Tree
