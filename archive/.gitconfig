@@ -28,7 +28,7 @@
     ign = ls-files -o -i --exclude-standard
 [core]
     autocrlf = input
-    editor = vim
+    editor = nvim
     excludesfile = ~/.gitignore
 
 [push]
