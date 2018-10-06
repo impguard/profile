@@ -1,0 +1,15 @@
+- name: Copying gitconfig
+  become: no
+  copy:
+    src: gitconfig
+    dest: ~/.gitconfig
+
+- name: Acquiring git bash completion
+  become: no
+  get_url:
+    url: https://github.com/git/git/blob/8976500cbbb13270398d3b3e07a17b8cc7bff43f/contrib/completion/git-prompt.bash
+    dest: ~/.bashrc.d/git-prompt.bashrc
+
+- name: Installing git
+  apt:
+    name: git

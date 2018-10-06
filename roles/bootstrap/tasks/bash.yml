@@ -1,0 +1,11 @@
+- name: Copying bashrc
+  become: no
+  copy:
+    src: bashrc
+    dest: ~/.bashrc
+
+- name: Copying common bash configurations
+  become: no
+  copy:
+    src: common.bashrc
+    dest: ~/.bashrc.d/common.bashrc

@@ -1,0 +1,17 @@
+- name: Updates apt cache
+  import_tasks: apt.yml
+  when: ansible_os_family == 'Debian'
+
+- name: Install git
+  import_tasks: git.yml
+  when: ansible_os_family == 'Debian'
+
+- name: Setup bash
+  import_tasks: bash.yml
+
+- name: Install linuxbrew
+  import_tasks: linuxbrew.yml
+  when: ansible_os_family == 'Debian'
+
+- name: Install neovim
+  import_tasks: neovim.yml
