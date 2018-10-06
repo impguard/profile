@@ -11,10 +11,10 @@
 
 # Neovim
 
-# - name: Install neovim
-#   become: no
-#   homebrew:
-#     name: neovim
+- name: Install neovim
+  become: no
+  homebrew:
+    name: neovim
 
 - name: Setup plug directory
   file:
@@ -38,9 +38,11 @@
     marker: "# {mark} ANSIBLE - autojump"
     content: source {{ brew_prefix }}/share/autojump/autojump.bash
 
-# fzf
+# fzf, ag
 
-- name: Install fzf
+- name: Install fzf, ag
   homebrew:
-    name: fzf
-
+    name:
+    - fzf
+    - ag
+    - shellcheck

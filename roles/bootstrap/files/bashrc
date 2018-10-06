@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 for file in $HOME/.bashrc.d/*.bashrc; do
+  # shellcheck disable=SC1090
   source "$file"
 done
 
@@ -16,9 +17,11 @@ GIT_PS1_SHOWDIRTYSTATE=true
 ############################################################
 
 export CODEPATH=$HOME/Code
-export EDITOR=vim
+export EDITOR=nvim
 # Allows ignoring history by typing a space before a command
 export HISTCONTROL=ignorespace
+# Customizes what files fzf finds
+export FZF_DEFAULT_COMMAND='ag -g "" --hidden --ignore "node_modules|.git"'
 
 ############################################################
 # Modify the PATH

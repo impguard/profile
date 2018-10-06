@@ -22,7 +22,7 @@
   import_tasks: homebrew.yml
   when:
   - ansible_os_family == 'Darwin'
-    # - brewstatus.rc | int != 0
+  - brewstatus.rc | int != 0
 
 - name: Setup common utilities
   become: no

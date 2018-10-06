@@ -10,6 +10,18 @@
     name: ~/.bashrc.d/
     state: directory
 
+- name: Sourcing in .bash_profile
+  vars:
+    disable: "# shellcheck disable=SC1090"
+  blockinfile:
+    dest: ~/.bash_profile
+    block: |
+      {{ disable }}
+      source "$HOME/.bashrc"
+    marker: "# {mark} ANSIBLE - bashrc"
+    insertbefore: BOF
+    create: yes
+
 # Git
 
 - name: Acquiring git bash completion
