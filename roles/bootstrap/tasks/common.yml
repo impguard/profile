@@ -1,20 +1,13 @@
-# Bash
+# Gather facts
 
-- name: Copying bashrc
-  copy:
-    src: bashrc
-    dest: ~/.bashrc
+- name: Gather brew facts
+  shell:
+    brew --prefix
+  register: brewpath
 
-# Screen
-
-- name: Installing GNU screen
-  homebrew:
-    name: screen
-
-- name: Copying screenrc
-  copy:
-    src: screenrc
-    dest: ~/.screenrc
+- name: Create brew facts
+  set_fact:
+    brew_prefix: "{{ brewpath.stdout }}"
 
 # Neovim
 
@@ -33,22 +26,21 @@
     url: https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     dest: ~/.local/share/nvim/site/autoload/plug.vim
 
-- name: Setup neovim configs
-  copy:
-    src: neovim
-    dest: ~/.config/nvim/init.vim
-
-# fzf
-- name: Install fzf
-  homebrew:
-    name: fzf
-
 # autojump
+
 - name: Install autojump
   homebrew:
     name: autojump
 
 - name: Sourcing autojump in bashrc
   blockinfile:
-    marker: "{mark} ANSIBLE - autojump"
-    content: source {{ linuxbrew_prefix }}/share/autojump/autojump.sh
+    path: ~/.bashrc
+    marker: "# {mark} ANSIBLE - autojump"
+    content: source {{ brew_prefix }}/share/autojump/autojump.bash
+
+# fzf
+
+- name: Install fzf
+  homebrew:
+    name: fzf
+

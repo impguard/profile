@@ -2,13 +2,21 @@
   import_tasks: apt.yml
   when: ansible_os_family == 'Debian'
 
-- name: Install git
-  import_tasks: git.yml
-  when: ansible_os_family == 'Debian'
+- name: Copy common dotfiles
+  become: no
+  import_tasks: dotfiles.yml
+
+- name: Check if brew is installed
+  become: no
+  shell: command -V brew
+  ignore_errors: yes
+  register: brewstatus
 
 - name: Install linuxbrew
   import_tasks: linuxbrew.yml
-  when: ansible_os_family == 'Debian'
+  when:
+  - ansible_os_family == 'Debian'
+  - brewstatus.rc | int != 0
 
 - name: Setup common utilities
   become: no

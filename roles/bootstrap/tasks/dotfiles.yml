@@ -1,0 +1,44 @@
+# Bash
+
+- name: Copying bashrc
+  copy:
+    src: bashrc
+    dest: ~/.bashrc
+
+# Git
+
+- name: Acquiring git bash completion
+  become: no
+  get_url:
+    url: https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
+    dest: ~/.bashrc.d/git-completion.bashrc
+
+- name: Acquiring git bash prompt
+  become: no
+  get_url:
+    url: https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh
+    dest: ~/.bashrc.d/git-prompt.bashrc
+
+- name: Copying gitconfig
+  become: no
+  copy:
+    src: gitconfig
+    dest: ~/.gitconfig
+
+# Screen
+
+- name: Installing GNU screen
+  homebrew:
+    name: screen
+
+- name: Copying screenrc
+  copy:
+    src: screenrc
+    dest: ~/.screenrc
+
+# Neovim
+
+- name: Setup neovim configs
+  copy:
+    src: neovim
+    dest: ~/.config/nvim/init.vim

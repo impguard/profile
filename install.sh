@@ -2,4 +2,4 @@
 
 export ANSIBLE_LOG_PATH=./ansible.log
 
-ansible-playbook $@ -i hosts bootstrap.yml
+ansible-playbook -Ki hosts bootstrap.yml
