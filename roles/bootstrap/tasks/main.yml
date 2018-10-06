@@ -18,6 +18,12 @@
   - ansible_os_family == 'Debian'
   - brewstatus.rc | int != 0
 
+- name: Install homebrew
+  import_tasks: homebrew.yml
+  when:
+  - ansible_os_family == 'Darwin'
+    # - brewstatus.rc | int != 0
+
 - name: Setup common utilities
   become: no
   import_tasks: common.yml

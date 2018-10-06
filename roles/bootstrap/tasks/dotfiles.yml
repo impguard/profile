@@ -5,6 +5,11 @@
     src: bashrc
     dest: ~/.bashrc
 
+- name: Creating bashrc.d
+  file:
+    name: ~/.bashrc.d/
+    state: directory
+
 # Git
 
 - name: Acquiring git bash completion

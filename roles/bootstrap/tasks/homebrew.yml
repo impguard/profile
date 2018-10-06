@@ -1,0 +1,34 @@
+- name: Download homebrew installer
+  get_url:
+    url: https://raw.githubusercontent.com/Homebrew/install/master/install
+    dest: /tmp/homebrew.sh
+    mode: 0755
+
+- name: Run homebrew installer
+  become: no
+  shell: /tmp/homebrew.sh
+
+- name: Cleanup homebrew installer
+  file:
+    name: /tmp/homebrew.sh
+    state: absent
+
+- name: Gather homebrew path
+  become: no
+  shell: brew --prefix
+  register: homebrewpath
+
+- name: Create homebrew fact
+  set_fact:
+    homebrew_prefix: "{{ homebrewpath.stdout }}"
+
+- name: Update path for homebrew
+  become: no
+  blockinfile:
+    dest: "~/.bashrc.d/homebrew.bashrc"
+    block: |
+      export PATH={{ homebrew_prefix }}/bin:{{ homebrew_prefix }}/sbin:{{ ansible_env.PATH }}
+    marker: "# {mark} ANSIBLE - homebrew"
+    insertbefore: BOF
+    create: yes
+
