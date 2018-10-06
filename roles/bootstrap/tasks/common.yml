@@ -9,6 +9,16 @@
   set_fact:
     brew_prefix: "{{ brewpath.stdout }}"
 
+# fzf, ag, git
+
+- name: Install fzf, ag
+  homebrew:
+    name:
+    - fzf
+    - ag
+    - shellcheck
+    - git
+
 # Neovim
 
 - name: Install neovim
@@ -26,6 +36,9 @@
     url: https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     dest: ~/.local/share/nvim/site/autoload/plug.vim
 
+- name: Setup neovim
+  shell: nvim +PlugInstall +qall
+
 # autojump
 
 - name: Install autojump
@@ -37,12 +50,3 @@
     path: ~/.bashrc
     marker: "# {mark} ANSIBLE - autojump"
     content: source {{ brew_prefix }}/share/autojump/autojump.bash
-
-# fzf, ag
-
-- name: Install fzf, ag
-  homebrew:
-    name:
-    - fzf
-    - ag
-    - shellcheck
