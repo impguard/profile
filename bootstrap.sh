@@ -1,3 +1,5 @@
 #!/usr/bin/env bash
 
-ansible-playbook -K -i hosts bootstrap.yml
+export ANSIBLE_LOG_PATH=./ansible.log
+
+ansible-playbook $@ -i hosts bootstrap.yml

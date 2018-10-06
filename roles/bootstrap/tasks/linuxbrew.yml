@@ -30,6 +30,10 @@
     brew --prefix
   register: brewpath
 
+- name: Create linuxbrew fact
+  set_fact:
+    linuxbrew_prefix: "{{ brewpath.stdout }}"
+
 - name: Update path for linuxbrew
   become: no
   environment:
@@ -37,7 +41,7 @@
   blockinfile:
     dest: "~/.bashrc.d/linuxbrew.bashrc"
     block: |
-      export PATH={{ brewpath.stdout }}/bin:{{ brewpath.stdout }}/sbin:{{ ansible_env.PATH }}
+      export PATH={{ linuxbrew_prefix }}/bin:{{ linuxbrew_prefix }}/sbin:{{ ansible_env.PATH }}
     marker: "# {mark} ANSIBLE - linuxbrew"
     insertbefore: BOF
     create: yes
