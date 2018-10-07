@@ -44,10 +44,6 @@
 
 # Screen
 
-- name: Installing GNU screen
-  homebrew:
-    name: screen
-
 - name: Copying screenrc
   copy:
     src: screenrc
