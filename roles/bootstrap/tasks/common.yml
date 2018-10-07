@@ -11,9 +11,10 @@
 
 # fzf, ag, git
 
-- name: Install fzf, ag
+- name: Install useful utilities (screen, fzf, ag...)
   homebrew:
     name:
+    - screen
     - fzf
     - ag
     - shellcheck
