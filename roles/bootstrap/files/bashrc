@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-for file in $HOME/.bashrc.d/*.bashrc; do
+for file in "$HOME"/.bashrc.d/*.bashrc; do
   # shellcheck disable=SC1090
   source "$file"
 done
