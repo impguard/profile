@@ -23,7 +23,6 @@
 # Neovim
 
 - name: Install neovim
-  become: no
   homebrew:
     name: neovim
 
