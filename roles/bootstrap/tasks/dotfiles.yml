@@ -51,6 +51,11 @@
 
 # Neovim
 
+- name: Setup neovim directory
+  file:
+    name: ~/.config/nvim/
+    state: directory
+
 - name: Setup neovim configs
   copy:
     src: neovim
