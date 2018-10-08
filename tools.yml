@@ -1,0 +1,5 @@
+- name: Setup local environment with common tools
+  hosts: localhost
+  connection: local
+  roles:
+    - tools

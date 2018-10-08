@@ -2,9 +2,15 @@
   import_tasks: apt.yml
   when: ansible_os_family == 'Debian'
 
-- name: Copy common dotfiles
+- name: Setup bashrc
   become: no
-  import_tasks: dotfiles.yml
+  import_tasks: bashrc.yml
+
+- name: Setup code directory
+  become: no
+  file:
+    name: ~/code
+    state: directory
 
 - name: Check if brew is installed
   become: no
@@ -23,7 +29,3 @@
   when:
   - ansible_os_family == 'Darwin'
   - brewstatus.rc | int != 0
-
-- name: Setup common utilities
-  become: no
-  import_tasks: common.yml
