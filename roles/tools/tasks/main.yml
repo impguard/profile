@@ -22,6 +22,18 @@
     - neovim
     - autojump
 
+# docker
+
+- name: Install docker via homebrew if on mac
+  homebrew:
+    name: docker
+  when: ansible_os_family == "Darwin"
+
+- name: Install docker via apt if on ubuntu
+  become: yes
+  import_tasks: docker.yml
+  when: ansible_os_family == 'Debian'
+
 # git
 
 - name: Acquiring git bash completion
