@@ -22,5 +22,5 @@
 - name: Add user to docker user group
   become: no
   user:
-    name: {{ user }}
+    name: "{{ user }}"
     group: docker
