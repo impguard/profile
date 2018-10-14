@@ -72,7 +72,9 @@
 
 - name: Install typescript
   npm:
-    name: typescript
+    name:
+    - typescript
+    - neovim
     global: yes
 
 
