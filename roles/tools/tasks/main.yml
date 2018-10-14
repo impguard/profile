@@ -5,9 +5,14 @@
   shell: brew --prefix
   register: brewprefix
 
+- name: Gather user
+  shell: whoami
+  register: user
+
 - name: Set brew prefix fact
   set_fact:
     brew_prefix: "{{ brewprefix.stdout }}"
+    user: "{{ user.stdout }}"
 
 - name: Install useful tools (screen, fzf, ag...)
   homebrew:

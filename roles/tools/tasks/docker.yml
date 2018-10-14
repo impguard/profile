@@ -20,7 +20,7 @@
     update_cache: yes
 
 - name: Add user to docker user group
-  become: no
+  become: yes
   user:
     name: "{{ user }}"
     group: docker
