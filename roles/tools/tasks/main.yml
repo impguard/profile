@@ -86,6 +86,13 @@
     src: neovim
     dest: ~/.config/nvim/init.vim
 
+- name: Cleanup fzf installation
+  replace:
+    path: ~/.config/nvim/init.vim
+    regexp: "Plug '/usr/local/opt/fzf'"
+    replace: "Plug '{{ brew_prefix }}/opt/fzf'"
+  when: ansible_os_family == 'Debian'
+
 - name: Setup plug directory
   file:
     path: ~/.local/share/nvim/site/autoload/
