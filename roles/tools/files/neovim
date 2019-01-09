@@ -34,6 +34,9 @@ Plug 'mhartington/nvim-typescript', {'do': './install.sh'}
 Plug 'zchee/deoplete-jedi'
 Plug 'Vimjas/vim-python-pep8-indent'
 
+" Rust
+Plug 'rust-lang/rust.vim'
+
 " Javascript
 Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
