@@ -2,8 +2,8 @@
 
 set -eux
 
-read -p "Github Name : " name
-read -p "Github Email: " email
+read -rp "Github Name : " name
+read -rp "Github Email: " email
 
 git config --global user.name "$name"
 git config --global user.email "$email"

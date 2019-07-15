@@ -11,12 +11,13 @@ Linux based systems.
 2. Run the following commands to run lubuntu preinstallation
 ```
 apt upgrade
-apt install curl git
+apt install curl git tilix
 ```
+3. Startup Tilix
 
 ## Installation
 
-Run the following commands to setup the local environment
+Run the following command to setup the local environment
 ```
 bash -c "$(curl https://raw.githubusercontent.com/impguard/profile/master/setup.sh)"
 ```

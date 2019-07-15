@@ -1,8 +1,9 @@
 [color]
     ui = true
+
 [user]
-    name = kwu
-    email = kwu@riotgames.com
+    name = Kevin Wu
+    email = contact@kevinwu.io
 
 [alias]
     st = status
