@@ -4,6 +4,7 @@ set -eu -o pipefail
 
 PROFILE_ROOT="$HOME/.profile.d"
 PROFILE_STAGING="$PROFILE_ROOT/staging"
+PROFILE_ENV="$PROFILE_STAGING/env"
 PLATFORM=$(uname)
 
 ########################################
@@ -33,24 +34,19 @@ function link_home
   cp -a "$PROFILE_STAGING/home/." "$HOME/"
 }
 
-function pre_install
+function perform_install
 {
-  pushd "$PROFILE_STAGING"
-  for file in "$PROFILE_STAGING"/pre/*; do
+  local filename
+
+  for file in "$PROFILE_STAGING/$1"/*; do
+    filename=$(basename "$file")
+
+    mkdir -p "$PROFILE_ENV/$filename"
+    pushd "$PROFILE_ENV/$filename"
     log "Running pre-install: $file"
     $file
+    popd
   done
-  popd
-}
-
-function post_install
-{
-  pushd "$PROFILE_STAGING"
-  for file in "$PROFILE_STAGING"/post/*; do
-    log "Running post-install: $file"
-    $file
-  done
-  popd
 }
 
 ########################################
@@ -75,7 +71,7 @@ function install
   echo "  PLATFORM=$PLATFORM"
 
   # Ensure directories exist
-  mkdir -p "$PROFILE_STAGING"
+  mkdir -p "$PROFILE_ENV"
 
   # Stage files
   stage Base
@@ -85,7 +81,7 @@ function install
   if [ -n "${NO_POST_INSTALL:-}" ]; then
     log "NO_INSTALL set, not running post install"
   else
-    pre_install
+    perform_install pre
   fi
 
   # Copying home files
@@ -99,7 +95,7 @@ function install
   if [ -n "${NO_POST_INSTALL:-}" ]; then
     log "NO_INSTALL set, not running post install"
   else
-    post_install
+    perform_install post
   fi
 }
 
