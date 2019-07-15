@@ -11,13 +11,30 @@ PLATFORM=$(uname)
 # Helpers
 ########################################
 
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+CLEAR='\033[0m'
+
 function log
 {
   local message=$1
-  local green='\033[0;32m'
-  local clear='\033[0m'
+  echo -e "$GREEN$message$CLEAR"
+}
 
-  echo -e "$green$message$clear"
+function logerror
+{
+  local message=$1
+  echo -e "$RED$message$CLEAR"
+}
+
+function pushd
+{
+  command pushd "$@" > /dev/null
+}
+
+function popd
+{
+  command popd > /dev/null
 }
 
 function stage
@@ -43,8 +60,8 @@ function perform_install
 
     mkdir -p "$PROFILE_INSTALL/$filename"
     pushd "$PROFILE_INSTALL/$filename"
-    log "Running pre-install: $file"
-    $file
+    log "Running install: $file"
+    $file || logerror "Install failed: $file"
     popd
   done
 }
