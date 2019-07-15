@@ -19,5 +19,5 @@ apt install curl git tilix
 
 Run the following command to setup the local environment
 ```
-bash -c "$(curl https://raw.githubusercontent.com/impguard/profile/master/setup.sh)"
+bash -c "$(curl https://raw.githubusercontent.com/impguard/profile/master/install.sh)"
 ```
