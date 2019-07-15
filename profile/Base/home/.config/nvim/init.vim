@@ -27,25 +27,25 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/echodoc.vim'
 
 " Typescript
-Plug 'HerringtonDarkholme/yats.vim'
-Plug 'mhartington/nvim-typescript', {'do': './install.sh'}
+" Plug 'HerringtonDarkholme/yats.vim'
+" Plug 'mhartington/nvim-typescript', {'do': './install.sh'}
 
 " Python
-Plug 'zchee/deoplete-jedi'
-Plug 'Vimjas/vim-python-pep8-indent'
+" Plug 'zchee/deoplete-jedi'
+" Plug 'Vimjas/vim-python-pep8-indent'
 
 " Rust
-Plug 'rust-lang/rust.vim'
+" Plug 'rust-lang/rust.vim'
 
 " Javascript
-Plug 'pangloss/vim-javascript'
-Plug 'mxw/vim-jsx'
+" Plug 'pangloss/vim-javascript'
+" Plug 'mxw/vim-jsx'
 " Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
 " Plug 'ternjs/tern_for_vim'
 
 " Terraform
-Plug 'hashivim/vim-terraform'
-Plug 'juliosueiras/vim-terraform-completion'
+" Plug 'hashivim/vim-terraform'
+" Plug 'juliosueiras/vim-terraform-completion'
 
 " File search
 Plug 'junegunn/fzf', { 'dir': '~/.fzf' }
