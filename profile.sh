@@ -4,7 +4,7 @@ set -eu -o pipefail
 
 PROFILE_ROOT="$HOME/.profile.d"
 PROFILE_STAGING="$PROFILE_ROOT/staging"
-PROFILE_ENV="$PROFILE_STAGING/env"
+PROFILE_INSTALL="$PROFILE_STAGING/install"
 PLATFORM=$(uname)
 
 ########################################
@@ -41,8 +41,8 @@ function perform_install
   for file in "$PROFILE_STAGING/$1"/*; do
     filename=$(basename "$file")
 
-    mkdir -p "$PROFILE_ENV/$filename"
-    pushd "$PROFILE_ENV/$filename"
+    mkdir -p "$PROFILE_INSTALL/$filename"
+    pushd "$PROFILE_INSTALL/$filename"
     log "Running pre-install: $file"
     $file
     popd
@@ -71,7 +71,7 @@ function install
   echo "  PLATFORM=$PLATFORM"
 
   # Ensure directories exist
-  mkdir -p "$PROFILE_ENV"
+  mkdir -p "$PROFILE_INSTALL"
 
   # Stage files
   stage Base
