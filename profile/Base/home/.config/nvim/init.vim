@@ -9,6 +9,9 @@ set incsearch                   " Search incrementally instead of after I press 
 set timeoutlen=300 		          " Adjust esckeys option timeout length
 set hidden 			                " Buffers can exist in the background
 set laststatus=2                " Enable status line
+set guicursor=                  " Always use block cursor
+set nohlsearch                  " Disable highlight search
+set noshowmode                  " Don't show the mode
 
 " Automatically remove trailing whitespace
 autocmd BufWritePre * :%s/\s\+$//e
@@ -21,13 +24,31 @@ call plug#begin('~/.local/share/nvim/plugged')
 
 " Deoplete completion
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'Shougo/echodoc.vim'
 
 " Typescript
 Plug 'HerringtonDarkholme/yats.vim'
 Plug 'mhartington/nvim-typescript', {'do': './install.sh'}
 
+" Python
+Plug 'zchee/deoplete-jedi'
+Plug 'Vimjas/vim-python-pep8-indent'
+
+" Rust
+Plug 'rust-lang/rust.vim'
+
+" Javascript
+Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx'
+" Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
+" Plug 'ternjs/tern_for_vim'
+
+" Terraform
+Plug 'hashivim/vim-terraform'
+Plug 'juliosueiras/vim-terraform-completion'
+
 " File search
-Plug '/usr/bin/fzf'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf' }
 Plug 'junegunn/fzf.vim'
 " NERD Tree
 Plug 'scrooloose/nerdtree'
@@ -43,17 +64,35 @@ Plug 'editorconfig/editorconfig-vim'
 Plug 'w0rp/ale'
 " Show Github changes
 Plug 'airblade/vim-gitgutter'
+" Useful tabularize function
+Plug 'godlygeek/tabular'
 
 " Color scheme
 Plug 'morhetz/gruvbox'
 
 call plug#end()
 
+" ================ Common Settings ================
+let mapleader = ","
+
 " ================ Deoplete Settings ==============
 let g:deoplete#enable_at_startup = 1
+inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 
-" ================ fzf Settings ===================
-let mapleader = ","
+" Adjust delay to 30 ms
+call deoplete#custom#option('auto_complete_delay', 30)
+
+" Silence the  messages in the command line
+" such as 'The only match', 'Pattern not found', 'Back at original", etc.
+set shortmess+=c
+
+" ================ Tern Settings =================
+" let g:tern#command = ["tern"]
+" let g:tern#arguments = ["--persistent"]
+
+" ================ Echodoc Settings ==============
+let g:echodoc#enable_at_startup = 1
+set completeopt-=preview
 
 " ================ fzf Settings ===================
 noremap <c-p> :Files<CR>
@@ -64,9 +103,6 @@ let NERDTreeShowHidden=1
 noremap <leader>n :NERDTreeToggle<CR>
 
 " ================ Theme =========================
-" let g:gruvbox_contrast_dark = 'hard'
-" set t_Co=256
-" set t_ut=
 set background=dark
 colorscheme gruvbox
 
