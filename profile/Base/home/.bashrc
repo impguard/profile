@@ -40,5 +40,7 @@ export FZF_DEFAULT_COMMAND='ag -g "" --hidden --ignore "node_modules|.git"'
 PATH=$PATH:$HOME/bin
 
 ############################################################
-# Useful helper functions
+# Useful helper functions or aliases
 ############################################################
+
+alias ls="ls --color"
