@@ -13,7 +13,8 @@ Linux based systems.
 apt upgrade
 apt install curl git tilix
 ```
-3. Startup Tilix (Note: after installation, make sure you change the Tilix to match nvim)
+3. Startup Tilix (Note: after installation, make sure you change the Tilix to
+   match nvim)
 
 ## Installation
 
