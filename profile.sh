@@ -55,6 +55,11 @@ function perform_install
 {
   local filename
 
+  if [ ! -d "$PROFILE_STAGING/$1" ]; then
+    log "Nothing to install from $PROFILE_STAGING/$1"
+    return
+  fi
+
   for file in "$PROFILE_STAGING/$1"/*; do
     filename=$(basename "$file")
 
