@@ -4,10 +4,12 @@
 # Source files
 ############################################################
 
-for file in "$HOME"/.bashrc.d/*; do
-  # shellcheck disable=SC1090
-  source "$file"
-done
+if [ -d "$HOME/.bashrc.d" ]; then
+  for file in "$HOME"/.bashrc.d/*; do
+    # shellcheck disable=SC1090
+    source "$file"
+  done
+fi
 
 for file in "$HOME"/.profile.d/staging/source/*; do
   # shellcheck disable=SC1090
