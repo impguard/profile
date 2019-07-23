@@ -39,7 +39,7 @@ export FZF_DEFAULT_COMMAND='ag -g "" --hidden --ignore "node_modules|.git"'
 # Modify the PATH
 ############################################################
 
-PATH=$PATH:$HOME/bin
+PATH=$PATH:$HOME/bin:/usr/lib/go-1.12/bin
 
 ############################################################
 # Useful helper functions or aliases
