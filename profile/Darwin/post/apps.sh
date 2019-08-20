@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-brew cask install chrome docker slack iterm2
+brew cask install google-chrome docker slack iterm2 || true

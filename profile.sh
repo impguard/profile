@@ -119,6 +119,8 @@ function install
   else
     perform_install post
   fi
+
+  log "Installation complete!"
 }
 
 function main
