@@ -32,8 +32,8 @@ Plug 'Shougo/echodoc.vim'
 " Plug 'mhartington/nvim-typescript', {'do': './install.sh'}
 
 " Python
-" Plug 'zchee/deoplete-jedi'
-" Plug 'Vimjas/vim-python-pep8-indent'
+Plug 'deoplete-plugins/deoplete-jedi'
+Plug 'Vimjas/vim-python-pep8-indent'
 
 " Rust
 " Plug 'rust-lang/rust.vim'
