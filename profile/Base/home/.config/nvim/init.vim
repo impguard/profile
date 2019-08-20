@@ -88,6 +88,10 @@ call deoplete#custom#option('auto_complete_delay', 30)
 " such as 'The only match', 'Pattern not found', 'Back at original", etc.
 set shortmess+=c
 
+" ================ Python Settings ===============
+let g:python_host_prog = '/Users/kwu/.pyenv/versions/neovim/bin/python'
+let g:python3_host_prog = '/Users/kwu/.pyenv/versions/neovim/bin/python'
+
 " ================ Tern Settings =================
 " let g:tern#command = ["tern"]
 " let g:tern#arguments = ["--persistent"]
