@@ -100,8 +100,8 @@ function install
   stage "$PLATFORM"
 
   # Pre Install
-  if [ -n "${NO_POST_INSTALL:-}" ]; then
-    log "NO_INSTALL set, not running post install"
+  if [ -n "${NO_PRE_INSTALL:-}" ]; then
+    log "NO_INSTALL set, not running pre install"
   else
     perform_install pre
   fi
