@@ -47,6 +47,5 @@ PATH=$PATH:$HOME/bin
 
 alias ls="ls --color"
 
-function devpy {
-  eval "$(pyenv init -)"
-}
+# Initialize pyenv
+eval "$(pyenv init -)"
