@@ -49,7 +49,7 @@ Plug 'Shougo/echodoc.vim'
 " Plug 'juliosueiras/vim-terraform-completion'
 
 " File search
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf', { 'dir': '~/.fzf' }
 Plug 'junegunn/fzf.vim'
 " NERD Tree
 Plug 'scrooloose/nerdtree'
