@@ -34,6 +34,7 @@ Plug 'Shougo/echodoc.vim'
 " Python
 Plug 'deoplete-plugins/deoplete-jedi'
 Plug 'Vimjas/vim-python-pep8-indent'
+Plug 'davidhalter/jedi-vim'
 
 " Rust
 " Plug 'rust-lang/rust.vim'
@@ -87,6 +88,10 @@ call deoplete#custom#option('auto_complete_delay', 30)
 " Silence the  messages in the command line
 " such as 'The only match', 'Pattern not found', 'Back at original", etc.
 set shortmess+=c
+
+" ================ Jedi-Vim Settings =============
+let g:jedi#completions_enabled = 0
+let g:jedi#use_splits_not_buffers = "right"
 
 " ================ Python Settings ===============
 let g:python_host_prog = '/Users/kwu/.pyenv/versions/neovim/bin/python'
