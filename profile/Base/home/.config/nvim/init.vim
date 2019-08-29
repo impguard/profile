@@ -91,7 +91,6 @@ set shortmess+=c
 
 " ================ Jedi-Vim Settings =============
 let g:jedi#completions_enabled = 0
-let g:jedi#use_splits_not_buffers = "right"
 
 " ================ Python Settings ===============
 let g:python_host_prog = '/Users/kwu/.pyenv/versions/neovim/bin/python'
