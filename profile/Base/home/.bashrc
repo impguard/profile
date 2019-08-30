@@ -47,5 +47,3 @@ PATH=$PATH:$HOME/bin
 
 alias ls="ls --color"
 
-# Initialize pyenv
-eval "$(pyenv init -)"
