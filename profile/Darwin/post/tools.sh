@@ -11,4 +11,5 @@ brew install \
   the_silver_searcher \
   bash-completion \
   git \
+  python \
   || true
