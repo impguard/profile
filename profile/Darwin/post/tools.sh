@@ -10,4 +10,5 @@ brew install \
   shellcheck \
   the_silver_searcher \
   bash-completion \
+  git \
   || true

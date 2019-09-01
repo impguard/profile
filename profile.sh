@@ -132,6 +132,9 @@ function main
     install)
       install "$@"
       ;;
+    copy)
+      NO_PRE_INSTALL=1 NO_POST_INSTALL=1 install "$@"
+      ;;
     *)
       help
       ;;

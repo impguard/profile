@@ -22,8 +22,16 @@ apt install curl git tilix
 2. Run the following commands to install brew and additional utilities
 ```
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-brew install curl git
+brew install curl git coreutils
 ```
+3. Note that before the installation, you will have to temporarily add coreutils to your PATH
+```
+PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+```
+4. Make sure you open `System Preferences > Keyboard > Shortcuts` and adjust
+   the defaults for ctrl-left, right, up and down. Set Mission Control left and
+   right space movements to `ctrl-cmd-left` and `ctrl-cmd-right`.
+5. In the same preferences panel, change `Full Keyboard Access` to `All Controls`
 
 ## Installation
 
