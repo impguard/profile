@@ -12,6 +12,7 @@ set laststatus=2                " Enable status line
 set guicursor=                  " Always use block cursor
 set nohlsearch                  " Disable highlight search
 set noshowmode                  " Don't show the mode
+set termguicolors
 
 " Automatically remove trailing whitespace
 autocmd BufWritePre * :%s/\s\+$//e
@@ -68,7 +69,8 @@ Plug 'airblade/vim-gitgutter'
 Plug 'godlygeek/tabular'
 
 " Color scheme
-Plug 'morhetz/gruvbox'
+Plug 'lifepillar/vim-solarized8'
+" Plug 'morhetz/gruvbox'
 
 call plug#end()
 
@@ -104,7 +106,7 @@ noremap <leader>n :NERDTreeToggle<CR>
 
 " ================ Theme =========================
 set background=dark
-colorscheme gruvbox
+colorscheme solarized8_flat
 
 " ================ Indentation ===================
 set autoindent
