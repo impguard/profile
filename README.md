@@ -3,7 +3,7 @@
 Helps setup my personal profile based on the OS being used. It's designed for
 Linux based systems.
 
-## Pre-Installation
+## OS-specific Instructions
 
 ### linux (ubuntu-flavor)
 
@@ -28,10 +28,15 @@ brew install curl git coreutils
 ```
 PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
 ```
-4. Make sure you open `System Preferences > Keyboard > Shortcuts` and adjust
-   the defaults for ctrl-left, right, up and down. Set Mission Control left and
-   right space movements to `ctrl-cmd-left` and `ctrl-cmd-right`.
-5. In the same preferences panel, change `Full Keyboard Access` to `All Controls`
+4. Make sure you open `System Preferences > Trackpad` settings and adjust
+   accordingly.
+5. Make sure you open `System Preferences > Keyboard > Shortcuts` and adjust
+   the defaults for ctrl-left, right, up and down. All mission control settings
+   should be adjusted to `ctrl-cmd` instead of `ctrl`, and `Application
+   Windows` should be disabled.
+6. In the same preferences panel, change `Full Keyboard Access` to `All Controls`
+7. Change the iTerm2 profile to leverage Solarized with the Minimal theme
+8. Once installed, launch hammerspoon and adjust its settings accordingly
 
 ## Installation
 
