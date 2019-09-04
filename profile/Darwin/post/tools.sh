@@ -12,6 +12,5 @@ brew install \
   bash-completion \
   git \
   python \
-  python \
   pyenv \
   || true
