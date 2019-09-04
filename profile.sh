@@ -92,7 +92,8 @@ function install
   echo "  PROFILE_STAGING=$PROFILE_STAGING"
   echo "  PLATFORM=$PLATFORM"
 
-  # Ensure directories exist
+  # Reset directories
+  rm -rf "$PROFILE_STAGING"
   mkdir -p "$PROFILE_INSTALL"
 
   # Stage files
