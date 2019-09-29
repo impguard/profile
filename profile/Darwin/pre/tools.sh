@@ -12,4 +12,5 @@ brew install \
   bash-completion \
   git \
   python \
+  tmux \
   || true

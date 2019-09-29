@@ -92,10 +92,6 @@ set shortmess+=c
 " ================ Jedi-Vim Settings =============
 let g:jedi#completions_enabled = 0
 
-" ================ Python Settings ===============
-let g:python_host_prog = '/Users/kwu/.pyenv/versions/neovim/bin/python'
-let g:python3_host_prog = '/Users/kwu/.pyenv/versions/neovim/bin/python'
-
 " ================ Tern Settings =================
 " let g:tern#command = ["tern"]
 " let g:tern#arguments = ["--persistent"]
@@ -115,6 +111,11 @@ noremap <leader>n :NERDTreeToggle<CR>
 " ================ Theme =========================
 set background=dark
 colorscheme solarized8_flat
+
+" ================ Lightline Colorscheme =========
+let g:lightline = {
+  \ 'colorscheme': 'solarized',
+  \ }
 
 " ================ Indentation ===================
 set autoindent
