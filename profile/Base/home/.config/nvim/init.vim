@@ -123,3 +123,7 @@ set shiftwidth=2
 set softtabstop=2
 set tabstop=2
 set expandtab
+
+" ================ Source ========================
+
+source $HOME/.config/nvim/source/python.vim

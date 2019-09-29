@@ -13,4 +13,5 @@ brew install \
   git \
   python \
   pyenv \
+  pyenv-virtualenv \
   || true

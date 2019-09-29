@@ -4,7 +4,7 @@
 # Source files
 ############################################################
 
-if [ ! -z "$(ls -A "$HOME/.bashrc.d/")" ]; then
+if [ -n "$(ls -A "$HOME/.bashrc.d/")" ]; then
   for file in "$HOME"/.bashrc.d/*; do
     # shellcheck disable=SC1090
     source "$file"
@@ -47,3 +47,8 @@ PATH=$PATH:$HOME/bin
 
 alias ls="ls --color"
 
+function enable_python
+{
+  eval "$(pyenv init -)"
+  eval "$(pyenv virtualenv-init -)"
+}
