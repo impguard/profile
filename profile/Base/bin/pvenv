@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+if [ "$#" != 1 ]; then
+  echo "usage: pvenv <PYTHON_VERSION>"
+  echo
+  echo "A helper to setup a virtualenv using pyenv-virtualenv This wrapper"
+  echo "will setup a virtualenv with the same name as the directory this"
+  echo "command is run based ont he python version specified. Any additional"
+  echo "flags will be passed to pyenv virtualenv. The resulting environment"
+  echo "will be set as the local pyenv version."
+
+  exit 0
+fi
+
+version=$1
+directory=$(basename "$(pwd)")
+
+shift
+
+pyenv virtualenv "$@" "$version" "$directory"
+pyenv local "$directory"
