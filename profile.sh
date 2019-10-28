@@ -81,6 +81,15 @@ function help
 
   install
     Installs the profile based on your platform.
+
+  copy
+    Simply copies the home files and avoids installing apps and tools.
+
+  pre
+    Runs the preinstall.
+
+  post
+    Runs the postinstall.
   "
   exit 1
 }
@@ -118,6 +127,8 @@ function install
   if [ -n "${NO_POST_INSTALL:-}" ]; then
     log "NO_INSTALL set, not running post install"
   else
+    # shellcheck disable=SC1090
+    source "$HOME/.bashrc"
     perform_install post
   fi
 
@@ -135,6 +146,12 @@ function main
       ;;
     copy)
       NO_PRE_INSTALL=1 NO_POST_INSTALL=1 install "$@"
+      ;;
+    pre)
+      NO_HOME=1 NO_POST_INSTALL=1 install "$@"
+      ;;
+    post)
+      NO_HOME=1 NO_PRE_INSTALL=1 install "$@"
       ;;
     *)
       help
