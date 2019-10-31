@@ -27,3 +27,5 @@ pyenv activate neovim3
 pip install neovim
 
 echo "let g:python3_host_prog = '$(pyenv which python)'" >> "$SOURCE_FILENAME"
+
+nvim +'PlugUpdate --sync' +qa
