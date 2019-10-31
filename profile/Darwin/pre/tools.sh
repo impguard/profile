@@ -12,6 +12,4 @@ brew install \
   bash-completion \
   git \
   python \
-  pyenv \
-  pyenv-virtualenv \
   || true

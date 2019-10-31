@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# shellcheck disable=SC1090
+source "$HOME/.bin/pyenv/bin"
+
 SOURCE_DIR="$HOME/.config/nvim/source"
 SOURCE_FILENAME="$SOURCE_DIR/python.vim"
 
