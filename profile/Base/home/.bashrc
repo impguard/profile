@@ -39,7 +39,7 @@ export FZF_DEFAULT_COMMAND='ag -g "" --hidden --ignore "node_modules|.git"'
 # Modify the PATH
 ############################################################
 
-PATH=$HOME/.profile.d/staging/bin:$PATH
+PATH=$HOME/.profile.d/staging/bin:$HOME/.bin/:$PATH
 
 ############################################################
 # Useful helper functions or aliases
