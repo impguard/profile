@@ -11,7 +11,7 @@ if [ -n "$(ls -A "$HOME/.bashrc.d/")" ]; then
   done
 fi
 
-for file in "$HOME"/.profile.d/staging/source/*; do
+for file in "$HOME"/.source/*; do
   # shellcheck disable=SC1090
   source "$file"
 done
@@ -39,14 +39,17 @@ export FZF_DEFAULT_COMMAND='ag -g "" --hidden --ignore "node_modules|.git"'
 # Modify the PATH
 ############################################################
 
-PATH=$HOME/.profile.d/staging/bin:$HOME/.bin/:$PATH
+PATH=$HOME/.bin/:$PATH
 
 ############################################################
-# Setup goenv
+# Setup env tools
 ############################################################
 
 export GOENV_ROOT="$HOME/.bin/goenv"
 export PATH="$GOENV_ROOT/bin:$PATH"
+
+export PYENV_ROOT="$HOME/.bin/pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
 
 ############################################################
 # Useful helper functions or aliases

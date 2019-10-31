@@ -45,10 +45,16 @@ function stage
   fi
 }
 
-function link_home
+function link_home_files
 {
   log "Linking home files"
   cp -a "$PROFILE_STAGING/home/." "$HOME/"
+
+  log "Linking bin files"
+  cp -a "$PROFILE_STAGING/bin/." "$HOME/.bin"
+
+  log "Linking source files"
+  cp -a "$PROFILE_STAGING/source/." "$HOME/.source"
 }
 
 function perform_install
@@ -121,6 +127,7 @@ function install
     log "NO_HOME set, not copying to home dir"
   else
     link_home
+    link_bin
   fi
 
   # Post Install
