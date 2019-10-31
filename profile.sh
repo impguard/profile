@@ -110,6 +110,8 @@ function install
   # Reset directories
   rm -rf "$PROFILE_STAGING"
   mkdir -p "$PROFILE_INSTALL"
+  mkdir -p "$HOME/.bin"
+  mkdir -p "$HOME/.source"
 
   # Stage files
   stage Base
@@ -126,8 +128,7 @@ function install
   if [ -n "${NO_HOME:-}" ]; then
     log "NO_HOME set, not copying to home dir"
   else
-    link_home
-    link_bin
+    link_home_files
   fi
 
   # Post Install
@@ -135,7 +136,6 @@ function install
     log "NO_INSTALL set, not running post install"
   else
     # shellcheck disable=SC1090
-    source "$HOME/.bashrc"
     perform_install post
   fi
 

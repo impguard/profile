@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # shellcheck disable=SC1090
-source "$HOME/.bin/pyenv/bin"
+PATH="$HOME/.bin/pyenv/bin/pyenv":$PATH
 
 SOURCE_DIR="$HOME/.config/nvim/source"
 SOURCE_FILENAME="$SOURCE_DIR/python.vim"
