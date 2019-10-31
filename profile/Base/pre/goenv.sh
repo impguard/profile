@@ -1,3 +1,5 @@
 #!/usr/bin/env bash
 
-git clone https://github.com/syndbg/goenv.git ~/.bin/goenv
+rm -rf "$HOME/.bin/goenv"
+
+git clone https://github.com/syndbg/goenv.git "$HOME/.bin/goenv"
