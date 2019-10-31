@@ -42,6 +42,13 @@ export FZF_DEFAULT_COMMAND='ag -g "" --hidden --ignore "node_modules|.git"'
 PATH=$HOME/.profile.d/staging/bin:$HOME/.bin/:$PATH
 
 ############################################################
+# Setup goenv
+############################################################
+
+export GOENV_ROOT="$HOME/.bin/goenv"
+export PATH="$GOENV_ROOT/bin:$PATH"
+
+############################################################
 # Useful helper functions or aliases
 ############################################################
 
