@@ -59,3 +59,8 @@ function enable_python
   eval "$(pyenv init -)"
   eval "$(pyenv virtualenv-init -)"
 }
+
+function enable_go
+{
+  eval "$(goenv init -)"
+}
