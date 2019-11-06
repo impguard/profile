@@ -36,6 +36,9 @@ Plug 'deoplete-plugins/deoplete-jedi'
 Plug 'Vimjas/vim-python-pep8-indent'
 Plug 'davidhalter/jedi-vim'
 
+" Go
+Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
+
 " Rust
 " Plug 'rust-lang/rust.vim'
 
@@ -91,6 +94,13 @@ set shortmess+=c
 
 " ================ Jedi-Vim Settings =============
 let g:jedi#completions_enabled = 0
+
+" ================ Python Settings ===============
+let g:python_host_prog = '/Users/kwu/.pyenv/versions/neovim/bin/python'
+let g:python3_host_prog = '/Users/kwu/.pyenv/versions/neovim/bin/python'
+
+" ================ Go Settings ===================
+let g:deoplete#sources#go#gocode_binary = '$GOPATH/bin/gocode'
 
 " ================ Tern Settings =================
 " let g:tern#command = ["tern"]
