@@ -67,3 +67,25 @@ function enable_go
 {
   eval "$(goenv init -)"
 }
+
+function tmox
+{
+  if [ "$#" == 0 ]; then
+    echo "usage: tmoox <SESSION_NAME>"
+    return 1
+  fi
+
+  tmux new-session -d -s "$1"
+  tmux rename-window  -t "$1:0" editor
+  tmux new-window -t "$1:1" -n admin
+  tmux new-window -t "$1:2" -n build
+  tmux new-window -t "$1:3" -n service
+  tmux new-window -t "$1:4" -n database
+  tmux new-window -t "$1:5" -n playground
+  tmux new-window -t "$1:6" -n playground
+  tmux new-window -t "$1:7" -n playground
+
+  tmux select-window -t "$2:1"
+  tmux select-window -t "$1:0"
+  tmux attach-session -t "$1"
+}
