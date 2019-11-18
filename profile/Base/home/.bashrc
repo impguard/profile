@@ -51,7 +51,8 @@ export PATH="$GOENV_ROOT/bin:$PATH"
 export PYENV_ROOT="$HOME/.bin/pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 
-export NVM_DIR="$HOME/.bin/nvm"
+export NODENV_ROOT="$HOME/.bin/nodenv"
+export PATH="$NODENV_ROOT/bin:$PATH"
 
 ############################################################
 # Useful helper functions or aliases
@@ -72,10 +73,7 @@ function enable_go
 
 function enable_node
 {
-  # shellcheck disable=1090
-  source "$NVM_DIR/nvm.sh"
-  # shellcheck disable=1090
-  source "$NVM_DIR/bash_completion"
+  eval "$(nodenv init -)"
 }
 
 function tmox
