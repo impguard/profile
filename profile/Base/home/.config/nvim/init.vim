@@ -38,6 +38,7 @@ Plug 'davidhalter/jedi-vim'
 
 " Go
 Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 
 " Rust
 " Plug 'rust-lang/rust.vim'
@@ -92,6 +93,15 @@ call deoplete#custom#option('auto_complete_delay', 30)
 " such as 'The only match', 'Pattern not found', 'Back at original", etc.
 set shortmess+=c
 
+" Disable deoplete when in multi cursor mode
+function! Multiple_cursors_before()
+  let b:deoplete_disable_auto_complete = 1
+endfunction
+
+function! Multiple_cursors_after()
+  let b:deoplete_disable_auto_complete = 0
+endfunction
+
 " ================ Jedi-Vim Settings =============
 let g:jedi#completions_enabled = 0
 
@@ -101,6 +111,20 @@ let g:python3_host_prog = '/Users/kwu/.pyenv/versions/neovim/bin/python'
 
 " ================ Go Settings ===================
 let g:deoplete#sources#go#gocode_binary = '$GOPATH/bin/gocode'
+
+let g:go_highlight_build_constraints = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_structs = 1
+let g:go_highlight_types = 1
+" let g:go_auto_sameids = 1
+let g:go_auto_type_info = 1
+let g:go_fmt_command = "goimports"
+let g:go_addtags_transform = "snakecase"
+let g:go_updatetime = 1
 
 " ================ Tern Settings =================
 " let g:tern#command = ["tern"]
