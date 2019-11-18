@@ -51,6 +51,8 @@ export PATH="$GOENV_ROOT/bin:$PATH"
 export PYENV_ROOT="$HOME/.bin/pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 
+export NVM_DIR="$HOME/.bin/.nvm"
+
 ############################################################
 # Useful helper functions or aliases
 ############################################################
@@ -66,6 +68,12 @@ function enable_python
 function enable_go
 {
   eval "$(goenv init -)"
+}
+
+function enable_node
+{
+  "$NVM_DIR/nvm.sh"
+  "$NVM_DIR/bash_completion"
 }
 
 function tmox
