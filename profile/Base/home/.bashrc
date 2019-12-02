@@ -60,22 +60,6 @@ export PATH="$NODENV_ROOT/bin:$PATH"
 
 alias ls="ls --color"
 
-function enable_python
-{
-  eval "$(pyenv init -)"
-  eval "$(pyenv virtualenv-init -)"
-}
-
-function enable_go
-{
-  eval "$(goenv init -)"
-}
-
-function enable_node
-{
-  eval "$(nodenv init -)"
-}
-
 function tmox
 {
   local session=${1:-$(basename "$(pwd)" | tr -dc '[:alnum:]\n\r' | tr '[:upper:]' '[:lower:]')}
