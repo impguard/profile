@@ -35,24 +35,30 @@ function __enable_node
 
 function en
 {
-  while getopts "phng" opt; do
+  while getopts "h" opt; do
     case "$opt" in
     h|/?)
       __enable_usage
       ;;
-    p)
-      __enable_python
-      ;;
-    g)
-      __enable_golang
-      ;;
-    n)
-      __enable_node
-      ;;
     esac
   done
 
-  if [ "$OPTIND" -eq 1 ]; then
-    echo "Please pick one of node (n), golang (g), or python (p)"
-  fi
+  shift $((OPTIND - 1))
+
+  case "${1:-}" in
+    p|py|python)
+      __enable_python
+      return
+      ;;
+    g|go|golang)
+      __enable_golang
+      return
+      ;;
+    n|node)
+      __enable_node
+      return
+      ;;
+  esac
+
+  echo "Please pick one of node (n), golang (g), or python (p)"
 }
