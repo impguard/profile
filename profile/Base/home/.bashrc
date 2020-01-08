@@ -29,8 +29,15 @@ export GIT_PS1_SHOWDIRTYSTATE=true
 export CODEPATH=$HOME/code
 export EDITOR=nvim
 
-# Allows ignoring history by typing a space before a command
-export HISTCONTROL=ignorespace
+# no duplicate entries and avoid history by typing a space before a command
+export HISTCONTROL=ignorespace:ignoredups:erasedups
+
+# Big history
+export HISTSIZE=100000
+export HISTFILESIZE=100000
+
+# Append to history, don't overwrite
+shopt -s histappend
 
 # Customizes what files fzf finds
 export FZF_DEFAULT_COMMAND='ag -g "" --hidden --ignore "node_modules|.git"'
@@ -59,6 +66,7 @@ export PATH="$NODENV_ROOT/bin:$PATH"
 ############################################################
 
 alias ls="ls --color"
+alias hr="history -a; history -c; history -r"
 
 function tmox
 {
