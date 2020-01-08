@@ -33,6 +33,12 @@ function __enable_node
   echo "nodenv enabled"
 }
 
+function __enable_java
+{
+  eval "$(jenv init -)"
+  echo "jenv enabled"
+}
+
 function en
 {
   while getopts "h" opt; do
@@ -56,6 +62,10 @@ function en
       ;;
     n|node)
       __enable_node
+      return
+      ;;
+    j|java)
+      __enable_java
       return
       ;;
   esac

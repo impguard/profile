@@ -61,6 +61,9 @@ export PATH="$PYENV_ROOT/bin:$PATH"
 export NODENV_ROOT="$HOME/.bin/nodenv"
 export PATH="$NODENV_ROOT/bin:$PATH"
 
+export JENV_ROOT="$HOME/.bin/jenv"
+export PATH="$JENV_ROOT/bin:$PATH"
+
 ############################################################
 # Useful helper functions or aliases
 ############################################################
