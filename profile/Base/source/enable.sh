@@ -2,15 +2,16 @@
 
 function __enable_usage
 {
-  echo "usage: enable [-p]"
+  echo "usage: enable [p]"
   echo
   echo "Initializes environments for specific languages. Pass no options to"
   echo "initialize all available."
   echo
   echo "Options:"
-  echo "  -p Enables pyenv"
-  echo "  -g Enables genv"
-  echo "  -n Enables nodenv"
+  echo "  p Enables pyenv"
+  echo "  g Enables genv"
+  echo "  n Enables nodenv"
+  echo "  j Enables jenv"
 }
 
 
@@ -70,5 +71,5 @@ function en
       ;;
   esac
 
-  echo "Please pick one of node (n), golang (g), or python (p)"
+  echo "Please pick one of node (n), golang (g), or python (p), or java (j)"
 }
