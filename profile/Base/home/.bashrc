@@ -68,6 +68,8 @@ export PATH="$JENV_ROOT/bin:$PATH"
 # Useful helper functions or aliases
 ############################################################
 
+alias gitx="git.exe"
+
 alias ls="ls --color"
 alias hr="history -a; history -c; history -r"
 
