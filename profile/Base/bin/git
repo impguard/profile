@@ -1,6 +1,10 @@
 #!/bin/sh
 
 case "$PWD" in
-    /mnt/?/*) exec git.exe "$@" ;;
-    *) exec /usr/bin/git "$@" ;;
+    /mnt/?/*)
+      git.exe "$@"
+      ;;
+    *)
+      git "$@"
+      ;;
 esac
