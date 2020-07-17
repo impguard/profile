@@ -3,6 +3,8 @@
 # shellcheck disable=SC1090
 PATH="$HOME/.bin/pyenv/bin/pyenv":$PATH
 
+# Setup neovim
+
 SOURCE_DIR="$HOME/.config/nvim/source"
 SOURCE_FILENAME="$SOURCE_DIR/python.vim"
 

@@ -21,6 +21,13 @@ autocmd BufWritePre * :%s/\s\+$//e
 " Turn on syntax highlighting
 syntax enable
 
+" Setup Coc Extensions
+let g:coc_global_extensions = [
+      \ 'coc-sh',
+      \ 'coc-json',
+      \ 'coc-highlight',
+      \ ]
+
 " ================ Install plugins =================
 call plug#begin('~/.local/share/nvim/plugged')
 
