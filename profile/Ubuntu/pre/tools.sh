@@ -14,5 +14,4 @@ sudo apt install \
   autojump \
   shellcheck \
   silversearcher-ag \
-  python3 \
-  tmux
+  python3

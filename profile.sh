@@ -3,8 +3,9 @@
 DOC="Profile setup tool.
 
 Usage:
-  ./profile.sh (install|copy|pre|post) [PLUGINS...]
+  ./profile.sh (install|copy|pre|post) [PROFILES...]
   ./profile.sh (ls|reset|info)
+  ./profile.sh run (pre|post) SCRIPT
 
 Commands:
   install   Installs the entire profile
@@ -12,8 +13,10 @@ Commands:
   pre       Performs pre installation step and no other step
   post      Performs post installation step and no other step
   reset     Resets directories
-  ls        List all available plugins
+  ls        List all available profiles and installation scripts
   info      Shows information about current system
+  run       Runs an installation script, specify type as pre, post
+            and the script to run.
 "
 
 # docopt parser below, refresh this parser with `docopt.sh profile.sh`
@@ -109,34 +112,37 @@ eval "var_$1+=($value)"; else eval "var_$1=$value"; fi; return 0; fi; done
 return 1; }; stdout() { printf -- "cat <<'EOM'\n%s\nEOM\n" "$1"; }; stderr() {
 printf -- "cat <<'EOM' >&2\n%s\nEOM\n" "$1"; }; error() {
 [[ -n $1 ]] && stderr "$1"; stderr "$usage"; _return 1; }; _return() {
-printf -- "exit %d\n" "$1"; exit "$1"; }; set -e; trimmed_doc=${DOC:0:454}
-usage=${DOC:21:89}; digest=10607; shorts=(); longs=(); argcounts=(); node_0(){
-value PLUGINS a true; }; node_1(){ _command install; }; node_2(){ _command copy
-}; node_3(){ _command pre; }; node_4(){ _command post; }; node_5(){ _command ls
-}; node_6(){ _command reset; }; node_7(){ _command info; }; node_8(){
-either 1 2 3 4; }; node_9(){ required 8; }; node_10(){ oneormore 0; }
-node_11(){ optional 10; }; node_12(){ required 9 11; }; node_13(){ either 5 6 7
-}; node_14(){ required 13; }; node_15(){ required 14; }; node_16(){ either 12 15
-}; node_17(){ required 16; }; cat <<<' docopt_exit() {
-[[ -n $1 ]] && printf "%s\n" "$1" >&2; printf "%s\n" "${DOC:21:89}" >&2; exit 1
-}'; unset var_PLUGINS var_install var_copy var_pre var_post var_ls var_reset \
-var_info; parse 17 "$@"; local prefix=${DOCOPT_PREFIX:-''}; local docopt_decl=1
-[[ $BASH_VERSION =~ ^4.3 ]] && docopt_decl=2; unset "${prefix}PLUGINS" \
-"${prefix}install" "${prefix}copy" "${prefix}pre" "${prefix}post" \
-"${prefix}ls" "${prefix}reset" "${prefix}info"
-if declare -p var_PLUGINS >/dev/null 2>&1; then
-eval "${prefix}"'PLUGINS=("${var_PLUGINS[@]}")'; else
-eval "${prefix}"'PLUGINS=()'; fi
+printf -- "exit %d\n" "$1"; exit "$1"; }; set -e; trimmed_doc=${DOC:0:620}
+usage=${DOC:21:127}; digest=6dfa1; shorts=(); longs=(); argcounts=(); node_0(){
+value PROFILES a true; }; node_1(){ value SCRIPT a; }; node_2(){
+_command install; }; node_3(){ _command copy; }; node_4(){ _command pre; }
+node_5(){ _command post; }; node_6(){ _command ls; }; node_7(){ _command reset
+}; node_8(){ _command info; }; node_9(){ _command run; }; node_10(){
+either 2 3 4 5; }; node_11(){ required 10; }; node_12(){ oneormore 0; }
+node_13(){ optional 12; }; node_14(){ required 11 13; }; node_15(){ either 6 7 8
+}; node_16(){ required 15; }; node_17(){ required 16; }; node_18(){ either 4 5
+}; node_19(){ required 18; }; node_20(){ required 9 19 1; }; node_21(){
+either 14 17 20; }; node_22(){ required 21; }; cat <<<' docopt_exit() {
+[[ -n $1 ]] && printf "%s\n" "$1" >&2; printf "%s\n" "${DOC:21:127}" >&2; exit 1
+}'; unset var_PROFILES var_SCRIPT var_install var_copy var_pre var_post var_ls \
+var_reset var_info var_run; parse 22 "$@"; local prefix=${DOCOPT_PREFIX:-''}
+local docopt_decl=1; [[ $BASH_VERSION =~ ^4.3 ]] && docopt_decl=2
+unset "${prefix}PROFILES" "${prefix}SCRIPT" "${prefix}install" "${prefix}copy" \
+"${prefix}pre" "${prefix}post" "${prefix}ls" "${prefix}reset" "${prefix}info" \
+"${prefix}run"; if declare -p var_PROFILES >/dev/null 2>&1; then
+eval "${prefix}"'PROFILES=("${var_PROFILES[@]}")'; else
+eval "${prefix}"'PROFILES=()'; fi; eval "${prefix}"'SCRIPT=${var_SCRIPT:-}'
 eval "${prefix}"'install=${var_install:-false}'
 eval "${prefix}"'copy=${var_copy:-false}'
 eval "${prefix}"'pre=${var_pre:-false}'
 eval "${prefix}"'post=${var_post:-false}'; eval "${prefix}"'ls=${var_ls:-false}'
 eval "${prefix}"'reset=${var_reset:-false}'
-eval "${prefix}"'info=${var_info:-false}'; local docopt_i=0
+eval "${prefix}"'info=${var_info:-false}'
+eval "${prefix}"'run=${var_run:-false}'; local docopt_i=0
 for ((docopt_i=0;docopt_i<docopt_decl;docopt_i++)); do
-declare -p "${prefix}PLUGINS" "${prefix}install" "${prefix}copy" \
-"${prefix}pre" "${prefix}post" "${prefix}ls" "${prefix}reset" "${prefix}info"
-done; }
+declare -p "${prefix}PROFILES" "${prefix}SCRIPT" "${prefix}install" \
+"${prefix}copy" "${prefix}pre" "${prefix}post" "${prefix}ls" "${prefix}reset" \
+"${prefix}info" "${prefix}run"; done; }
 # docopt parser above, complete command for generating this parser is `docopt.sh profile.sh`
 
 eval "$(docopt "$@")"
@@ -199,22 +205,41 @@ function link_home_files
 
 function perform_install
 {
-  local filename
+  local type filename
 
-  if [ ! -d "$PROFILE_STAGING/$1" ]; then
-    log "Nothing to install from $PROFILE_STAGING/$1"
+  type=$1
+
+  if [ ! -d "$PROFILE_STAGING/$type" ]; then
+    log "Nothing to install from $PROFILE_STAGING/$type"
     return
   fi
 
-  for file in "$PROFILE_STAGING/$1"/*; do
-    filename=$(basename "$file")
-
-    mkdir -p "$PROFILE_INSTALL/$filename"
-    pushd "$PROFILE_INSTALL/$filename"
-    log "Running install: $file"
-    $file || logerror "Install failed: $file"
-    popd
+  for script in "$PROFILE_STAGING/$type"/*; do
+    one_off_install "$type" "$script"
   done
+}
+
+function one_off_install
+{
+  local type script filename workdir
+
+  type=$1
+  script=$2
+
+  if [ ! -f "$script" ]; then
+    logerror "Not a valid install script $1/$2"
+    return
+  fi
+
+  filename=$(basename "$script")
+  workdir=$PROFILE_INSTALL/$type/$filename
+
+  rm -rf "$workdir"
+  mkdir -p "$workdir"
+  pushd "$workdir"
+  log "Running install: $type/$script"
+  $script || logerror "Install failed: $type/$script"
+  popd
 }
 
 ########################################
@@ -226,15 +251,15 @@ function install
   echo "Installing profile"
   echo "  PROFILE_ROOT=$PROFILE_ROOT"
   echo "  PROFILE_STAGING=$PROFILE_STAGING"
-  echo "  PLUGINS=${PLUGINS[@]}"
+  echo "  PROFILES=${PROFILES[@]}"
 
   # Stage files
-  if [ ${#PLUGINS[@]} -eq 0 ]; then
+  if [ ${#PROFILES[@]} -eq 0 ]; then
     stage Base
   fi
 
-  for plugin in "${PLUGINS[@]}"; do
-    stage "$plugin"
+  for profile in "${PROFILES[@]}"; do
+    stage "$profile"
   done
 
   # Pre Install
@@ -273,6 +298,12 @@ function reset
 
 if $install; then
   install
+elif $run; then
+  if $pre; then
+    one_off_install pre "$PROFILE_STAGING/pre/$SCRIPT"
+  elif $post; then
+    one_off_install post "$PROFILE_STAGING/post/$SCRIPT"
+  fi
 elif $copy; then
   NO_PRE_INSTALL=1 NO_POST_INSTALL=1 install
 elif $pre; then
@@ -282,7 +313,12 @@ elif $post; then
 elif $reset; then
   reset
 elif $ls; then
-  ls profile
+  for profile in $(ls profile); do
+    echo "Profile      : $profile"
+    echo "Pre Scripts  : $(ls "profile/$profile/pre" 2>/dev/null | tr "\n" " ")"
+    echo "Post Scripts : $(ls "profile/$profile/post" 2>/dev/null | tr "\n" " ")"
+    echo
+  done
 elif $info; then
   echo "This lists your platform information, which may inform what you want to install."
   uname
