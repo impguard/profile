@@ -3,20 +3,20 @@
 DOC="Profile setup tool.
 
 Usage:
-  ./profile.sh (install|copy|pre|post) [PROFILES...]
+  ./profile.sh (install|copy) [PROFILES...]
+  ./profile.sh (pre|post) [SCRIPT]
   ./profile.sh (ls|reset|info)
-  ./profile.sh run (pre|post) SCRIPT
 
 Commands:
   install   Installs the entire profile
   copy      Performs copy step and no other step
-  pre       Performs pre installation step and no other step
-  post      Performs post installation step and no other step
+  pre       Performs pre installation step and no other step, specify script
+            with SCRIPT parameter
+  post      Performs post installation step and no other step, specify script
+            with SCRIPT parameter
   reset     Resets directories
   ls        List all available profiles and installation scripts
   info      Shows information about current system
-  run       Runs an installation script, specify type as pre, post
-            and the script to run.
 "
 
 # docopt parser below, refresh this parser with `docopt.sh profile.sh`
@@ -112,24 +112,24 @@ eval "var_$1+=($value)"; else eval "var_$1=$value"; fi; return 0; fi; done
 return 1; }; stdout() { printf -- "cat <<'EOM'\n%s\nEOM\n" "$1"; }; stderr() {
 printf -- "cat <<'EOM' >&2\n%s\nEOM\n" "$1"; }; error() {
 [[ -n $1 ]] && stderr "$1"; stderr "$usage"; _return 1; }; _return() {
-printf -- "exit %d\n" "$1"; exit "$1"; }; set -e; trimmed_doc=${DOC:0:620}
-usage=${DOC:21:127}; digest=6dfa1; shorts=(); longs=(); argcounts=(); node_0(){
+printf -- "exit %d\n" "$1"; exit "$1"; }; set -e; trimmed_doc=${DOC:0:607}
+usage=${DOC:21:116}; digest=5e863; shorts=(); longs=(); argcounts=(); node_0(){
 value PROFILES a true; }; node_1(){ value SCRIPT a; }; node_2(){
 _command install; }; node_3(){ _command copy; }; node_4(){ _command pre; }
 node_5(){ _command post; }; node_6(){ _command ls; }; node_7(){ _command reset
-}; node_8(){ _command info; }; node_9(){ _command run; }; node_10(){
-either 2 3 4 5; }; node_11(){ required 10; }; node_12(){ oneormore 0; }
-node_13(){ optional 12; }; node_14(){ required 11 13; }; node_15(){ either 6 7 8
-}; node_16(){ required 15; }; node_17(){ required 16; }; node_18(){ either 4 5
-}; node_19(){ required 18; }; node_20(){ required 9 19 1; }; node_21(){
-either 14 17 20; }; node_22(){ required 21; }; cat <<<' docopt_exit() {
-[[ -n $1 ]] && printf "%s\n" "$1" >&2; printf "%s\n" "${DOC:21:127}" >&2; exit 1
-}'; unset var_PROFILES var_SCRIPT var_install var_copy var_pre var_post var_ls \
-var_reset var_info var_run; parse 22 "$@"; local prefix=${DOCOPT_PREFIX:-''}
-local docopt_decl=1; [[ $BASH_VERSION =~ ^4.3 ]] && docopt_decl=2
-unset "${prefix}PROFILES" "${prefix}SCRIPT" "${prefix}install" "${prefix}copy" \
-"${prefix}pre" "${prefix}post" "${prefix}ls" "${prefix}reset" "${prefix}info" \
-"${prefix}run"; if declare -p var_PROFILES >/dev/null 2>&1; then
+}; node_8(){ _command info; }; node_9(){ either 2 3; }; node_10(){ required 9; }
+node_11(){ oneormore 0; }; node_12(){ optional 11; }; node_13(){ required 10 12
+}; node_14(){ either 4 5; }; node_15(){ required 14; }; node_16(){ optional 1; }
+node_17(){ required 15 16; }; node_18(){ either 6 7 8; }; node_19(){ required 18
+}; node_20(){ required 19; }; node_21(){ either 13 17 20; }; node_22(){
+required 21; }; cat <<<' docopt_exit() { [[ -n $1 ]] && printf "%s\n" "$1" >&2
+printf "%s\n" "${DOC:21:116}" >&2; exit 1; }'; unset var_PROFILES var_SCRIPT \
+var_install var_copy var_pre var_post var_ls var_reset var_info; parse 22 "$@"
+local prefix=${DOCOPT_PREFIX:-''}; local docopt_decl=1
+[[ $BASH_VERSION =~ ^4.3 ]] && docopt_decl=2; unset "${prefix}PROFILES" \
+"${prefix}SCRIPT" "${prefix}install" "${prefix}copy" "${prefix}pre" \
+"${prefix}post" "${prefix}ls" "${prefix}reset" "${prefix}info"
+if declare -p var_PROFILES >/dev/null 2>&1; then
 eval "${prefix}"'PROFILES=("${var_PROFILES[@]}")'; else
 eval "${prefix}"'PROFILES=()'; fi; eval "${prefix}"'SCRIPT=${var_SCRIPT:-}'
 eval "${prefix}"'install=${var_install:-false}'
@@ -137,12 +137,11 @@ eval "${prefix}"'copy=${var_copy:-false}'
 eval "${prefix}"'pre=${var_pre:-false}'
 eval "${prefix}"'post=${var_post:-false}'; eval "${prefix}"'ls=${var_ls:-false}'
 eval "${prefix}"'reset=${var_reset:-false}'
-eval "${prefix}"'info=${var_info:-false}'
-eval "${prefix}"'run=${var_run:-false}'; local docopt_i=0
+eval "${prefix}"'info=${var_info:-false}'; local docopt_i=0
 for ((docopt_i=0;docopt_i<docopt_decl;docopt_i++)); do
 declare -p "${prefix}PROFILES" "${prefix}SCRIPT" "${prefix}install" \
 "${prefix}copy" "${prefix}pre" "${prefix}post" "${prefix}ls" "${prefix}reset" \
-"${prefix}info" "${prefix}run"; done; }
+"${prefix}info"; done; }
 # docopt parser above, complete command for generating this parser is `docopt.sh profile.sh`
 
 eval "$(docopt "$@")"
@@ -298,18 +297,20 @@ function reset
 
 if $install; then
   install
-elif $run; then
-  if $pre; then
-    one_off_install pre "$PROFILE_STAGING/pre/$SCRIPT"
-  elif $post; then
-    one_off_install post "$PROFILE_STAGING/post/$SCRIPT"
-  fi
 elif $copy; then
   NO_PRE_INSTALL=1 NO_POST_INSTALL=1 install
 elif $pre; then
-  NO_HOME=1 NO_POST_INSTALL=1 install
+  if [ -z "$SCRIPT" ]; then
+    NO_HOME=1 NO_POST_INSTALL=1 install
+  else
+    one_off_install pre "$PROFILE_STAGING/pre/$SCRIPT"
+  fi
 elif $post; then
-  NO_HOME=1 NO_PRE_INSTALL=1 install "$@"
+  if [ -z "$SCRIPT" ]; then
+    NO_HOME=1 NO_PRE_INSTALL=1 install "$@"
+  else
+    one_off_install post "$PROFILE_STAGING/post/$SCRIPT"
+  fi
 elif $reset; then
   reset
 elif $ls; then

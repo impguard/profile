@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+if [ -d "$HOME/.bin/tmux/bin" ]; then
+  echo "Tmux already installed"
+  exit 0
+fi
+
 # Install dependencies
 sudo apt install libevent-dev
 
