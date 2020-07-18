@@ -8,8 +8,9 @@ curl -L https://github.com/tmux/tmux/releases/download/3.1/tmux-3.1.tar.gz -o tm
 
 # Install tmux
 
-tar -zxf tmux-*.tar.gz
+mkdir -p ~/.bin/tmux
+tar -C ~/.bin/tmux -zxf tmux-*.tar.gz
 # shellcheck disable=2164
-cd tmux-*/
-./configure --prefix "$HOME/.bin"
+cd ~/.bin/tmux/tmux-*/
+./configure --prefix "$PWD/../"
 make && sudo make install
