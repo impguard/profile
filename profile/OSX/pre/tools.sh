@@ -13,4 +13,5 @@ brew install \
   git \
   python \
   tmux \
+  node \
   || true
