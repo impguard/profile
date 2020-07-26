@@ -236,8 +236,8 @@ function one_off_install
   rm -rf "$workdir"
   mkdir -p "$workdir"
   pushd "$workdir"
-  log "Running install: $type/$script"
-  $script || logerror "Install failed: $type/$script"
+  log "Running install: $type/$filename"
+  $script || logerror "Install failed: $type/$filename"
   popd
 }
 

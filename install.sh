@@ -11,4 +11,5 @@ git config --global user.email "$email"
 git clone git@github.com:impguard/profile.git "$HOME/.profile.d"
 
 cd "$HOME/.profile.d"
-./profile.sh install
+echo "Too lazy to fix the automatic installation."
+echo "Please 'cd $HOME/.profile.d' and run the profile install manually."
