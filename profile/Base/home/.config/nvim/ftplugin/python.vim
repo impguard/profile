@@ -1,1 +1,1 @@
-let b:coc_root_patterns = ['.git', '.python-version']
+let b:coc_root_patterns = ['.git', '.python-version', 'venv', '.venv']
