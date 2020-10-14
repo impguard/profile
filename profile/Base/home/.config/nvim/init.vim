@@ -62,6 +62,10 @@ call plug#end()
 " ================ Common Settings ================
 let mapleader = ","
 
+" Recognize Jenkinsfiles
+au BufNewFile,BufRead Jenkinsfile setf groovy
+au BufNewFile,BufRead *.Jenkinsfile setf groovy
+
 " ================ fzf Settings ===================
 noremap <c-p> :Files<CR>
 
@@ -241,9 +245,6 @@ set expandtab
 " ================ Source ========================
 
 source $HOME/.config/nvim/source/python.vim
-
-
-
 
 " Archive of old plugins
 

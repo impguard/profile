@@ -2,14 +2,14 @@
   "coc.preferences.formatOnType":true,
   "coc.preferences.formatOnTypeFiletypes":["python"],
 
+  "diagnostic.errorSign": "✘",
+  "diagnostic.infoSign": "ℹ",
+  "diagnostic.hintSign": "➤",
+  "diagnostic.enableHighlightLineNumber": true,
+
   "python.jediEnabled": false,
   "python.formatting.provider": "black",
 
   "python.venvPath": "~/.pyenv",
-  "python.venvFolders": ["venv"],
-
-  "diagnostic.errorSign": "✘",
-  "diagnostic.infoSign": "ℹ",
-  "diagnostic.hintSign": "➤",
-  "diagnostic.enableHighlightLineNumber": true
+  "python.venvFolders": ["venv"]
 }
