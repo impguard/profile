@@ -40,7 +40,7 @@ export HISTFILESIZE=100000
 shopt -s histappend
 
 # Customizes what files fzf finds
-export FZF_DEFAULT_COMMAND='ag -g "" --hidden --ignore "node_modules|.git"'
+export FZF_DEFAULT_COMMAND='ag -U -g "" --hidden --ignore "node_modules|.git"'
 
 ############################################################
 # Modify the PATH
