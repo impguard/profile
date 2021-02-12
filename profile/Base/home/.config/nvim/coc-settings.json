@@ -2,8 +2,7 @@
   "coc.preferences.formatOnType":true,
   "coc.preferences.formatOnTypeFiletypes":["python"],
 
-  "diagnostic.infoSign": ">>",
-  "diagnostic.warningSign": ">>",
+  "diagnostic.displayByAle": true,
   "diagnostic.enableHighlightLineNumber": true,
 
   "python.jediEnabled": false,

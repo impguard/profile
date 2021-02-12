@@ -3,6 +3,8 @@
 curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
+sudo apt update
+
 sudo apt install \
   make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev \
   libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev libxml2-dev \
@@ -14,4 +16,5 @@ sudo apt install \
   autojump \
   shellcheck \
   silversearcher-ag \
-  python3
+  python3 \
+  pipenv

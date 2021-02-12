@@ -11,3 +11,6 @@ cd ~/.bin/nodenv && src/configure && make -C src
 
 # Install node build plugin for nodenv
 git clone https://github.com/nodenv/node-build.git "$HOME/.bin/nodenv/plugins/node-build"
+
+# Install node update plugin for nodenv
+git clone https://github.com/nodenv/nodenv-update.git "$HOME/.bin/nodenv/plugins/nodenv-update"
