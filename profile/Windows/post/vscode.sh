@@ -2,4 +2,4 @@
 
 userprofile=$(wslpath "$(wslvar USERPROFILE)")
 
-echo cp -a "$HOME/.omnisharp" "$userprofile/"
+cp --verbose -r "$HOME/.omnisharp" "$userprofile/"
