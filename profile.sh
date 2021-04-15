@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2154
 
 DOC="Profile setup tool.
 
@@ -20,17 +21,18 @@ Commands:
 "
 
 # docopt parser below, refresh this parser with `docopt.sh profile.sh`
-# shellcheck disable=2016,1075
+# shellcheck disable=2016,1075,2154
 docopt() { parse() { if ${DOCOPT_DOC_CHECK:-true}; then local doc_hash
-doc_hash=$(printf "%s" "$DOC" | shasum -a 256)
+if doc_hash=$(printf "%s" "$DOC" | (sha256sum 2>/dev/null || shasum -a 256)); then
 if [[ ${doc_hash:0:5} != "$digest" ]]; then
 stderr "The current usage doc (${doc_hash:0:5}) does not match \
 what the parser was generated with (${digest})
-Run \`docopt.sh\` to refresh the parser."; _return 70; fi; fi; local root_idx=$1
-shift; argv=("$@"); parsed_params=(); parsed_values=(); left=(); testdepth=0
-local arg; while [[ ${#argv[@]} -gt 0 ]]; do if [[ ${argv[0]} = "--" ]]; then
-for arg in "${argv[@]}"; do parsed_params+=('a'); parsed_values+=("$arg"); done
-break; elif [[ ${argv[0]} = --* ]]; then parse_long
+Run \`docopt.sh\` to refresh the parser."; _return 70; fi; fi; fi
+local root_idx=$1; shift; argv=("$@"); parsed_params=(); parsed_values=()
+left=(); testdepth=0; local arg; while [[ ${#argv[@]} -gt 0 ]]; do
+if [[ ${argv[0]} = "--" ]]; then for arg in "${argv[@]}"; do
+parsed_params+=('a'); parsed_values+=("$arg"); done; break
+elif [[ ${argv[0]} = --* ]]; then parse_long
 elif [[ ${argv[0]} = -* && ${argv[0]} != "-" ]]; then parse_shorts
 elif ${DOCOPT_OPTIONS_FIRST:-false}; then for arg in "${argv[@]}"; do
 parsed_params+=('a'); parsed_values+=("$arg"); done; break; else
@@ -125,10 +127,9 @@ node_17(){ required 15 16; }; node_18(){ either 6 7 8; }; node_19(){ required 18
 required 21; }; cat <<<' docopt_exit() { [[ -n $1 ]] && printf "%s\n" "$1" >&2
 printf "%s\n" "${DOC:21:116}" >&2; exit 1; }'; unset var_PROFILES var_SCRIPT \
 var_install var_copy var_pre var_post var_ls var_reset var_info; parse 22 "$@"
-local prefix=${DOCOPT_PREFIX:-''}; local docopt_decl=1
-[[ $BASH_VERSION =~ ^4.3 ]] && docopt_decl=2; unset "${prefix}PROFILES" \
-"${prefix}SCRIPT" "${prefix}install" "${prefix}copy" "${prefix}pre" \
-"${prefix}post" "${prefix}ls" "${prefix}reset" "${prefix}info"
+local prefix=${DOCOPT_PREFIX:-''}; unset "${prefix}PROFILES" "${prefix}SCRIPT" \
+"${prefix}install" "${prefix}copy" "${prefix}pre" "${prefix}post" \
+"${prefix}ls" "${prefix}reset" "${prefix}info"
 if declare -p var_PROFILES >/dev/null 2>&1; then
 eval "${prefix}"'PROFILES=("${var_PROFILES[@]}")'; else
 eval "${prefix}"'PROFILES=()'; fi; eval "${prefix}"'SCRIPT=${var_SCRIPT:-}'
@@ -137,8 +138,8 @@ eval "${prefix}"'copy=${var_copy:-false}'
 eval "${prefix}"'pre=${var_pre:-false}'
 eval "${prefix}"'post=${var_post:-false}'; eval "${prefix}"'ls=${var_ls:-false}'
 eval "${prefix}"'reset=${var_reset:-false}'
-eval "${prefix}"'info=${var_info:-false}'; local docopt_i=0
-for ((docopt_i=0;docopt_i<docopt_decl;docopt_i++)); do
+eval "${prefix}"'info=${var_info:-false}'; local docopt_i=1
+[[ $BASH_VERSION =~ ^4.3 ]] && docopt_i=2; for ((;docopt_i>0;docopt_i--)); do
 declare -p "${prefix}PROFILES" "${prefix}SCRIPT" "${prefix}install" \
 "${prefix}copy" "${prefix}pre" "${prefix}post" "${prefix}ls" "${prefix}reset" \
 "${prefix}info"; done; }
@@ -250,6 +251,7 @@ function install
   echo "Installing profile"
   echo "  PROFILE_ROOT=$PROFILE_ROOT"
   echo "  PROFILE_STAGING=$PROFILE_STAGING"
+  # shellcheck disable=SC2145
   echo "  PROFILES=${PROFILES[@]}"
 
   # Stage files
@@ -300,6 +302,7 @@ if $install; then
 elif $copy; then
   NO_PRE_INSTALL=1 NO_POST_INSTALL=1 install
 elif $pre; then
+  # shellcheck disable=2153
   if [ -z "$SCRIPT" ]; then
     NO_HOME=1 NO_POST_INSTALL=1 install
   else
@@ -314,9 +317,12 @@ elif $post; then
 elif $reset; then
   reset
 elif $ls; then
-  for profile in $(ls profile); do
+  for profile_path in profile/*; do
+    profile=$(basename "$profile_path")
     echo "Profile      : $profile"
+    # shellcheck disable=2012
     echo "Pre Scripts  : $(ls "profile/$profile/pre" 2>/dev/null | tr "\n" " ")"
+    # shellcheck disable=2012
     echo "Post Scripts : $(ls "profile/$profile/post" 2>/dev/null | tr "\n" " ")"
     echo
   done
