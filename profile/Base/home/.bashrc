@@ -46,7 +46,7 @@ export FZF_DEFAULT_COMMAND='ag -U -g "" --hidden --ignore "node_modules|.git"'
 # Modify the PATH
 ############################################################
 
-PATH=$HOME/.bin/:$PATH
+PATH=$HOME/.bin:$PATH
 
 ############################################################
 # Setup env tools
