@@ -2,5 +2,5 @@
 
 userprofile=$(wslpath "$(wslvar USERPROFILE)")
 
-cp --verbose -r "$HOME/.omnisharp" "$userprofile/"
+cp --verbose --dereference --recursive "$HOME/.omnisharp" "$userprofile/"
 chmod -R u+x "$HOME/.omnisharp"

@@ -206,7 +206,7 @@ function verify_profiles
 
 function run_script
 {
-  local type script script_name workspace
+  local type script real_script script_name workspace
 
   type=$1
   script=$2
@@ -217,13 +217,14 @@ function run_script
   fi
 
   script_name=$(basename "$script")
+  real_script=$(realpath "$script")
   workspace=$INSTALL_DIR/$type/$script_name
 
   rm -rf "$workspace"
   mkdir -p "$workspace"
   pushd "$workspace"
   log "Running script $script_name"
-  $script || logerror "Install failed. Workspace at $workspace"
+  $real_script || logerror "Install failed. Workspace at $workspace"
   popd
 }
 
