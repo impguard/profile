@@ -4,23 +4,21 @@
 DOC="Profile setup tool.
 
 Usage:
-  ./profile.sh (install|copy) [PROFILES...]
-  ./profile.sh (pre|post) [SCRIPT]
-  ./profile.sh (ls|reset|info)
+  ./profile.sh install [PROFILES...]
+  ./profile.sh (home|pre|init|post) [PROFILES...]
+  ./profile.sh SCRIPT_PATH
+  ./profile.sh (ls|info)
 
 Commands:
-  install   Installs the entire profile
-  copy      Performs copy step and no other step
-  pre       Performs pre installation step and no other step, specify script
-            with SCRIPT parameter
-  post      Performs post installation step and no other step, specify script
-            with SCRIPT parameter
-  reset     Resets directories
+  install   Installs all listed profiles
+  home      Copies home files for the selected profiles
+  pre       Performs pre-initialization for the selected profiles
+  init      Performs initialization for the selected profiles
+  post      Performs post-initialization for the selected profiles
   ls        List all available profiles and installation scripts
   info      Shows information about current system
 "
-
-# docopt parser below, refresh this parser with `docopt.sh profile.sh`
+# docopt parser below, refresh this parser with `docopt.sh setup`
 # shellcheck disable=2016,1075,2154
 docopt() { parse() { if ${DOCOPT_DOC_CHECK:-true}; then local doc_hash
 if doc_hash=$(printf "%s" "$DOC" | (sha256sum 2>/dev/null || shasum -a 256)); then
@@ -94,9 +92,8 @@ if [[ -z $match_count || ${#left[@]} -lt $match_count ]]; then
 best_match_idx=$node_idx; match_count=${#left[@]}; fi; fi
 left=("${initial_left[@]}"); done; ((testdepth--)) || true
 if [[ -n $best_match_idx ]]; then "node_$best_match_idx"; return 0; fi
-left=("${initial_left[@]}"); return 1; }; optional() { local node_idx
-for node_idx in "$@"; do "node_$node_idx"; done; return 0; }; oneormore() {
-local i=0; local prev=${#left[@]}; while "node_$1"; do ((i++)) || true
+left=("${initial_left[@]}"); return 1; }; oneormore() { local i=0
+local prev=${#left[@]}; while "node_$1"; do ((i++)) || true
 [[ $prev -eq ${#left[@]} ]] && break; prev=${#left[@]}; done
 if [[ $i -ge 1 ]]; then return 0; fi; return 1; }; _command() { local i
 local name=${2:-$1}; for i in "${!left[@]}"; do local l=${left[$i]}
@@ -114,44 +111,46 @@ eval "var_$1+=($value)"; else eval "var_$1=$value"; fi; return 0; fi; done
 return 1; }; stdout() { printf -- "cat <<'EOM'\n%s\nEOM\n" "$1"; }; stderr() {
 printf -- "cat <<'EOM' >&2\n%s\nEOM\n" "$1"; }; error() {
 [[ -n $1 ]] && stderr "$1"; stderr "$usage"; _return 1; }; _return() {
-printf -- "exit %d\n" "$1"; exit "$1"; }; set -e; trimmed_doc=${DOC:0:607}
-usage=${DOC:21:116}; digest=5e863; shorts=(); longs=(); argcounts=(); node_0(){
-value PROFILES a true; }; node_1(){ value SCRIPT a; }; node_2(){
-_command install; }; node_3(){ _command copy; }; node_4(){ _command pre; }
-node_5(){ _command post; }; node_6(){ _command ls; }; node_7(){ _command reset
-}; node_8(){ _command info; }; node_9(){ either 2 3; }; node_10(){ required 9; }
-node_11(){ oneormore 0; }; node_12(){ optional 11; }; node_13(){ required 10 12
-}; node_14(){ either 4 5; }; node_15(){ required 14; }; node_16(){ optional 1; }
-node_17(){ required 15 16; }; node_18(){ either 6 7 8; }; node_19(){ required 18
-}; node_20(){ required 19; }; node_21(){ either 13 17 20; }; node_22(){
-required 21; }; cat <<<' docopt_exit() { [[ -n $1 ]] && printf "%s\n" "$1" >&2
-printf "%s\n" "${DOC:21:116}" >&2; exit 1; }'; unset var_PROFILES var_SCRIPT \
-var_install var_copy var_pre var_post var_ls var_reset var_info; parse 22 "$@"
-local prefix=${DOCOPT_PREFIX:-''}; unset "${prefix}PROFILES" "${prefix}SCRIPT" \
-"${prefix}install" "${prefix}copy" "${prefix}pre" "${prefix}post" \
-"${prefix}ls" "${prefix}reset" "${prefix}info"
-if declare -p var_PROFILES >/dev/null 2>&1; then
+printf -- "exit %d\n" "$1"; exit "$1"; }; set -e; trimmed_doc=${DOC:0:581}
+usage=${DOC:21:141}; digest=ed212; shorts=(); longs=(); argcounts=(); node_0(){
+value PROFILES a true; }; node_1(){ value SCRIPT_PATH a; }; node_2(){
+_command install; }; node_3(){ _command home; }; node_4(){ _command pre; }
+node_5(){ _command init; }; node_6(){ _command post; }; node_7(){ _command ls; }
+node_8(){ _command info; }; node_9(){ oneormore 0; }; node_10(){ required 2 9; }
+node_11(){ either 3 4 5 6; }; node_12(){ required 11; }; node_13(){
+required 12 9; }; node_14(){ required 1; }; node_15(){ either 7 8; }; node_16(){
+required 15; }; node_17(){ required 16; }; node_18(){ either 10 13 14 17; }
+node_19(){ required 18; }; cat <<<' docopt_exit() {
+[[ -n $1 ]] && printf "%s\n" "$1" >&2; printf "%s\n" "${DOC:21:141}" >&2; exit 1
+}'; unset var_PROFILES var_SCRIPT_PATH var_install var_home var_pre var_init \
+var_post var_ls var_info; parse 19 "$@"; local prefix=${DOCOPT_PREFIX:-''}
+unset "${prefix}PROFILES" "${prefix}SCRIPT_PATH" "${prefix}install" \
+"${prefix}home" "${prefix}pre" "${prefix}init" "${prefix}post" "${prefix}ls" \
+"${prefix}info"; if declare -p var_PROFILES >/dev/null 2>&1; then
 eval "${prefix}"'PROFILES=("${var_PROFILES[@]}")'; else
-eval "${prefix}"'PROFILES=()'; fi; eval "${prefix}"'SCRIPT=${var_SCRIPT:-}'
+eval "${prefix}"'PROFILES=()'; fi
+eval "${prefix}"'SCRIPT_PATH=${var_SCRIPT_PATH:-}'
 eval "${prefix}"'install=${var_install:-false}'
-eval "${prefix}"'copy=${var_copy:-false}'
+eval "${prefix}"'home=${var_home:-false}'
 eval "${prefix}"'pre=${var_pre:-false}'
+eval "${prefix}"'init=${var_init:-false}'
 eval "${prefix}"'post=${var_post:-false}'; eval "${prefix}"'ls=${var_ls:-false}'
-eval "${prefix}"'reset=${var_reset:-false}'
 eval "${prefix}"'info=${var_info:-false}'; local docopt_i=1
 [[ $BASH_VERSION =~ ^4.3 ]] && docopt_i=2; for ((;docopt_i>0;docopt_i--)); do
-declare -p "${prefix}PROFILES" "${prefix}SCRIPT" "${prefix}install" \
-"${prefix}copy" "${prefix}pre" "${prefix}post" "${prefix}ls" "${prefix}reset" \
+declare -p "${prefix}PROFILES" "${prefix}SCRIPT_PATH" "${prefix}install" \
+"${prefix}home" "${prefix}pre" "${prefix}init" "${prefix}post" "${prefix}ls" \
 "${prefix}info"; done; }
-# docopt parser above, complete command for generating this parser is `docopt.sh profile.sh`
+# docopt parser above, complete command for generating this parser is `docopt.sh setup`
 
 eval "$(docopt "$@")"
 
 set -euo pipefail
+shopt -s nullglob
 
-PROFILE_ROOT="$HOME/.profile.d"
-PROFILE_STAGING="$PROFILE_ROOT/staging"
-PROFILE_INSTALL="$PROFILE_STAGING/install"
+ROOT=$HOME/.profile.d
+PROFILE_DIR=$ROOT/profile
+STAGING_DIR=$ROOT/staging
+INSTALL_DIR=$ROOT/staging/install
 
 ########################################
 # Helpers
@@ -185,60 +184,41 @@ function popd
 
 function stage
 {
-  local staging_dir="$PROFILE_ROOT/profile/$1/."
-  if [ -d "$staging_dir" ]; then
-    cp -vfrs "$PROFILE_ROOT/profile/$1/." "$PROFILE_STAGING"
-  fi
-}
-
-function link_home_files
-{
-  log "Linking home files"
-  cp -a "$PROFILE_STAGING/home/." "$HOME/"
-
-  log "Linking bin files"
-  cp -a "$PROFILE_STAGING/bin/." "$HOME/.bin"
-
-  log "Linking source files"
-  cp -a "$PROFILE_STAGING/source/." "$HOME/.source"
-}
-
-function perform_install
-{
-  local type filename
-
-  type=$1
-
-  if [ ! -d "$PROFILE_STAGING/$type" ]; then
-    log "Nothing to install from $PROFILE_STAGING/$type"
-    return
-  fi
-
-  for script in "$PROFILE_STAGING/$type"/*; do
-    one_off_install "$type" "$script"
+  for profile in "${PROFILES[@]}"; do
+    cp -vfrs "$PROFILE_DIR/$profile/." "$STAGING_DIR"
   done
 }
 
-function one_off_install
+function verify_profiles
 {
-  local type script filename workdir
+  for profile in "${PROFILES[@]}"; do
+    if [ ! -d "$PROFILE_DIR/$profile" ]; then
+      logerror "$profile is not a supported profile"
+      return 1
+    fi
+  done
+}
+
+function run_script
+{
+  local type script script_name workspace
 
   type=$1
   script=$2
 
   if [ ! -f "$script" ]; then
-    logerror "Not a valid install script $1/$2"
+    logerror "Not a valid script to run $script"
     return
   fi
 
-  filename=$(basename "$script")
-  workdir=$PROFILE_INSTALL/$type/$filename
+  script_name=$(basename "$script")
+  workspace=$INSTALL_DIR/$type/$script_name
 
-  rm -rf "$workdir"
-  mkdir -p "$workdir"
-  pushd "$workdir"
-  log "Running install: $type/$filename"
-  $script || logerror "Install failed: $type/$filename"
+  rm -rf "$workspace"
+  mkdir -p "$workspace"
+  pushd "$workspace"
+  log "Running script $script_name"
+  $script || logerror "Install failed. Workspace at $workspace"
   popd
 }
 
@@ -248,82 +228,70 @@ function one_off_install
 
 function install
 {
-  echo "Installing profile"
-  echo "  PROFILE_ROOT=$PROFILE_ROOT"
-  echo "  PROFILE_STAGING=$PROFILE_STAGING"
-  # shellcheck disable=SC2145
-  echo "  PROFILES=${PROFILES[@]}"
-
-  # Stage files
-  if [ ${#PROFILES[@]} -eq 0 ]; then
-    stage Base
-  fi
-
-  for profile in "${PROFILES[@]}"; do
-    stage "$profile"
-  done
-
-  # Pre Install
-  if [ -n "${NO_PRE_INSTALL:-}" ]; then
-    log "NO_INSTALL set, not running pre install"
-  else
-    perform_install pre
-  fi
-
-  # Copying home files
-  if [ -n "${NO_HOME:-}" ]; then
-    log "NO_HOME set, not copying to home dir"
-  else
-    link_home_files
-  fi
-
-  # Post Install
-  if [ -n "${NO_POST_INSTALL:-}" ]; then
-    log "NO_INSTALL set, not running post install"
-  else
-    # shellcheck disable=SC1090
-    perform_install post
-  fi
-
-  log "Installation complete!"
+  home
+  pre
+  init
+  post
 }
 
-function reset
+function home
 {
-  # Reset directories
-  rm -rf "$PROFILE_STAGING"
-  mkdir -p "$PROFILE_INSTALL"
-  mkdir -p "$HOME/.bin"
-  mkdir -p "$HOME/.source"
+  log "Linking home files"
+  cp -a "$STAGING_DIR/home/." "$HOME/"
+}
+
+function pre
+{
+  log "Running pre initialization"
+  for script in "$STAGING_DIR/pre"/*; do
+    run_script pre "$script"
+  done
+}
+
+function init
+{
+  log "Running initialization"
+  for script in "$STAGING_DIR/init"/*; do
+    run_script init "$script"
+  done
+}
+
+function post
+{
+  log "Running post initialization"
+  for script in "$STAGING_DIR/post"/*; do
+    run_script post "$script"
+  done
 }
 
 if $install; then
+  verify_profiles
+  stage
   install
-elif $copy; then
-  NO_PRE_INSTALL=1 NO_POST_INSTALL=1 install
+elif $home; then
+  verify_profiles
+  stage
+  home
 elif $pre; then
-  # shellcheck disable=2153
-  if [ -z "$SCRIPT" ]; then
-    NO_HOME=1 NO_POST_INSTALL=1 install
-  else
-    one_off_install pre "$PROFILE_STAGING/pre/$SCRIPT"
-  fi
+  verify_profiles
+  stage
+  pre
 elif $post; then
-  if [ -z "$SCRIPT" ]; then
-    NO_HOME=1 NO_PRE_INSTALL=1 install "$@"
-  else
-    one_off_install post "$PROFILE_STAGING/post/$SCRIPT"
-  fi
-elif $reset; then
-  reset
+  verify_profiles
+  stage
+  post
+elif $script; then
+  run_script manual "$SCRIPT_PATH"
 elif $ls; then
-  for profile_path in profile/*; do
+  for profile_path in $PROFILE_DIR; do
     profile=$(basename "$profile_path")
     echo "Profile      : $profile"
     # shellcheck disable=2012
-    echo "Pre Scripts  : $(ls "profile/$profile/pre" 2>/dev/null | tr "\n" " ")"
+    echo "Pre Scripts  : $(ls "$profile_path/pre" 2>/dev/null | tr "\n" " ")"
     # shellcheck disable=2012
-    echo "Post Scripts : $(ls "profile/$profile/post" 2>/dev/null | tr "\n" " ")"
+    echo "Init Scripts : $(ls "$profile_path/init" 2>/dev/null | tr "\n" " ")"
+    # shellcheck disable=2012
+    echo "Post Scripts : $(ls "$profile_path/post" 2>/dev/null | tr "\n" " ")"
     echo
   done
 elif $info; then

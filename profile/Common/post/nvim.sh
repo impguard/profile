@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # shellcheck disable=SC1090
-PATH="$HOME/.bin/pyenv/bin/pyenv":$PATH
+PATH="$HOME/.bin/pyenv/bin":$PATH
 
 # Setup neovim
 
