@@ -4,10 +4,10 @@
 DOC="Profile setup tool.
 
 Usage:
-  ./profile.sh install [PROFILES...]
-  ./profile.sh (home|pre|init|post) [PROFILES...]
-  ./profile.sh SCRIPT_PATH
-  ./profile.sh (ls|info)
+  ./setup install [PROFILES...]
+  ./setup (home|pre|init|post) [PROFILES...]
+  ./setup SCRIPT_PATH
+  ./setup (ls|info)
 
 Commands:
   install   Installs all listed profiles
