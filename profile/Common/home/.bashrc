@@ -89,5 +89,3 @@ function tmox
   tmux select-window -t "$session:0"
   tmux attach-session -t "$session"
 }
-
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
