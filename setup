@@ -92,8 +92,9 @@ if [[ -z $match_count || ${#left[@]} -lt $match_count ]]; then
 best_match_idx=$node_idx; match_count=${#left[@]}; fi; fi
 left=("${initial_left[@]}"); done; ((testdepth--)) || true
 if [[ -n $best_match_idx ]]; then "node_$best_match_idx"; return 0; fi
-left=("${initial_left[@]}"); return 1; }; oneormore() { local i=0
-local prev=${#left[@]}; while "node_$1"; do ((i++)) || true
+left=("${initial_left[@]}"); return 1; }; optional() { local node_idx
+for node_idx in "$@"; do "node_$node_idx"; done; return 0; }; oneormore() {
+local i=0; local prev=${#left[@]}; while "node_$1"; do ((i++)) || true
 [[ $prev -eq ${#left[@]} ]] && break; prev=${#left[@]}; done
 if [[ $i -ge 1 ]]; then return 0; fi; return 1; }; _command() { local i
 local name=${2:-$1}; for i in "${!left[@]}"; do local l=${left[$i]}
@@ -111,22 +112,23 @@ eval "var_$1+=($value)"; else eval "var_$1=$value"; fi; return 0; fi; done
 return 1; }; stdout() { printf -- "cat <<'EOM'\n%s\nEOM\n" "$1"; }; stderr() {
 printf -- "cat <<'EOM' >&2\n%s\nEOM\n" "$1"; }; error() {
 [[ -n $1 ]] && stderr "$1"; stderr "$usage"; _return 1; }; _return() {
-printf -- "exit %d\n" "$1"; exit "$1"; }; set -e; trimmed_doc=${DOC:0:581}
-usage=${DOC:21:141}; digest=ed212; shorts=(); longs=(); argcounts=(); node_0(){
+printf -- "exit %d\n" "$1"; exit "$1"; }; set -e; trimmed_doc=${DOC:0:585}
+usage=${DOC:21:145}; digest=b88cb; shorts=(); longs=(); argcounts=(); node_0(){
 value PROFILES a true; }; node_1(){ value SCRIPT_PATH a; }; node_2(){
 _command install; }; node_3(){ _command home; }; node_4(){ _command pre; }
 node_5(){ _command init; }; node_6(){ _command post; }; node_7(){ _command ls; }
-node_8(){ _command info; }; node_9(){ oneormore 0; }; node_10(){ required 2 9; }
-node_11(){ either 3 4 5 6; }; node_12(){ required 11; }; node_13(){
-required 12 9; }; node_14(){ required 1; }; node_15(){ either 7 8; }; node_16(){
-required 15; }; node_17(){ required 16; }; node_18(){ either 10 13 14 17; }
-node_19(){ required 18; }; cat <<<' docopt_exit() {
-[[ -n $1 ]] && printf "%s\n" "$1" >&2; printf "%s\n" "${DOC:21:141}" >&2; exit 1
-}'; unset var_PROFILES var_SCRIPT_PATH var_install var_home var_pre var_init \
-var_post var_ls var_info; parse 19 "$@"; local prefix=${DOCOPT_PREFIX:-''}
-unset "${prefix}PROFILES" "${prefix}SCRIPT_PATH" "${prefix}install" \
-"${prefix}home" "${prefix}pre" "${prefix}init" "${prefix}post" "${prefix}ls" \
-"${prefix}info"; if declare -p var_PROFILES >/dev/null 2>&1; then
+node_8(){ _command info; }; node_9(){ oneormore 0; }; node_10(){ optional 9; }
+node_11(){ required 2 10; }; node_12(){ either 3 4 5 6; }; node_13(){
+required 12; }; node_14(){ required 13 10; }; node_15(){ required 1; }
+node_16(){ either 7 8; }; node_17(){ required 16; }; node_18(){ required 17; }
+node_19(){ either 11 14 15 18; }; node_20(){ required 19; }
+cat <<<' docopt_exit() { [[ -n $1 ]] && printf "%s\n" "$1" >&2
+printf "%s\n" "${DOC:21:145}" >&2; exit 1; }'; unset var_PROFILES \
+var_SCRIPT_PATH var_install var_home var_pre var_init var_post var_ls var_info
+parse 20 "$@"; local prefix=${DOCOPT_PREFIX:-''}; unset "${prefix}PROFILES" \
+"${prefix}SCRIPT_PATH" "${prefix}install" "${prefix}home" "${prefix}pre" \
+"${prefix}init" "${prefix}post" "${prefix}ls" "${prefix}info"
+if declare -p var_PROFILES >/dev/null 2>&1; then
 eval "${prefix}"'PROFILES=("${var_PROFILES[@]}")'; else
 eval "${prefix}"'PROFILES=()'; fi
 eval "${prefix}"'SCRIPT_PATH=${var_SCRIPT_PATH:-}'
