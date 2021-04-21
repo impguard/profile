@@ -3,11 +3,14 @@
   "coc.preferences.formatOnTypeFiletypes":["python"],
 
   "diagnostic.displayByAle": true,
+  "diagnostic.level": "hint",
+  "diagnostic.infoSign": ">>",
+  "diagnostic.warningSign": ">>",
   "diagnostic.enableHighlightLineNumber": true,
+  "diagnostic.showUnused": false,
 
-  "python.jediEnabled": false,
+  "python.linting.enabled": false,
   "python.formatting.provider": "black",
 
-  "python.venvPath": "~/.pyenv",
-  "python.venvFolders": ["venv"]
+  "python.venvPath": "~/.pyenv"
 }

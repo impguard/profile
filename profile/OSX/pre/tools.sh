@@ -14,4 +14,6 @@ brew install \
   python \
   tmux \
   node \
+  minikube \
+  helm \
   || true
