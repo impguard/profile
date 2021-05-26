@@ -6,7 +6,7 @@ if [ -d "$HOME/.bin/tmux/bin" ]; then
 fi
 
 # Install dependencies
-sudo apt install libevent-dev
+sudo apt install -y libevent-dev
 
 # Download source
 curl -L https://github.com/tmux/tmux/releases/download/3.1/tmux-3.1.tar.gz -o tmux-3.1.tar.gz
