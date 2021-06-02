@@ -1,16 +1,4 @@
 {
-  "coc.preferences.formatOnType":true,
-  "coc.preferences.formatOnTypeFiletypes":["python"],
-
-  "diagnostic.displayByAle": true,
-  "diagnostic.level": "hint",
-  "diagnostic.infoSign": ">>",
-  "diagnostic.warningSign": ">>",
   "diagnostic.enableHighlightLineNumber": true,
-  "diagnostic.showUnused": false,
-
-  "python.linting.enabled": false,
-  "python.formatting.provider": "black",
-
-  "python.venvPath": "~/.pyenv"
+  "diagnostic.showUnused": false
 }

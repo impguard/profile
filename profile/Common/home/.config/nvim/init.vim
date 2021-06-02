@@ -28,17 +28,11 @@ let g:coc_global_extensions = [
       \ 'coc-highlight',
       \ ]
 
-" Disable ALE LSP since Coc Manages it
-let g:ale_disable_lsp = 1
-
 " ================ Install plugins =================
 call plug#begin('~/.local/share/nvim/plugged')
 
 " Intellisense Egngine
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
-" Asynchronous Linting Engine
-Plug 'w0rp/ale'
 
 " Yaml
 Plug 'stephpy/vim-yaml'
@@ -83,10 +77,6 @@ let NERDTreeIgnore = ['\.\.$', '\.$', '__pycache__', 'node_modules', '\.git$', '
 let NERDTreeShowHidden=1
 noremap <leader>n :NERDTreeToggle<CR>
 autocmd FileType nerdtree setlocal signcolumn=no
-
-" ================ ALE Settings ===================
-
-nmap <silent> gf <Plug>(ale_fix)
 
 " ================ CoC Settings ===================
 
@@ -166,106 +156,3 @@ set expandtab
 " ================ Source ========================
 
 source $HOME/.config/nvim/source/python.vim
-
-" Archive of old plugins
-
-" Deoplete completion
-" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-" Plug 'Shougo/echodoc.vim'
-
-" Typescript
-" Plug 'HerringtonDarkholme/yats.vim'
-" Plug 'mhartington/nvim-typescript', {'do': './install.sh'}
-
-" Python
-" Plug 'deoplete-plugins/deoplete-jedi'
-" Plug 'Vimjas/vim-python-pep8-indent'
-" Plug 'davidhalter/jedi-vim'
-" Plug 'fisadev/vim-isort'
-
-" Go
-" Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
-" Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
-
-" Rust
-" Plug 'rust-lang/rust.vim'
-
-" Javascript
-" Plug 'yuezk/vim-js'
-" Plug 'maxmellon/vim-jsx-pretty'
-"
-" Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
-" Plug 'ternjs/tern_for_vim'
-
-" Terraform
-" Plug 'hashivim/vim-terraform'
-" Plug 'juliosueiras/vim-terraform-completion'
-
-" File search
-" Plug 'junegunn/fzf', { 'dir': '~/.fzf' }
-" Plug 'junegunn/fzf.vim'
-" NERD Tree
-" Plug 'scrooloose/nerdtree'
-" Sublime multiple cursors
-" Plug 'terryma/vim-multiple-cursors'
-" Common Unix commands
-" Plug 'tpope/vim-eunuch'
-" Editor config support
-" Plug 'editorconfig/editorconfig-vim'
-
-" ================ Deoplete Settings ==============
-" let g:deoplete#enable_at_startup = 1
-" inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
-"
-" " Adjust delay to 30 ms
-" call deoplete#custom#option('auto_complete_delay', 30)
-"
-" " Silence the  messages in the command line
-" " such as 'The only match', 'Pattern not found', 'Back at original", etc.
-" set shortmess+=c
-"
-" " Support for terraform
-" let g:deoplete#omni_patterns = {}
-" let g:deoplete#omni_patterns.terraform = '[^ *\t"{=$]\w*'
-"
-" " Disable deoplete when in multi cursor mode
-" function! Multiple_cursors_before()
-"   let b:deoplete_disable_auto_complete = 1
-" endfunction
-"
-" function! Multiple_cursors_after()
-"   let b:deoplete_disable_auto_complete = 0
-" endfunction
-
-" ================ Jedi-Vim Settings =============
-" let g:jedi#completions_enabled = 0
-" let g:jedi#usages_command = "<leader>u"
-
-" ================ Python Settings ===============
-" let g:python_host_prog = '/Users/kwu/.pyenv/versions/neovim/bin/python'
-" let g:python3_host_prog = '/Users/kwu/.pyenv/versions/neovim/bin/python'
-
-" ================ Go Settings ===================
-" let g:deoplete#sources#go#gocode_binary = '$GOPATH/bin/gocode'
-"
-" let g:go_highlight_build_constraints = 1
-" let g:go_highlight_extra_types = 1
-" let g:go_highlight_fields = 1
-" let g:go_highlight_functions = 1
-" let g:go_highlight_methods = 1
-" let g:go_highlight_operators = 1
-" let g:go_highlight_structs = 1
-" let g:go_highlight_types = 1
-" " let g:go_auto_sameids = 1
-" let g:go_auto_type_info = 1
-" let g:go_fmt_command = "goimports"
-" let g:go_addtags_transform = "snakecase"
-" let g:go_updatetime = 1
-
-" ================ Tern Settings =================
-" let g:tern#command = ["tern"]
-" let g:tern#arguments = ["--persistent"]
-
-" ================ Echodoc Settings ==============
-" let g:echodoc#enable_at_startup = 1
-" set completeopt-=preview
