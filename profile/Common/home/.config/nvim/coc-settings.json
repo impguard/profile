@@ -1,4 +1,5 @@
 {
   "diagnostic.enableHighlightLineNumber": true,
-  "diagnostic.showUnused": false
+  "diagnostic.showUnused": false,
+  "coc.preferences.formatOnSaveFiletypes": ["go"]
 }
