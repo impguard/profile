@@ -120,6 +120,9 @@ nmap <leader>gf <Plug>(coc-format)
 " Symbol renaming.
 nmap <leader>rn <Plug>(coc-rename)
 
+" List Coc Commands
+nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
+
 " Use K to show documentation in preview window.
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 
