@@ -7,3 +7,5 @@ if !empty($PYENV_VIRTUAL_ENV)
   \   'pythonPath': $PYENV_VIRTUAL_ENV . '/bin/python'
   \ })
 endif
+
+autocmd BufWritePre *.go :silent call CocAction('runCommand', 'editor.action.organizeImport')

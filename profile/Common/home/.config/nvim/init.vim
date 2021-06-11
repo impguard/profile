@@ -44,6 +44,9 @@ Plug 'maxmellon/vim-jsx-pretty'
 " Jinja2
 Plug 'glench/vim-jinja2-syntax'
 
+" Terraform
+Plug 'hashivim/vim-terraform'
+
 " File search
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -66,8 +69,8 @@ call plug#end()
 let mapleader = ","
 
 " Recognize Jenkinsfiles
-au BufNewFile,BufRead Jenkinsfile setf groovy
-au BufNewFile,BufRead *.Jenkinsfile setf groovy
+autocmd BufNewFile,BufRead Jenkinsfile setf groovy
+autocmd BufNewFile,BufRead *.Jenkinsfile setf groovy
 
 " ================ fzf Settings ===================
 noremap <c-p> :Files<CR>
@@ -76,6 +79,7 @@ noremap <c-p> :Files<CR>
 let NERDTreeIgnore = ['\.\.$', '\.$', '__pycache__', 'node_modules', '\.git$', '\.pyc$', '.cache', '.DS_Store', '.terraform']
 let NERDTreeShowHidden=1
 noremap <leader>n :NERDTreeToggle<CR>
+noremap <leader>f :NERDTreeFind<CR>
 autocmd FileType nerdtree setlocal signcolumn=no
 
 " ================ CoC Settings ===================
@@ -120,11 +124,11 @@ nmap <leader>gf <Plug>(coc-format)
 " Symbol renaming.
 nmap <leader>rn <Plug>(coc-rename)
 
-" List Coc Commands
-nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
+" List Coc Actions
+nmap <leader>ca :CocAction<cr>
 
 " Use K to show documentation in preview window.
-nnoremap <silent> K :call <SID>show_documentation()<CR>
+nnoremap <silent> K :call <sid>show_documentation()<cr>
 
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)

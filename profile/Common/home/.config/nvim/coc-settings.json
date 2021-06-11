@@ -1,5 +1,19 @@
 {
   "diagnostic.enableHighlightLineNumber": true,
-  "diagnostic.showUnused": false,
-  "coc.preferences.formatOnSaveFiletypes": ["go"]
+  "coc.preferences.formatOnSaveFiletypes": ["go", "python"],
+  "python.linting.mypyEnabled": true,
+  "python.linting.flake8Enabled": true,
+  "pyright.organizeimports.provider": "isort",
+  "python.formatting.provider": "black",
+  "python.formatting.blackArgs": [
+    "--line-length", "120"
+  ],
+  "python.sortImports.args": [
+    "-m", "VERTICAL_HANGING_INDENT",
+    "--trailing-comma",
+    "--line-length", "120"
+  ],
+  "python.linting.flake8Args": [
+    "--max-line-length", "120"
+  ]
 }
