@@ -56,30 +56,66 @@ Plug 'scrooloose/nerdtree'
 
 " Status line
 Plug 'itchyny/lightline.vim'
+Plug 'shinchu/lightline-gruvbox.vim'
 
 " Useful tabularize function
 Plug 'godlygeek/tabular'
 
 " Color scheme
 Plug 'lifepillar/vim-solarized8'
+Plug 'morhetz/gruvbox'
 
 call plug#end()
 
-" ================ Common Settings ================
+" ================ Mappings ================
 let mapleader = ","
+
+" ===== Normal/Visual/Select/Operator
+
+" fzf file Search
+noremap <c-p> :Files<CR>
+
+" List Coc Actions
+nmap <c-a> :CocAction<cr>
+
+" NERDTree
+noremap <leader>n :NERDTreeToggle<CR>
+noremap <leader>f :NERDTreeFind<CR>
+
+" ===== Normal Mode
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gtd <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Format buffer
+nmap <silent> gf <Plug>(coc-format)
+
+" Symbol renaming.
+nmap <silent> rn <Plug>(coc-rename)
+
+" Use K to show documentation in preview window.
+nnoremap <silent> sd :call <sid>show_documentation()<cr>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" ================ Common Settings ================
 
 " Recognize Jenkinsfiles
 autocmd BufNewFile,BufRead Jenkinsfile setf groovy
 autocmd BufNewFile,BufRead *.Jenkinsfile setf groovy
 
-" ================ fzf Settings ===================
-noremap <c-p> :Files<CR>
-
 " ================ NERDTree Settings ==============
 let NERDTreeIgnore = ['\.\.$', '\.$', '__pycache__', 'node_modules', '\.git$', '\.pyc$', '.cache', '.DS_Store', '.terraform']
 let NERDTreeShowHidden=1
-noremap <leader>n :NERDTreeToggle<CR>
-noremap <leader>f :NERDTreeFind<CR>
 autocmd FileType nerdtree setlocal signcolumn=no
 
 " ================ CoC Settings ===================
@@ -102,6 +138,11 @@ set updatetime=300
 " Don't pass messages to |ins-completion-menu|.
 set shortmess+=c
 
+" Add (Neo)Vim's native statusline support.
+" NOTE: Please see `:h coc-status` for integrations with external plugins that
+" provide custom statusline: lightline.vim, vim-airline.
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+
 " Force enter to confirm completion
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
@@ -112,55 +153,23 @@ inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
 
-" GoTo code navigation.
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-
-" Format buffer
-nmap <leader>gf <Plug>(coc-format)
-
-" Symbol renaming.
-nmap <leader>rn <Plug>(coc-rename)
-
-" List Coc Actions
-nmap <leader>ca :CocAction<cr>
-
-" Use K to show documentation in preview window.
-nnoremap <silent> K :call <sid>show_documentation()<cr>
-
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
-
-" Add (Neo)Vim's native statusline support.
-" NOTE: Please see `:h coc-status` for integrations with external plugins that
-" provide custom statusline: lightline.vim, vim-airline.
-set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-
-" Remap <C-f> and <C-b> for scroll float windows/popups.
+" Remap <C-d> and <C-u> for scroll float windows/popups.
 if has('nvim-0.4.0') || has('patch-8.2.0750')
-  nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-  nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-  inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-  inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
-  vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-  vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+  nnoremap <silent><nowait><expr> <C-d> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-d>"
+  nnoremap <silent><nowait><expr> <C-u> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-u>"
+  inoremap <silent><nowait><expr> <C-d> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+  inoremap <silent><nowait><expr> <C-u> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+  vnoremap <silent><nowait><expr> <C-d> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-d>"
+  vnoremap <silent><nowait><expr> <C-u> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-u>"
 endif
 
 " ================ Theme =========================
-set background=dark
-colorscheme solarized8_high
+let g:gruvbox_contrast_dark = 'hard'
+colorscheme gruvbox
 
 " ================ Lightline Colorscheme =========
-let g:lightline = {
-  \ 'colorscheme': 'solarized',
-\ }
+let g:lightline = {}
+let g:lightline.colorscheme = 'gruvbox'
 
 " ================ Indentation ===================
 set autoindent

@@ -1,6 +1,6 @@
 {
   "diagnostic.enableHighlightLineNumber": true,
-  "coc.preferences.formatOnSaveFiletypes": ["go", "python"],
+  "coc.preferences.formatOnSaveFiletypes": [],
   "python.linting.mypyEnabled": true,
   "python.linting.flake8Enabled": true,
   "pyright.organizeimports.provider": "isort",
@@ -15,5 +15,6 @@
   ],
   "python.linting.flake8Args": [
     "--max-line-length", "120"
-  ]
+  ],
+  "diagnostic.hintSign": ""
 }
