@@ -40,12 +40,18 @@ Plug 'stephpy/vim-yaml'
 " Javascript
 Plug 'yuezk/vim-js'
 Plug 'maxmellon/vim-jsx-pretty'
+Plug 'peitalin/vim-jsx-typescript'
+Plug 'leafgarland/typescript-vim'
+Plug 'styled-components/vim-styled-components'
 
 " Jinja2
 Plug 'glench/vim-jinja2-syntax'
 
 " Terraform
 Plug 'hashivim/vim-terraform'
+
+" Solidity
+Plug 'tomlion/vim-solidity'
 
 " File search
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
