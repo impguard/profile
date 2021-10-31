@@ -289,7 +289,7 @@ elif $post; then
 elif $script; then
   run_script manual "$SCRIPT_PATH"
 elif $ls; then
-  for profile_path in $PROFILE_DIR; do
+  for profile_path in $PROFILE_DIR/*; do
     profile=$(basename "$profile_path")
     echo "Profile      : $profile"
     # shellcheck disable=2012
