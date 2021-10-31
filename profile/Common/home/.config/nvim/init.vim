@@ -4,7 +4,7 @@ set autoread                    " Reload files changed outside vim
 set exrc                        " Enable per-directory .vimrc files
 set secure                      " Disable unsafe commands in local .vimrc files
 set number                      " Show line numbers
-set clipboard=unnamed           " Makes yank/delete operations copy to clipboard
+set clipboard=unnamedplus       " Makes yank/delete operations copy to clipboard
 set incsearch                   " Search incrementally instead of after I press enter
 set timeoutlen=300 		          " Adjust esckeys option timeout length
 set hidden 			                " Buffers can exist in the background
