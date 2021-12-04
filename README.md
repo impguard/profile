@@ -34,7 +34,7 @@ cd ~/.profile.d
 3. Look for a file named like
    https://cloud-images.ubuntu.com/releases/hirsute/release/ubuntu-21.04-server-cloudimg-amd64-wsl.rootfs.tar.gz
    and download it
-4. Run wsl.exe --import Ubuntu <Install Folder> <.TAR.GZ File Path>
+4. Run `wsl.exe --import Ubuntu <Install Folder> <.TAR.GZ File Path>`
   * Distribution Name: A friendly name. eg Ubuntu
   * Install folder: a place to put the virtual hard disk, this will not contain human readable files
 5. Start the distro and run the following
