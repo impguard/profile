@@ -19,13 +19,38 @@ bash -c "$(curl https://raw.githubusercontent.com/impguard/profile/master/instal
 
 # Run setup
 cd ~/.profile.d
-./setup Ubuntu Common
+./setup install Ubuntu Common
 ```
 3. Startup Tilix (Note: after installation, make sure you change the Tilix
    theme to match nvim)
 
 
 ### windows
+
+#### Install Windows Terminal and Ubuntu
+
+1. Go to https://github.com/microsoft/terminal/releases and pick a release to install
+2. Go do https://cloud-images.ubuntu.com/releases/ and select a version to install
+3. Look for a file named like
+   https://cloud-images.ubuntu.com/releases/hirsute/release/ubuntu-21.04-server-cloudimg-amd64-wsl.rootfs.tar.gz
+   and download it
+4. Run wsl.exe --import Ubuntu <Install Folder> <.TAR.GZ File Path>
+  * Distribution Name: A friendly name. eg Ubuntu
+  * Install folder: a place to put the virtual hard disk, this will not contain human readable files
+5. Start the distro and run the following
+```
+NEW_USER=impguard
+adduser "${NEW_USER}"
+adduser "${NEW_USER}" sudo
+tee /etc/wsl.conf <<_EOF
+[user]
+default=${NEW_USER}
+_EOF
+```
+6. *Care: this will exit all distros.* Exit the session, then fully shutdown the distro using wsl --shutdown Ubuntu
+
+#### Run setup
+
 1. [Setup Github SSH Key](https://help.github.com/en/enterprise/2.15/user/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
 2. May want to setup a Github key for the Windows side as well
 3. [Setup WSL 2](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
@@ -40,7 +65,7 @@ bash -c "$(curl https://raw.githubusercontent.com/impguard/profile/master/instal
 
 # Run setup
 cd ~/.profile.d
-./setup Windows Ubuntu Common
+./setup install Windows Ubuntu Common
 ```
 
 ### osx
@@ -60,7 +85,7 @@ bash -c "$(curl https://raw.githubusercontent.com/impguard/profile/master/instal
 
 # Run setup
 cd ~/.profile.d
-./setup OSX Common
+./setup install OSX Common
 ```
 
 To setup the rest of the computer:
