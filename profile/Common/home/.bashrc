@@ -4,13 +4,6 @@
 # Source files
 ############################################################
 
-if [ -n "$(ls -A "$HOME/.bashrc.d/")" ]; then
-  for file in "$HOME"/.bashrc.d/*; do
-    # shellcheck disable=SC1090
-    source "$file"
-  done
-fi
-
 for file in "$HOME"/.source/*; do
   # shellcheck disable=SC1090
   source "$file"

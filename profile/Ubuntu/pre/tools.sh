@@ -12,7 +12,6 @@ sudo apt-get install --no-install-recommends -y \
 
 sudo apt install -y \
   neovim \
-  screen \
   autojump \
   shellcheck \
   silversearcher-ag \
