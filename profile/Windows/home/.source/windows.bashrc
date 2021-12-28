@@ -3,3 +3,5 @@
 export USERPROFILE
 
 USERPROFILE=$(wslpath "$(wslvar USERPROFILE 2>/dev/null)")
+
+alias open=explorer.exe

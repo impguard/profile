@@ -83,6 +83,7 @@ noremap <c-p> :Files<CR>
 
 " List Coc Actions
 nmap <c-a> :CocAction<cr>
+nmap <c-c> :CocCommand<cr>
 
 " NERDTree
 noremap <leader>n :NERDTreeToggle<CR>
