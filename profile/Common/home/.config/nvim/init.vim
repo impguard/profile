@@ -43,7 +43,6 @@ Plug 'maxmellon/vim-jsx-pretty'
 Plug 'peitalin/vim-jsx-typescript'
 Plug 'leafgarland/typescript-vim'
 Plug 'styled-components/vim-styled-components'
-Plug 'mattn/emmet-vim'
 
 " Jinja2
 Plug 'glench/vim-jinja2-syntax'
