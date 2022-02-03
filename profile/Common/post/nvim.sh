@@ -15,18 +15,18 @@ eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 
 pyenv install -s 2.7.14
-pyenv install -s 3.7.4
+pyenv install -s 3.10.2
 
 pyenv virtualenv 2.7.14 neovim2
-pyenv virtualenv 3.7.4 neovim3
+pyenv virtualenv 3.10.2 neovim3
 
 pyenv activate neovim2
-pip install pynvim
+pip3 install pynvim
 
 echo "let g:python_host_prog = '$(pyenv which python)'" > "$SOURCE_FILENAME"
 
 pyenv activate neovim3
-pip install neovim
+pip3 install neovim
 
 echo "let g:python3_host_prog = '$(pyenv which python)'" >> "$SOURCE_FILENAME"
 

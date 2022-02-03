@@ -1,3 +1,13 @@
 #!/usr/bin/env bash
 
-brew install --cask google-chrome docker slack iterm2 hammerspoon || true
+function install
+{
+  app=$1
+  brew install --cask "$app" || true
+}
+
+install google-chrome
+install docker
+install slack
+install iterm2
+install hammerspoon
