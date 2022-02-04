@@ -17,7 +17,7 @@ function __enable_usage
 
 function __enable_python
 {
-  eval "$(pyenv init --path)
+  eval "$(pyenv init --path)"
   eval "$(pyenv init -)"
   eval "$(pyenv virtualenv-init -)"
   echo "pyenv enabled"
