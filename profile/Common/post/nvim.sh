@@ -11,6 +11,7 @@ SOURCE_FILENAME="$SOURCE_DIR/python.vim"
 mkdir -p "$SOURCE_DIR"
 touch "$SOURCE_FILENAME"
 
+eval "$(pyenv init --path)"
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 
@@ -21,12 +22,12 @@ pyenv virtualenv 2.7.14 neovim2
 pyenv virtualenv 3.10.2 neovim3
 
 pyenv activate neovim2
-pip3 install pynvim
+pip install pynvim
 
 echo "let g:python_host_prog = '$(pyenv which python)'" > "$SOURCE_FILENAME"
 
 pyenv activate neovim3
-pip3 install neovim
+pip3 install pynvim
 
 echo "let g:python3_host_prog = '$(pyenv which python)'" >> "$SOURCE_FILENAME"
 
