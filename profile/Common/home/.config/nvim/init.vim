@@ -38,10 +38,10 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'stephpy/vim-yaml'
 
 " Javascript
-Plug 'yuezk/vim-js'
-Plug 'maxmellon/vim-jsx-pretty'
-Plug 'peitalin/vim-jsx-typescript'
+Plug 'pangloss/vim-javascript'
 Plug 'leafgarland/typescript-vim'
+Plug 'maxmellon/vim-jsx-pretty'
+Plug 'alampros/vim-styled-jsx'
 Plug 'styled-components/vim-styled-components'
 
 " Jinja2
