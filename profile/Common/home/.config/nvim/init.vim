@@ -34,21 +34,24 @@ call plug#begin('~/.local/share/nvim/plugged')
 " Intellisense Egngine
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
+" Tree Sitter (Syntax Highlighting)
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
 " Yaml
-Plug 'stephpy/vim-yaml'
+" Plug 'stephpy/vim-yaml'
 
 " Javascript
-Plug 'pangloss/vim-javascript'
-Plug 'leafgarland/typescript-vim'
 Plug 'maxmellon/vim-jsx-pretty'
-Plug 'alampros/vim-styled-jsx'
-Plug 'styled-components/vim-styled-components'
+" Plug 'pangloss/vim-javascript'
+" Plug 'leafgarland/typescript-vim'
+" Plug 'alampros/vim-styled-jsx'
+" Plug 'styled-components/vim-styled-components'
 
 " Jinja2
-Plug 'glench/vim-jinja2-syntax'
+" Plug 'glench/vim-jinja2-syntax'
 
 " Terraform
-Plug 'hashivim/vim-terraform'
+" Plug 'hashivim/vim-terraform'
 
 " Solidity
 Plug 'tomlion/vim-solidity'
@@ -69,7 +72,7 @@ Plug 'godlygeek/tabular'
 
 " Color scheme
 Plug 'lifepillar/vim-solarized8'
-Plug 'morhetz/gruvbox'
+Plug 'luisiacc/gruvbox-baby', {'branch': 'main'}
 
 call plug#end()
 
@@ -125,6 +128,20 @@ let NERDTreeIgnore = ['\.\.$', '\.$', '__pycache__', 'node_modules', '\.git$', '
 let NERDTreeShowHidden=1
 autocmd FileType nerdtree setlocal signcolumn=no
 
+" ============= Treesitter Settings ===============
+
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+  highlight = {
+    enable = true,
+    additional_vim_regex_highlighting = true,
+  },
+  indent = {
+    enable = true
+  }
+}
+EOF
+
 " ================ CoC Settings ===================
 
 "  To enable highlight current symbol on CursorHold
@@ -171,8 +188,8 @@ if has('nvim-0.4.0') || has('patch-8.2.0750')
 endif
 
 " ================ Theme =========================
-let g:gruvbox_contrast_dark = 'hard'
-colorscheme gruvbox
+let g:gruvbox_baby_background_color = "dark"
+colorscheme gruvbox-baby
 
 " ================ Lightline Colorscheme =========
 let g:lightline = {}
