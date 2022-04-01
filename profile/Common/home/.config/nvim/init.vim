@@ -71,8 +71,7 @@ Plug 'shinchu/lightline-gruvbox.vim'
 Plug 'godlygeek/tabular'
 
 " Color scheme
-Plug 'lifepillar/vim-solarized8'
-Plug 'luisiacc/gruvbox-baby', {'branch': 'main'}
+Plug 'sainnhe/gruvbox-material'
 
 call plug#end()
 
@@ -188,8 +187,9 @@ if has('nvim-0.4.0') || has('patch-8.2.0750')
 endif
 
 " ================ Theme =========================
-let g:gruvbox_baby_background_color = "dark"
-colorscheme gruvbox-baby
+set background=dark
+let g:gruvbox_material_background = 'hard'
+colorscheme gruvbox-material
 
 " ================ Lightline Colorscheme =========
 let g:lightline = {}
