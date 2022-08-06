@@ -84,7 +84,7 @@ let mapleader = ","
 noremap <c-p> :Files<CR>
 
 " List Coc Actions
-nmap <c-a> :CocAction<cr>
+nmap <c-a> <Plug>(coc-codeaction-selected)<cr>
 nmap <c-c> :CocCommand<cr>
 
 " NERDTree
