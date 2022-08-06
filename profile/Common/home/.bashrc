@@ -32,9 +32,6 @@ export HISTFILESIZE=100000
 # Append to history, don't overwrite
 shopt -s histappend
 
-# Customizes what files fzf finds
-export FZF_DEFAULT_COMMAND='ag -U -g "" --hidden --ignore "node_modules|.git"'
-
 ############################################################
 # Modify the PATH
 ############################################################
