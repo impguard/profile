@@ -32,7 +32,7 @@ cd ~/.profile.d
 1. Go to https://github.com/microsoft/terminal/releases and pick a release to install
 2. Go do https://cloud-images.ubuntu.com/releases/ and select a version to install
 3. Look for a file named like
-   https://cloud-images.ubuntu.com/releases/hirsute/release/ubuntu-21.04-server-cloudimg-amd64-wsl.rootfs.tar.gz
+   https://cloud-images.ubuntu.com/releases/jammy/release/ubuntu-22.04-server-cloudimg-amd64-wsl.rootfs.tar.gz
    and download it
 4. Run `wsl.exe --import Ubuntu <Install Folder> <.TAR.GZ File Path>`
   * Distribution Name: A friendly name. eg Ubuntu
