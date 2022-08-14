@@ -37,21 +37,8 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " Tree Sitter (Syntax Highlighting)
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
-" Yaml
-" Plug 'stephpy/vim-yaml'
-
 " Javascript
-Plug 'maxmellon/vim-jsx-pretty'
-" Plug 'pangloss/vim-javascript'
-" Plug 'leafgarland/typescript-vim'
-" Plug 'alampros/vim-styled-jsx'
-" Plug 'styled-components/vim-styled-components'
-
-" Jinja2
-" Plug 'glench/vim-jinja2-syntax'
-
-" Terraform
-" Plug 'hashivim/vim-terraform'
+" Plug 'maxmellon/vim-jsx-pretty'
 
 " Solidity
 Plug 'tomlion/vim-solidity'
