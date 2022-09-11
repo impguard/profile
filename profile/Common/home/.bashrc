@@ -23,7 +23,7 @@ export CODEPATH=$HOME/code
 export EDITOR=nvim
 
 # Custom FZF command
-export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
+export FZF_DEFAULT_COMMAND='ag --hidden --all-text --ignore .git -g ""'
 
 # no duplicate entries and avoid history by typing a space before a command
 export HISTCONTROL=ignorespace:ignoredups:erasedups
