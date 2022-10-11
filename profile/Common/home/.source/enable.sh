@@ -26,6 +26,8 @@ function __enable_python
 function __enable_golang
 {
   eval "$(goenv init -)"
+  export PATH="$GOROOT/bin:$PATH"
+  export PATH="$PATH:$GOPATH/bin"
   echo "goenv enabled"
 }
 

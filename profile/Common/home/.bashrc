@@ -82,3 +82,9 @@ function tmox
   tmux select-window -t "$session:0"
   tmux attach-session -t "$session"
 }
+
+############################################################
+# Riot Customizations
+############################################################
+
+export GOPRIVATE=*.riotgames.com
