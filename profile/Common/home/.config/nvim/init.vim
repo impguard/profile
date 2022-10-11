@@ -60,6 +60,9 @@ Plug 'shinchu/lightline-gruvbox.vim'
 " Useful tabularize function
 Plug 'godlygeek/tabular'
 
+" Plugin to help create markdown tables
+Plug 'dhruvasagar/vim-table-mode'
+
 " Color scheme
 Plug 'sainnhe/gruvbox-material'
 
