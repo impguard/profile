@@ -3,14 +3,13 @@
   "diagnostic.hintSign": "",
   "diagnostic.enableHighlightLineNumber": true,
   "diagnostic.checkCurrentLine": true,
+
   "python.linting.mypyEnabled": true,
   "python.linting.flake8Enabled": true,
   "pyright.organizeimports.provider": "isort",
   "python.formatting.provider": "black",
-  "python.formatting.blackArgs": [
-    "--line-length",
-    "120"
-  ],
+  "python.formatting.blackArgs": ["--line-length", "120"],
+  "python.linting.flake8Args": ["--max-line-length", "120"],
   "python.sortImports.args": [
     "-m",
     "VERTICAL_HANGING_INDENT",
@@ -22,9 +21,11 @@
     "--max-line-length",
     "120"
   ],
+
   "go.goplsOptions": {
     "gofumpt": true
   },
+
   "yaml.format.enable": true,
 
   "languageserver": {
@@ -43,5 +44,9 @@
         ]
       }
     }
+  },
+
+  "tsserver.watchOptions": {
+    "fallbackPolling": "priorityPollingInterval"
   }
 }
