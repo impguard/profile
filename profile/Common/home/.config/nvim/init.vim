@@ -1,3 +1,5 @@
+" ================== Settings ====================
+
 set history=1000                " Store lots of :cmdline history
 set showmode                    " Show current mode down the bottom
 set autoread                    " Reload files changed outside vim
@@ -15,6 +17,15 @@ set noshowmode                  " Don't show the mode
 set noswapfile                  " Disable swap files
 set termguicolors
 
+" Set indentation to 2 spaces
+set autoindent
+set breakindent
+set smarttab
+set shiftwidth=2
+set softtabstop=2
+set tabstop=2
+set expandtab
+
 " Automatically remove trailing whitespace
 autocmd BufWritePre * :%s/\s\+$//e
 
@@ -28,6 +39,10 @@ let g:coc_global_extensions = [
       \ 'coc-highlight',
       \ ]
 
+" Disabling netrw (recommended by nvim-tree)
+let g:loaded_netrw       = 1
+let g:loaded_netrwPlugin = 1
+
 " ================ Install plugins =================
 call plug#begin('~/.local/share/nvim/plugged')
 
@@ -37,21 +52,24 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " Tree Sitter (Syntax Highlighting)
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
+" Solidity
+Plug 'tomlion/vim-solidity'
+
 " Autopairs
 Plug 'windwp/nvim-autopairs'
 
-" Javascript
-" Plug 'maxmellon/vim-jsx-pretty'
+" Autotag HTML elements
+Plug 'windwp/nvim-ts-autotag'
 
-" Solidity
-Plug 'tomlion/vim-solidity'
+" Colorize color codes
+Plug 'norcalli/nvim-colorizer.lua'
+
+" File tree
+Plug 'preservim/nerdtree'
 
 " File search
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-
-" NERD Tree
-Plug 'scrooloose/nerdtree'
 
 " Status line
 Plug 'itchyny/lightline.vim'
@@ -71,35 +89,29 @@ call plug#end()
 " ================ Mappings ================
 let mapleader = ","
 
-" ===== Normal/Visual/Select/Operator
+" ===== Editor Actions (ctrl-X)
 
 " fzf file Search
 noremap <c-p> :Files<CR>
 
 " List Coc Actions
-nmap <c-a> <Plug>(coc-codeaction-selected)<cr>
-nmap <c-c> :CocCommand<cr>
+noremap <c-a> <Plug>(coc-codeaction-selected)<cr>
+noremap <c-c> :CocCommand<cr>
 
 " NERDTree
-noremap <leader>n :NERDTreeToggle<CR>
-noremap <leader>f :NERDTreeFind<CR>
+noremap <c-n> :NERDTreeToggle<CR>
+noremap <c-f> :NERDTreeFind<CR>
 
-" ===== Normal Mode
+" ===== Navigation Actions (gX)
 
 " GoTo code navigation.
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gtd <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+noremap <silent> gd <Plug>(coc-definition)
+noremap <silent> gtd <Plug>(coc-type-definition)
+noremap <silent> gi <Plug>(coc-implementation)
+noremap <silent> gr <Plug>(coc-references)
 
-" Format buffer
-nmap <silent> gf <Plug>(coc-format)
-
-" Symbol renaming.
-nmap <silent> rn <Plug>(coc-rename)
-
-" Use K to show documentation in preview window.
-nnoremap <silent> sd :call <sid>show_documentation()<cr>
+" Use sd to show documentation in preview window.
+nnoremap <silent> gdo :call <sid>show_documentation()<cr>
 
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
@@ -108,6 +120,14 @@ function! s:show_documentation()
     call CocAction('doHover')
   endif
 endfunction
+
+" ===== Editing Actions (arbitrary)
+
+" Format buffer
+noremap <silent> gf <Plug>(coc-format)
+
+" Symbol renaming.
+noremap <silent> rn <Plug>(coc-rename)
 
 " ================ Common Settings ================
 
@@ -119,26 +139,6 @@ autocmd BufNewFile,BufRead *.Jenkinsfile setf groovy
 let NERDTreeIgnore = ['\.\.$', '\.$', '__pycache__', 'node_modules', '\.git$', '\.pyc$', '.cache', '.DS_Store', '.terraform']
 let NERDTreeShowHidden=1
 autocmd FileType nerdtree setlocal signcolumn=no
-
-" ============= Treesitter Settings ===============
-
-lua <<EOF
-require("nvim-treesitter.configs").setup {
-  highlight = {
-    enable = true,
-    additional_vim_regex_highlighting = true,
-  },
-  indent = {
-    enable = false
-  },
-}
-EOF
-
-" =============== Autopair Settings ===============
-
-lua <<EOF
-require("nvim-autopairs").setup {}
-EOF
 
 " ================ CoC Settings ===================
 
@@ -200,11 +200,8 @@ colorscheme gruvbox-material
 let g:lightline = {}
 let g:lightline.colorscheme = 'gruvbox'
 
-" ================ Indentation ===================
-set autoindent
-set breakindent
-set smarttab
-set shiftwidth=2
-set softtabstop=2
-set tabstop=2
-set expandtab
+" ================ Lua Plugin Settings ===========
+
+lua require("autopairs-settings")
+lua require("colorizer-settings")
+lua require("treesitter-settings")

@@ -48,5 +48,6 @@
 
   "tsserver.watchOptions": {
     "fallbackPolling": "priorityPollingInterval"
-  }
+  },
+  "Lua.telemetry.enable": true
 }
