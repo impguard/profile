@@ -88,3 +88,4 @@ function tmox
 ############################################################
 
 export GOPRIVATE=*.riotgames.com
+alias run="./Taskfile"

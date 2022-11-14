@@ -11,7 +11,6 @@ sudo apt-get install --no-install-recommends -y \
   libxmlsec1-dev libffi-dev liblzma-dev unzip
 
 sudo apt install -y \
-  node \
   neovim \
   autojump \
   shellcheck \
