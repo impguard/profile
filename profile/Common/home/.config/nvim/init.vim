@@ -135,6 +135,12 @@ noremap <silent> rn <Plug>(coc-rename)
 autocmd BufNewFile,BufRead Jenkinsfile setf groovy
 autocmd BufNewFile,BufRead *.Jenkinsfile setf groovy
 
+" ================ Lua Plugin Settings ===========
+
+lua require("autopairs-settings")
+lua require("colorizer-settings")
+lua require("treesitter-settings")
+
 " ================ NERDTree Settings ==============
 let NERDTreeIgnore = ['\.\.$', '\.$', '__pycache__', 'node_modules', '\.git$', '\.pyc$', '.cache', '.DS_Store', '.terraform']
 let NERDTreeShowHidden=1
@@ -199,9 +205,3 @@ colorscheme gruvbox-material
 " ================ Lightline Colorscheme =========
 let g:lightline = {}
 let g:lightline.colorscheme = 'gruvbox'
-
-" ================ Lua Plugin Settings ===========
-
-lua require("autopairs-settings")
-lua require("colorizer-settings")
-lua require("treesitter-settings")
