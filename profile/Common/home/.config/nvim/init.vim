@@ -55,9 +55,6 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 " Solidity
 Plug 'tomlion/vim-solidity'
 
-" Markdown preview
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
-
 " Autopairs
 Plug 'windwp/nvim-autopairs'
 
