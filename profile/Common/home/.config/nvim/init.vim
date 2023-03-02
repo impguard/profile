@@ -55,6 +55,9 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 " Solidity
 Plug 'tomlion/vim-solidity'
 
+" Markdown preview
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
+
 " Autopairs
 Plug 'windwp/nvim-autopairs'
 
@@ -205,3 +208,17 @@ colorscheme gruvbox-material
 " ================ Lightline Colorscheme =========
 let g:lightline = {}
 let g:lightline.colorscheme = 'gruvbox'
+
+" ================ Copy and Paste WSL ============
+let g:clipboard = {
+          \   'name': 'win32yank-wsl',
+          \   'copy': {
+          \      '+': 'win32yank.exe -i --crlf',
+          \      '*': 'win32yank.exe -i --crlf',
+          \    },
+          \   'paste': {
+          \      '+': 'win32yank.exe -o --lf',
+          \      '*': 'win32yank.exe -o --lf',
+          \   },
+          \   'cache_enabled': 0,
+          \ }
