@@ -1,9 +1,11 @@
 [CmdletBinding(DefaultParameterSetName = "Help")]
 Param(
-  [Parameter(ParameterSetName = "Home", Mandatory = $true)]
-  [switch]$HomeParam,
-  [Parameter(ParameterSetName = "Install", Mandatory = $true)]
-  [switch]$InstallParam
+  [Parameter(ParameterSetName = "Home")]
+  [switch]$CopyHome,
+  [Parameter(ParameterSetName = "Install")]
+  [switch]$Install,
+  [Parameter(ParameterSetName = "Init")]
+  [switch]$Init
 )
 
 $ROOT = "$HOME\.profile.d"
@@ -19,10 +21,26 @@ function Log {
   Write-Host $args -ForegroundColor Green
 }
 
+function LinkFiles {
+  Param(
+    [Parameter()]
+    [string]$Target,
+    [Parameter()]
+    [string]$Destination
+  )
+
+  New-Item -ItemType Directory -Path "$Destination" -Force | Out-Null
+  $Files = Get-ChildItem -LiteralPath "$Target" -Recurse
+  foreach ($File in $Files) {
+    New-Item -ItemType SymbolicLink `
+      -Path "$Destination\$File" `
+      -Target "$Target\$File" -Force
+  }
+}
+
 function Stage {
-  New-Item -ItemType SymbolicLink `
-    -Path "./staging/home/.gitconfig" `
-    -Target "./profile/Common/home/.gitconfig"
+  LinkFiles -Target "$PROFILE_DIR\Windows\home" -Destination "$STAGING_DIR\home"
+  LinkFiles -Target "$PROFILE_DIR\Windows\init" -Destination "$STAGING_DIR\init"
 }
 
 ########################################
@@ -31,23 +49,34 @@ function Stage {
 
 function Install {
   Home
+  Init
 }
 
 function Home {
   Log "Linking home files"
-
-  $Items = Get-ChildItem -LiteralPath "./staging/home" -Recurse
-
-  Write-Host $Items
+  LinkFiles -Destination "$HOME" -Target "$STAGING_DIR\home"
 }
 
-if ($HomeParam) {
+function Init {
+  Log "Running init scripts"
+  $Files = Get-ChildItem -LiteralPath "$STAGING_DIR\init" -Recurse
+  foreach ($File in $Files) {
+    # Need to modify this to use install directory
+    & "$STAGING_DIR\init\$File"
+  }
+}
+
+if ($CopyHome) {
   Stage
   Home
 }
-elseif ($InstallParam) {
+elseif ($Install) {
   Stage
   Install
+}
+elseif ($init) {
+  Stage
+  Init
 }
 else {
   Get-Help $MyInvocation.MyCommand.Definition

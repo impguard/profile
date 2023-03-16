@@ -63,6 +63,9 @@ Set-ExecutionPolicy Bypass -Scope Process -Force
 [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
 iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
+# Install Git
+choco install git
+
 # Get Profile
 iex (iwr -URI 'https://raw.githubusercontent.com/impguard/profile-win/master/install.ps1')
 
@@ -71,7 +74,7 @@ cd ~./profile.d
 ./setup.ps1 install
 ```
 
-#### Run Ubuntu setup
+#### Run WSL setup
 
 1. [Setup Github SSH Key](https://help.github.com/en/enterprise/2.15/user/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
 2. May want to setup a Github key for the Windows side as well
@@ -88,7 +91,7 @@ bash -c "$(curl https://raw.githubusercontent.com/impguard/profile/master/instal
 
 # Run setup
 cd ~/.profile.d
-./setup install Windows Ubuntu Common
+./setup install WSL Ubuntu Common
 ```
 
 ### OSX
