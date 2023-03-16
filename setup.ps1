@@ -1,8 +1,8 @@
+[CmdletBinding(DefaultParameterSetName = "Help")]
 Param(
-  [Parameter(ParameterSetName = "Home")]
-  [switch]$HomeParam
-
-  [Parameter(ParameterSetName = "Install")]
+  [Parameter(ParameterSetName = "Home", Mandatory = $true)]
+  [switch]$HomeParam,
+  [Parameter(ParameterSetName = "Install", Mandatory = $true)]
   [switch]$InstallParam
 )
 
@@ -36,7 +36,6 @@ function Install {
 function Home {
   Log "Linking home files"
 
-  $Source = $PROFILE_DIR.Replace("\", "\\")
   $Items = Get-ChildItem -LiteralPath "./staging/home" -Recurse
 
   Write-Host $Items
@@ -46,11 +45,10 @@ if ($HomeParam) {
   Stage
   Home
 }
-else if ($InstallParam) {
+elseif ($InstallParam) {
   Stage
   Install
 }
 else {
   Get-Help $MyInvocation.MyCommand.Definition
 }
-
