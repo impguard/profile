@@ -9,7 +9,7 @@ Helps setup my personal profile based on the OS being used.
 1. [Setup Github SSH Key](https://help.github.com/en/enterprise/2.15/user/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
 2. Run the following commands to run setup
 
-```
+```bash
 # Base dependencies
 apt update
 apt install curl git tilix
@@ -35,10 +35,8 @@ cd ~/.profile.d
    https://cloud-images.ubuntu.com/releases/jammy/release/ubuntu-22.04-server-cloudimg-amd64-wsl.rootfs.tar.gz
    and download it
 4. Run `wsl.exe --import Ubuntu <Install Folder> <.TAR.GZ File Path>`
-
-- Distribution Name: A friendly name. eg Ubuntu
-- Install folder: a place to put the virtual hard disk, this will not contain human readable files
-
+  - Distribution Name: A friendly name. eg Ubuntu
+  - Install folder: a place to put the virtual hard disk, this will not contain human readable files
 5. Start the distro and run the following
 
 ```
