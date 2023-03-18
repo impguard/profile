@@ -55,6 +55,10 @@ function Install {
 function Home {
   Log "Linking home files"
   LinkFiles -Destination "$HOME" -Target "$STAGING_DIR\home"
+
+  New-Item -ItemType SymbolicLink `
+    -Path "$PROFILE" `
+    -Target "$HOME\.profile.ps1" -Force
 }
 
 function Init {
