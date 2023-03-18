@@ -2,10 +2,13 @@
 Import-Module posh-git
 
 # Prompt Customization
-$GitPromptSettings.DefaultPromptPath.ForegroundColor = 'Orange'
 $GitPromptSettings.EnableFileStatus = $false
-$GitPromptSettings.DefaultPromptBeforeSuffix.Text = ' '
 $GitPromptSettings.DefaultPromptAbbreviateHomeDirectory = $true
+$GitPromptSettings.DefaultPromptPath.ForegroundColor = 'Orange'
+$GitPromptSettings.DefaultPromptPrefix.Text = '`n'
+$GitPromptSettings.DefaultPromptBeforeSuffix.Text = '`n'
+$GitPromptSettings.DefaultPromptSuffix.Text = '❯  '
+$GitPromptSettings.DefaultPromptSuffix.ForegroundColor = 'Orange'
 
 # Set Readline to Emacs Mode
 Set-PSReadLineOption -EditMode Emacs

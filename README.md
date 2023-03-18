@@ -58,7 +58,6 @@ _EOF
 
 ```powershell
 # Install Scoop
-
 Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 irm get.scoop.sh | iex
 

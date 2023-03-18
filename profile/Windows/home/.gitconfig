@@ -30,6 +30,8 @@
 [core]
     # Adjusted for Windows to control line feed rules
     autocrlf = true
+    # Disable crlf warnings in Windows
+    safecrlf = false
     editor = nvim
     excludesfile = ~/.gitignore
 

@@ -30,8 +30,9 @@ function LinkFiles {
   )
 
   New-Item -ItemType Directory -Path "$Destination" -Force | Out-Null
-  $Files = Get-ChildItem -LiteralPath "$Target" -Recurse
+  $Files = Get-ChildItem -Path "$Target" -Name -Recurse
   foreach ($File in $Files) {
+    Write-Host $File
     New-Item -ItemType SymbolicLink `
       -Path "$Destination\$File" `
       -Target "$Target\$File" -Force
@@ -75,12 +76,12 @@ if ($CopyHome) {
   Home
 }
 elseif ($Install) {
-  Stage
-  Install
+  # Stage
+  # Install
 }
 elseif ($init) {
-  Stage
-  Init
+  # Stage
+  # Init
 }
 else {
   Get-Help $MyInvocation.MyCommand.Definition
