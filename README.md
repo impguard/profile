@@ -57,14 +57,13 @@ _EOF
 2. Run the following commands to run setup (in powershell)
 
 ```powershell
-# Install Chocolatey
+# Install Scoop
 
-Set-ExecutionPolicy Bypass -Scope Process -Force
-[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
-iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+irm get.scoop.sh | iex
 
 # Install Git
-choco install git
+scoop install git
 
 # Get Profile
 iex (iwr -URI 'https://raw.githubusercontent.com/impguard/profile-win/master/install.ps1')

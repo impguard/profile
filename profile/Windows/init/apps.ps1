@@ -1,1 +1,3 @@
-choco install -y neovim --pre
+scoop bucket add extras
+
+scoop install neovim zlocation sudo
