@@ -61,15 +61,15 @@ _EOF
 Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 irm get.scoop.sh | iex
 
-# Install Git
-scoop install git
+# Install Git and sudo
+scoop install git sudo
 
 # Get Profile
 iex (iwr -UseBasicParsing -URI 'https://raw.githubusercontent.com/impguard/profile-win/master/install.ps1')
 
 # Run setup
 cd ~./profile.d
-./setup.ps1 install
+sudo ./setup.ps1 install
 ```
 
 #### Run WSL setup
