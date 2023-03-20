@@ -61,10 +61,10 @@ _EOF
 Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 irm get.scoop.sh | iex
 
-# Install Git and sudo
-scoop install git sudo
+# Install git, sudo, and Powershell
+scoop install git sudo pwsh
 
-# Get Profile
+# Get Profile (within Powershell, not Windows Powershell)
 iex (iwr -UseBasicParsing -URI 'https://raw.githubusercontent.com/impguard/profile/master/install.ps1')
 
 # Run setup
