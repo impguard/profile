@@ -76,12 +76,12 @@ if ($CopyHome) {
   Home
 }
 elseif ($Install) {
-  # Stage
-  # Install
+  Stage
+  Install
 }
 elseif ($init) {
-  # Stage
-  # Init
+  Stage
+  Init
 }
 else {
   Get-Help $MyInvocation.MyCommand.Definition
