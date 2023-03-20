@@ -1,5 +1,6 @@
-# Posh Git
+# Import Modules
 Import-Module posh-git
+Import-Module ZLocation
 
 # Prompt Customization
 $GitPromptSettings.EnableFileStatus = $false
