@@ -65,11 +65,11 @@ irm get.scoop.sh | iex
 scoop install git sudo
 
 # Get Profile
-iex (iwr -UseBasicParsing -URI 'https://raw.githubusercontent.com/impguard/profile-win/master/install.ps1')
+iex (iwr -UseBasicParsing -URI 'https://raw.githubusercontent.com/impguard/profile/master/install.ps1')
 
 # Run setup
 cd ~./profile.d
-sudo ./setup.ps1 install
+sudo ./setup.ps1 -Install
 ```
 
 #### Run WSL setup
