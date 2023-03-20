@@ -65,7 +65,7 @@ irm get.scoop.sh | iex
 scoop install git
 
 # Get Profile
-iex (iwr -URI 'https://raw.githubusercontent.com/impguard/profile-win/master/install.ps1')
+iex (iwr -UseBasicParsing -URI 'https://raw.githubusercontent.com/impguard/profile-win/master/install.ps1')
 
 # Run setup
 cd ~./profile.d
