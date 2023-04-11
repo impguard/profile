@@ -67,7 +67,7 @@ function Init {
   $Files = Get-ChildItem -LiteralPath "$STAGING_DIR\init" -Recurse
   foreach ($File in $Files) {
     # Need to modify this to use install directory
-    & "$STAGING_DIR\init\$File"
+    & "$File"
   }
 }
 
