@@ -3,8 +3,10 @@
 function install
 {
   app=$1
-  brew install --cask "$app" || true
+  echo brew install --cask "$app" || true
 }
+
+echo "No longer installing apps. Here is a sample set of apps:"
 
 install google-chrome
 install docker

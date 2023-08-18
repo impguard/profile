@@ -35,11 +35,18 @@ export HISTFILESIZE=100000
 # Append to history, don't overwrite
 shopt -s histappend
 
+# After each command, save and reload history
+export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
+
 ############################################################
 # Modify the PATH
 ############################################################
 
-PATH=$HOME/.bin:$HOME/.local/bin:$PATH
+# Add Homebrew to PATH
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# Add custom tools
+PATH=$HOME/.bin:$PATH
 
 ############################################################
 # Setup env tools

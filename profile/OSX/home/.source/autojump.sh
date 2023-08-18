@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-if [ -f  /usr/local/etc/profile.d/autojump.sh ]; then
-  source /usr/local/etc/profile.d/autojump.sh
+if [ -f /opt/homebrew/etc/profile.d/autojump.sh ]; then
+  source /opt/homebrew/etc/profile.d/autojump.sh
 fi
