@@ -32,13 +32,6 @@ autocmd BufWritePre * :%s/\s\+$//e
 " Turn on syntax highlighting
 syntax enable
 
-" Setup Coc Extensions
-let g:coc_global_extensions = [
-      \ 'coc-sh',
-      \ 'coc-json',
-      \ 'coc-highlight',
-      \ ]
-
 " Disabling netrw (recommended by nvim-tree)
 let g:loaded_netrw       = 1
 let g:loaded_netrwPlugin = 1
@@ -46,20 +39,11 @@ let g:loaded_netrwPlugin = 1
 " ================ Install plugins =================
 call plug#begin('~/.local/share/nvim/plugged')
 
-" Intellisense Egngine
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
 " Tree Sitter (Syntax Highlighting)
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
-" Solidity
-Plug 'tomlion/vim-solidity'
-
 " Autopairs
 Plug 'windwp/nvim-autopairs'
-
-" Autotag HTML elements
-Plug 'windwp/nvim-ts-autotag'
 
 " Colorize color codes
 Plug 'norcalli/nvim-colorizer.lua'
@@ -68,8 +52,8 @@ Plug 'norcalli/nvim-colorizer.lua'
 Plug 'preservim/nerdtree'
 
 " File search
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.2' }
 
 " Status line
 Plug 'itchyny/lightline.vim'
@@ -78,56 +62,25 @@ Plug 'shinchu/lightline-gruvbox.vim'
 " Useful tabularize function
 Plug 'godlygeek/tabular'
 
-" Plugin to help create markdown tables
-Plug 'dhruvasagar/vim-table-mode'
-
 " Color scheme
-Plug 'sainnhe/gruvbox-material'
+Plug 'folke/tokyonight.nvim'
 
 call plug#end()
 
 " ================ Mappings ================
 let mapleader = ","
 
-" ===== Editor Actions (ctrl-X)
+" ===== Editor Actions
 
 " fzf file Search
-noremap <c-p> :Files<CR>
-
-" List Coc Actions
-noremap <c-a> <Plug>(coc-codeaction-selected)<cr>
-noremap <c-c> :CocCommand<cr>
+nnoremap <c-p> <cmd>Telescope find_files<cr>
+nnoremap <c-g> <cmd>Telescope live_grep<cr>
 
 " NERDTree
 noremap <c-n> :NERDTreeToggle<CR>
 noremap <c-f> :NERDTreeFind<CR>
 
-" ===== Navigation Actions (gX)
-
-" GoTo code navigation.
-noremap <silent> gd <Plug>(coc-definition)
-noremap <silent> gtd <Plug>(coc-type-definition)
-noremap <silent> gi <Plug>(coc-implementation)
-noremap <silent> gr <Plug>(coc-references)
-
-" Use sd to show documentation in preview window.
-nnoremap <silent> gdo :call <sid>show_documentation()<cr>
-
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
-
 " ===== Editing Actions (arbitrary)
-
-" Format buffer
-noremap <silent> gf <Plug>(coc-format)
-
-" Symbol renaming.
-noremap <silent> rn <Plug>(coc-rename)
 
 " ================ Common Settings ================
 
@@ -140,82 +93,29 @@ autocmd BufNewFile,BufRead *.Jenkinsfile setf groovy
 lua require("autopairs-settings")
 lua require("colorizer-settings")
 lua require("treesitter-settings")
+lua require("telescope-settings")
 
 " ================ NERDTree Settings ==============
 let NERDTreeIgnore = ['\.\.$', '\.$', '__pycache__', 'node_modules', '\.git$', '\.pyc$', '.cache', '.DS_Store', '.terraform']
 let NERDTreeShowHidden=1
 autocmd FileType nerdtree setlocal signcolumn=no
 
-" ================ CoC Settings ===================
-
-"  To enable highlight current symbol on CursorHold
-autocmd CursorHold * silent call CocActionAsync('highlight')
-
-" Some servers have issues with backup files, see #649.
-set nobackup
-set nowritebackup
-
-" Give more space for displaying messages.
-set cmdheight=2
-set signcolumn=yes
-
-" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
-" delays and poor user experience.
-set updatetime=300
-
-" Don't pass messages to |ins-completion-menu|.
-set shortmess+=c
-
-" Add (Neo)Vim's native statusline support.
-" NOTE: Please see `:h coc-status` for integrations with external plugins that
-" provide custom statusline: lightline.vim, vim-airline.
-set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-
-" Use tab for trigger completion with characters ahead and navigate.
-" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-" other plugin before putting this into your config.
-inoremap <silent><expr> <TAB>
-      \ coc#pum#visible() ? coc#pum#next(1):
-      \ CheckBackspace() ? "\<Tab>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
-
-" Make <CR> to accept selected completion item or notify coc.nvim to format
-" <C-g>u breaks current undo, please make your own choice.
-inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-
-function! CheckBackspace() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-" Use <c-space> to trigger completion.
-if has('nvim')
-  inoremap <silent><expr> <c-space> coc#refresh()
-else
-  inoremap <silent><expr> <c-@> coc#refresh()
-endif
-
 " ================ Theme =========================
-set background=dark
-let g:gruvbox_material_background = 'hard'
-colorscheme gruvbox-material
+colorscheme tokyonight
 
 " ================ Lightline Colorscheme =========
-let g:lightline = {}
-let g:lightline.colorscheme = 'gruvbox'
+let g:lightline = {'colorscheme': 'tokyonight'}
 
 " ================ Copy and Paste WSL ============
-let g:clipboard = {
-          \   'name': 'win32yank-wsl',
-          \   'copy': {
-          \      '+': 'win32yank.exe -i --crlf',
-          \      '*': 'win32yank.exe -i --crlf',
-          \    },
-          \   'paste': {
-          \      '+': 'win32yank.exe -o --lf',
-          \      '*': 'win32yank.exe -o --lf',
-          \   },
-          \   'cache_enabled': 0,
-          \ }
+" let g:clipboard = {
+"           \   'name': 'win32yank-wsl',
+"           \   'copy': {
+"           \      '+': 'win32yank.exe -i --crlf',
+"           \      '*': 'win32yank.exe -i --crlf',
+"           \    },
+"           \   'paste': {
+"           \      '+': 'win32yank.exe -o --lf',
+"           \      '*': 'win32yank.exe -o --lf',
+"           \   },
+"           \   'cache_enabled': 0,
+"           \ }

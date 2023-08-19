@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+export PATH="/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH"
