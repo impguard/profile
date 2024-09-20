@@ -42,9 +42,6 @@ export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 # Modify the PATH
 ############################################################
 
-# Add Homebrew to PATH
-eval "$(/opt/homebrew/bin/brew shellenv)"
-
 # Add custom tools
 PATH=$HOME/.bin:$PATH
 

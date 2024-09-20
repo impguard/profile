@@ -57,12 +57,10 @@ _EOF
 2. Run the following commands to run setup (in powershell)
 
 ```powershell
-# Install Scoop
-Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
-irm get.scoop.sh | iex
-
 # Install git, sudo, and Powershell
-scoop install git sudo pwsh
+winget install -e --id Microsoft.PowerShell
+winget install -e --id Git.Git
+winget install -e --id gerardog.gsudo
 
 # Get Profile (within Powershell, not Windows Powershell)
 iex (iwr -UseBasicParsing -URI 'https://raw.githubusercontent.com/impguard/profile/master/install.ps1')
