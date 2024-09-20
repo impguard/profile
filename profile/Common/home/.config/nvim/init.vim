@@ -46,20 +46,11 @@ let g:loaded_netrwPlugin = 1
 " ================ Install plugins =================
 call plug#begin('~/.local/share/nvim/plugged')
 
-" Intellisense Egngine
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
 " Tree Sitter (Syntax Highlighting)
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
-" Solidity
-Plug 'tomlion/vim-solidity'
-
 " Autopairs
 Plug 'windwp/nvim-autopairs'
-
-" Autotag HTML elements
-Plug 'windwp/nvim-ts-autotag'
 
 " Colorize color codes
 Plug 'norcalli/nvim-colorizer.lua'
@@ -145,57 +136,6 @@ lua require("treesitter-settings")
 let NERDTreeIgnore = ['\.\.$', '\.$', '__pycache__', 'node_modules', '\.git$', '\.pyc$', '.cache', '.DS_Store', '.terraform']
 let NERDTreeShowHidden=1
 autocmd FileType nerdtree setlocal signcolumn=no
-
-" ================ CoC Settings ===================
-
-"  To enable highlight current symbol on CursorHold
-autocmd CursorHold * silent call CocActionAsync('highlight')
-
-" Some servers have issues with backup files, see #649.
-set nobackup
-set nowritebackup
-
-" Give more space for displaying messages.
-set cmdheight=2
-set signcolumn=yes
-
-" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
-" delays and poor user experience.
-set updatetime=300
-
-" Don't pass messages to |ins-completion-menu|.
-set shortmess+=c
-
-" Add (Neo)Vim's native statusline support.
-" NOTE: Please see `:h coc-status` for integrations with external plugins that
-" provide custom statusline: lightline.vim, vim-airline.
-set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-
-" Use tab for trigger completion with characters ahead and navigate.
-" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-" other plugin before putting this into your config.
-inoremap <silent><expr> <TAB>
-      \ coc#pum#visible() ? coc#pum#next(1):
-      \ CheckBackspace() ? "\<Tab>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
-
-" Make <CR> to accept selected completion item or notify coc.nvim to format
-" <C-g>u breaks current undo, please make your own choice.
-inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-
-function! CheckBackspace() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-" Use <c-space> to trigger completion.
-if has('nvim')
-  inoremap <silent><expr> <c-space> coc#refresh()
-else
-  inoremap <silent><expr> <c-@> coc#refresh()
-endif
 
 " ================ Theme =========================
 set background=dark
