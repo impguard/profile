@@ -125,4 +125,10 @@ To setup the rest of the computer:
 # TODO
 
 - Need to verify Windows instructions with winget
+    - Powertoys
+    - Posh Git
+    - Zlocation
+    - Nanazip
+    - Neovim
+
 - Need to install lua by default for tree sitter and neovim
