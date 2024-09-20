@@ -121,3 +121,8 @@ To setup the rest of the computer:
 3. In the same preferences panel, change `Full Keyboard Access` to `All Controls`
 4. Change the iTerm2 profile to leverage Solarized with the Minimal theme
 5. Once installed, launch hammerspoon and adjust its settings accordingly
+
+# TODO
+
+- Need to verify Windows instructions with winget
+- Need to install lua by default for tree sitter and neovim
