@@ -30,7 +30,7 @@ function LinkFiles {
   )
 
   New-Item -ItemType Directory -Path "$Destination" -Force | Out-Null
-  $Files = Get-ChildItem -Path "$Target" -Name -Recurse
+  $Files = Get-ChildItem -Path "$Target" -Name
   foreach ($File in $Files) {
     Write-Host $File
     New-Item -ItemType SymbolicLink `

@@ -57,15 +57,15 @@ _EOF
 2. Run the following commands to run setup (in powershell)
 
 ```powershell
-# Install git, sudo, and Powershell
+# Install git and Powershell
+winget install -e --id gerardog.gsudo
 winget install -e --id Microsoft.PowerShell
 winget install -e --id Git.Git
-winget install -e --id gerardog.gsudo
 
 # Get Profile (within Powershell, not Windows Powershell)
 iex (iwr -UseBasicParsing -URI 'https://raw.githubusercontent.com/impguard/profile/master/install.ps1')
 
-# Run setup
+# Run setup (in new Powershell)
 cd ~./profile.d
 sudo ./setup.ps1 -Install
 ```
