@@ -75,16 +75,10 @@ function tmox
   tmux new-session -d -s "$session"
   tmux rename-window  -t "$session:0" editor
   tmux new-window -t "$session:1" -n admin
-  tmux new-window -t "$session:2" -n admin
-  tmux new-window -t "$session:3" -n build
-  tmux new-window -t "$session:4" -n service
-  tmux new-window -t "$session:5" -n playground
-  tmux new-window -t "$session:6" -n playground
-  tmux new-window -t "$session:7" -n playground
-  tmux new-window -t "$session:8" -n playground
+  tmux new-window -t "$session:2" -n ui
+  tmux new-window -t "$session:3" -n playground
 
   tmux select-window -t "$session:1"
-  tmux select-window -t "$session:0"
   tmux attach-session -t "$session"
 }
 
@@ -93,4 +87,9 @@ function tmox
 ############################################################
 
 export GOPRIVATE=*.riotgames.com
+export VAULT_ADDR=https://vault.security.riotgames.io
 alias run="./Taskfile"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
