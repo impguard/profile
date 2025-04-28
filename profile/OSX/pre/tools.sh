@@ -10,3 +10,6 @@ brew install \
   bash-completion@2 \
   tmux \
   || true
+
+# Setup homebrew source
+echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.source/homebrew.bash
