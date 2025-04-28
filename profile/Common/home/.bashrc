@@ -79,7 +79,7 @@ function tmox
   tmux new-window -t "$session:3" -n sandbox
   tmux new-window -t "$session:4" -n sandbox
 
-  tmux select-window -t "$session:1"
+  tmux select-window -t "$session:0"
   tmux attach-session -t "$session"
 }
 
