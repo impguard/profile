@@ -73,10 +73,11 @@ function tmox
   local session=${1:-$(basename "$(pwd)" | tr -dc '[:alnum:]\n\r' | tr '[:upper:]' '[:lower:]')}
 
   tmux new-session -d -s "$session"
-  tmux rename-window  -t "$session:0" editor
+  tmux rename-window  -t "$session:0" admin
   tmux new-window -t "$session:1" -n admin
-  tmux new-window -t "$session:2" -n ui
-  tmux new-window -t "$session:3" -n playground
+  tmux new-window -t "$session:2" -n sandbox
+  tmux new-window -t "$session:3" -n sandbox
+  tmux new-window -t "$session:4" -n sandbox
 
   tmux select-window -t "$session:1"
   tmux attach-session -t "$session"
