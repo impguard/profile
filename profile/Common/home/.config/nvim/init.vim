@@ -96,7 +96,7 @@ lua require("treesitter-settings")
 lua require("telescope-settings")
 
 " ================ NERDTree Settings ==============
-let NERDTreeIgnore = ['\.\.$', '\.$', '__pycache__', 'node_modules', '\.git$', '\.pyc$', '.cache', '.DS_Store', '.terraform']
+let NERDTreeIgnore = ['\.\.$', '\.$', '__pycache__', 'node_modules', '\.git$', '\.pyc$', '\.cache', '\.DS_Store', '\.terraform']
 let NERDTreeShowHidden=1
 autocmd FileType nerdtree setlocal signcolumn=no
 

@@ -3,7 +3,7 @@
 # bash completions
 if [[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]]; then
   source "/opt/homebrew/etc/profile.d/bash_completion.sh"
-fi 
+fi
 
 # git completions
 if [ -d /opt/homebrew/etc/bash_completion.d ]; then
@@ -19,7 +19,7 @@ fi
 # docker completion
 if [ -d /opt/homebrew/etc/bash_completion.d ]; then
   source /opt/homebrew/etc/bash_completion.d/docker
-  source /opt/homebrew/etc/bash_completion.d/docker-compose
+  # source /opt/homebrew/etc/bash_completion.d/docker-compose
 fi
 
 # Homebrew
