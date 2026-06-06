@@ -131,4 +131,6 @@ To setup the rest of the computer:
     - Nanazip
     - Neovim
 
-- Need to install lua by default for tree sitter and neovim
+- Need to revamp setup for neovim since it's been modernized and lightened
+- Need to clean up and document what's actually being installed
+
