@@ -282,6 +282,10 @@ elif $pre; then
   verify_profiles
   stage
   pre
+elif $init; then
+  verify_profiles
+  stage
+  init
 elif $post; then
   verify_profiles
   stage
