@@ -157,7 +157,10 @@ To update, pull this repository and rerun the relevant setup command. Ubuntu's N
 
 Useful commands:
 
+Running `./setup` without arguments (or with `--help`) prints a compact list of Bash profiles, their home files and phase scripts, followed by available commands. `ls` (also `list`) prints just the listing. Installation reports stages, copied or unchanged files, backup locations, and completion totals, like the PowerShell setup.
+
 ```bash
+bash ./setup
 bash ./setup ls
 bash ./setup plan Ubuntu Common
 bash ./setup home Common        # configuration only

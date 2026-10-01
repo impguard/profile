@@ -6,18 +6,59 @@ ROOT=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 PROFILE_DIR=$ROOT/profile
 BACKUP_DIR=
 WORK_DIR=
+COPIED_COUNT=0
+UNCHANGED_COUNT=0
+BACKUP_COUNT=0
+
+show_profile() {
+  local directory=$1 file phase label separator
+  printf 'Profile      : %s\n' "${directory##*/}"
+  if [[ -d $directory/home ]]; then
+    printf 'Home files   : '
+    separator=
+    while IFS= read -r -d '' file; do
+      printf '%s%s' "$separator" "${file#"$directory/home/"}"
+      separator=', '
+    done < <(find "$directory/home" -type f -print0)
+    printf '\n'
+  fi
+  for phase in pre init post; do
+    separator=
+    case $phase in pre) label='Pre scripts' ;; init) label='Init scripts' ;; post) label='Post scripts' ;; esac
+    for file in "$directory/$phase"/*.sh; do
+      if [[ -z $separator ]]; then printf '%-13s: ' "$label"; fi
+      printf '%s%s' "$separator" "${file##*/}"
+      separator=', '
+    done
+    if [[ -n $separator ]]; then printf '\n'; fi
+  done
+  printf '\n'
+}
+
+show_profiles() {
+  local directory
+  for directory in "$PROFILE_DIR"/*; do
+    [[ -d $directory && ${directory##*/} != Windows ]] || continue
+    show_profile "$directory"
+  done
+  printf 'Windows profiles: use ./setup.ps1\n'
+}
 
 usage() {
+  show_profiles
   cat <<'EOF'
-Usage:
-  ./setup (install|home|pre|init|post|plan) PROFILE...
-  ./setup script SCRIPT_PATH
-  ./setup (ls|info)
 
-Profiles are applied in order; later profiles override matching home files.
-Install runs pre -> home -> init -> post, stopping on the first failure.
-Home files are copied. Replaced files are backed up under ~/.profile-backups/.
-Plan lists files and scripts without changing anything.
+Usage:
+  ./setup install PROFILE...         Install tools and home configuration
+  ./setup home PROFILE...            Copy home configuration only
+  ./setup (pre|init|post) PROFILE...  Run scripts for one phase only
+  ./setup plan PROFILE...            Preview profiles and destinations
+  ./setup script SCRIPT_PATH         Run one installation script
+  ./setup ls                         List profiles and scripts (also: list)
+  ./setup info                       Show system information
+  ./setup --help                     Show this summary (also the default)
+
+Example: ./setup install WSL Ubuntu Common
 EOF
 }
 
@@ -39,6 +80,8 @@ backup() {
     else
       mv -- "$target" "$BACKUP_DIR/$relative"
     fi
+    BACKUP_COUNT=$((BACKUP_COUNT + 1))
+    printf 'Backed up: %s -> %s\n' "$target" "$BACKUP_DIR/$relative"
   fi
 }
 
@@ -63,11 +106,14 @@ copy_file() {
   local source=$1 relative=$2 target=$HOME/$2
   ensure_directory "$(dirname "$relative")"
   if [[ ! -L $target && -f $target ]] && cmp -s "$source" "$target"; then
+    UNCHANGED_COUNT=$((UNCHANGED_COUNT + 1))
+    printf 'Skipped (unchanged): %s\n' "$target"
     return 0
   fi
   backup "$target" "$relative"
   cp -p -- "$source" "$target"
-  printf 'Copied %s\n' "$relative"
+  COPIED_COUNT=$((COPIED_COUNT + 1))
+  printf 'Copied: %s\n' "$target"
 }
 
 install_git_config() {
@@ -77,6 +123,8 @@ install_git_config() {
   # location and take precedence. Detach links created by the old installer.
   if [[ ! -L $HOME/.gitconfig && -f $HOME/.gitconfig ]] &&
       git config --file "$HOME/.gitconfig" --get-all include.path | grep -Fxq "$defaults"; then
+    UNCHANGED_COUNT=$((UNCHANGED_COUNT + 1))
+    printf 'Skipped (defaults already included): %s\n' "$HOME/.gitconfig"
     return 0
   fi
   temporary=$WORK_DIR/gitconfig
@@ -109,9 +157,10 @@ run_script() {
   local script=$1 workspace status
   [[ -f $script ]] || fail "Not a script: $script"
   workspace=$(mktemp -d "$WORK_DIR/script.XXXXXX")
-  printf 'Running %s\n' "$script"
+  printf 'Running: %s\n' "$script"
   # A separate Bash process preserves errexit even in this conditional.
   if (cd "$workspace" && bash -euo pipefail "$script"); then
+    printf 'Completed: %s\n' "$script"
     return 0
   else
     status=$?
@@ -122,6 +171,7 @@ run_script() {
 
 run_phase() {
   local phase=$1 profile script
+  printf '\n[%s] Running scripts for: %s\n' "$phase" "${PROFILES[*]}"
   for profile in "${PROFILES[@]}"; do
     for script in "$PROFILE_DIR/$profile/$phase"/*.sh; do
       run_script "$script"
@@ -131,6 +181,7 @@ run_phase() {
 
 stage_home() {
   local profile
+  printf '\n[Home] Installing configuration for: %s\nHome directory: %s\n' "${PROFILES[*]}" "$HOME"
   mkdir -p "$WORK_DIR/home"
   for profile in "${PROFILES[@]}"; do
     if [[ -d $PROFILE_DIR/$profile/home ]]; then
@@ -152,13 +203,9 @@ stage_home() {
 command=${1:---help}
 [[ $# == 0 ]] || shift
 case $command in
-  -h|--help) usage; exit 0 ;;
+  -h|--help|help) usage; exit 0 ;;
   info) uname -a; exit 0 ;;
-  ls)
-    for profile in "$PROFILE_DIR"/*; do
-      [[ -d $profile ]] && printf '%s\n' "${profile##*/}"
-    done
-    exit 0 ;;
+  ls|list) show_profiles; exit 0 ;;
   script)
     [[ $# == 1 && -f $1 ]] || fail 'Usage: ./setup script SCRIPT_PATH'
     script=$(cd "$(dirname "$1")" && pwd)/$(basename "$1") ;;
@@ -173,10 +220,11 @@ case $command in
 esac
 
 if [[ $command == plan ]]; then
+  printf 'Setup preview (no changes will be made)\nHome directory: %s\nBackup directory: %s\n\n' "$HOME" "$HOME/.profile-backups"
   for profile in "${PROFILES[@]}"; do
-    printf '\nProfile: %s\n' "$profile"
-    find "$PROFILE_DIR/$profile" -type f -print
+    show_profile "$PROFILE_DIR/$profile"
   done
+  printf 'Install order: pre -> home -> init -> post; later profiles override matching home files.\n'
   exit 0
 fi
 
@@ -188,4 +236,9 @@ case $command in
   script) run_script "$script" ;;
 esac
 rm -rf -- "$WORK_DIR"
-printf 'Setup completed.\n'
+printf '\nSetup completed.\n'
+if [[ $command == install || $command == home ]]; then
+  printf 'Configuration files copied: %s; unchanged: %s; entries backed up: %s\n' "$COPIED_COUNT" "$UNCHANGED_COUNT" "$BACKUP_COUNT"
+  if [[ -n $BACKUP_DIR ]]; then printf 'Recover previous settings from: %s\n' "$BACKUP_DIR"; fi
+  printf 'Open a new Bash session to load updated tools and profile settings.\n'
+fi
