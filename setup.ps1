@@ -13,10 +13,14 @@ $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 $profileRoot = Join-Path $PSScriptRoot 'profile'
 $script:backupDirectory = $null
+$script:copiedCount = 0
+$script:unchangedCount = 0
+$script:backupCount = 0
 $HomeDirectory = [IO.Path]::GetFullPath($HomeDirectory)
 if (-not $ProfilePath) {
   $ProfilePath = if ($HomeDirectory -eq $HOME) { $PROFILE.CurrentUserCurrentHost } else { Join-Path $HomeDirectory 'Documents/PowerShell/Microsoft.PowerShell_profile.ps1' }
 }
+$nvimDirectory = if ($HomeDirectory -eq $HOME -and $env:LOCALAPPDATA) { Join-Path $env:LOCALAPPDATA 'nvim' } else { Join-Path $HomeDirectory 'AppData/Local/nvim' }
 
 function Backup-File([string]$Path, [string]$Relative) {
   if (Get-Item -LiteralPath $Path -Force -ErrorAction SilentlyContinue) {
@@ -33,6 +37,8 @@ function Backup-File([string]$Path, [string]$Relative) {
     } else {
       Move-Item -LiteralPath $Path -Destination $backupPath
     }
+    $script:backupCount++
+    Write-Host "Backed up: $Path -> $backupPath"
   }
 }
 
@@ -53,10 +59,15 @@ function Copy-ManagedFile([string]$Source, [string]$Destination, [string]$Relati
   Ensure-Directory (Split-Path $Destination)
   $item = Get-Item -LiteralPath $Destination -Force -ErrorAction SilentlyContinue
   if ($item -and -not $item.PSIsContainer -and -not $item.LinkType -and
-      (Get-FileHash -LiteralPath $Source).Hash -eq (Get-FileHash -LiteralPath $Destination).Hash) { return }
+      (Get-FileHash -LiteralPath $Source).Hash -eq (Get-FileHash -LiteralPath $Destination).Hash) {
+    $script:unchangedCount++
+    Write-Host "Skipped (unchanged): $Destination"
+    return
+  }
   Backup-File $Destination $Relative
   Copy-Item -LiteralPath $Source -Destination $Destination
-  Write-Host "Copied $Destination"
+  $script:copiedCount++
+  Write-Host "Copied: $Destination"
 }
 
 function Install-GitConfig {
@@ -65,7 +76,11 @@ function Install-GitConfig {
   $target = Join-Path $HomeDirectory '.gitconfig'
   $item = Get-Item -LiteralPath $target -Force -ErrorAction SilentlyContinue
   $oldContent = if (Test-Path -LiteralPath $target -PathType Leaf) { [IO.File]::ReadAllText($target) } else { '' }
-  if ($item -and -not $item.LinkType -and $oldContent.Contains("    path = $defaults")) { return }
+  if ($item -and -not $item.LinkType -and $oldContent.Contains("    path = $defaults")) {
+    $script:unchangedCount++
+    Write-Host "Skipped (defaults already included): $target"
+    return
+  }
   if ($item -and $item.PSIsContainer) { throw "$target must be a file" }
   $temporary = Join-Path ([IO.Path]::GetTempPath()) ([guid]::NewGuid().ToString('N') + '.gitconfig')
   try {
@@ -75,27 +90,36 @@ function Install-GitConfig {
 }
 
 function Install-Home {
+  Write-Host "`n[Home] Installing Git, PowerShell, and Neovim configuration" -ForegroundColor Cyan
+  Write-Host "Home directory: $HomeDirectory"
   Install-GitConfig
   Copy-ManagedFile (Join-Path $profileRoot 'Windows/home/.profile.ps1') $ProfilePath 'PowerShell/profile.ps1'
-  $nvimDirectory = if ($HomeDirectory -eq $HOME -and $env:LOCALAPPDATA) { Join-Path $env:LOCALAPPDATA 'nvim' } else { Join-Path $HomeDirectory 'AppData/Local/nvim' }
   Ensure-Directory $nvimDirectory
   Backup-File (Join-Path $nvimDirectory 'init.vim') 'nvim/init.vim'
   Copy-ManagedFile (Join-Path $profileRoot 'Common/home/.config/nvim/init.lua') (Join-Path $nvimDirectory 'init.lua') 'nvim/init.lua'
 }
 
 function Install-Tools {
+  Write-Host "`n[Tools] Checking Git, Neovim, and mise" -ForegroundColor Cyan
+  if ($Extras) { Write-Host 'Optional modules: posh-git, ZLocation' }
   $scripts = @(Join-Path $profileRoot 'Windows/init/apps.ps1')
   if ($Extras) { $scripts += Join-Path $profileRoot 'Windows/extras/modules.ps1' }
   foreach ($scriptPath in $scripts) {
-    Write-Host "Running $scriptPath"
+    Write-Host "Running: $scriptPath"
     & (Join-Path $PSHOME 'pwsh.exe') -NoProfile -NonInteractive -File $scriptPath
     if ($LASTEXITCODE -ne 0) { throw "Failed ($LASTEXITCODE): $scriptPath" }
+    Write-Host "Completed: $(Split-Path $scriptPath -Leaf)"
   }
 }
 
 if ($Plan) {
+  Write-Output 'Windows setup preview (no changes will be made)'
   Write-Output 'Core: Git, Neovim, mise; PowerShell 7 and Windows curl are prerequisites.'
   Write-Output 'Copies: Git defaults, PowerShell profile, Neovim config. Existing files are backed up.'
+  Write-Output "Home directory: $HomeDirectory"
+  Write-Output "PowerShell profile: $ProfilePath"
+  Write-Output "Neovim config: $(Join-Path $nvimDirectory 'init.lua')"
+  Write-Output "Backup directory: $(Join-Path $HomeDirectory '.profile-backups') (created only when needed)"
   if ($Extras) { Write-Output 'Extras: posh-git, ZLocation (CurrentUser modules).' }
 } elseif ($Install) {
   Install-Tools
@@ -106,4 +130,13 @@ if ($Plan) {
   Install-Tools
 } else {
   Write-Output 'Usage: ./setup.ps1 -Install | -CopyHome | -Init | -Plan [-Extras]'
+}
+
+if ($Install -or $CopyHome -or $Init) {
+  Write-Host "`nSetup completed." -ForegroundColor Green
+  if ($Install -or $CopyHome) {
+    Write-Host "Configuration files copied: $script:copiedCount; unchanged: $script:unchangedCount; entries backed up: $script:backupCount"
+    if ($script:backupDirectory) { Write-Host "Recover previous settings from: $script:backupDirectory" }
+  }
+  Write-Host 'Open a new PowerShell session to load updated tools and profile settings.'
 }
