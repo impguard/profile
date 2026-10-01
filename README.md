@@ -64,7 +64,7 @@ Set-Location "$HOME\.profile.d"
 ./setup.ps1 -Install
 ```
 
-Running `./setup.ps1` without arguments shows the same help as `-Help` (also `-h` or `-?`): options, descriptions, and examples. `-Plan` shows the selected tools and actual destination paths without making changes. `-Install` performs setup and prints progress and results.
+Running `./setup.ps1` without arguments (or with `-Help` / `-h`) prints a compact profile/script listing and available commands. `-List` (also `-ls`) prints just the Windows profile and scripts, like Bash's `setup ls`. `-Plan` shows the selected tools and actual destination paths without making changes. `-Install` performs setup and prints progress and results.
 
 Setup does not require gsudo or symbolic-link privileges. Winget may request elevation for individual packages. If your execution policy blocks local scripts, use `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` if allowed by your machine's policy. Reopen PowerShell after installation so Git, Neovim, and mise are on PATH.
 
