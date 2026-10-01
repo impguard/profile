@@ -21,6 +21,7 @@ function Show-Profiles {
   $initScripts = (Get-ChildItem -LiteralPath (Join-Path $windowsRoot 'init') -Filter '*.ps1' -File).Name -join ', '
   $extraScripts = (Get-ChildItem -LiteralPath (Join-Path $windowsRoot 'extras') -Filter '*.ps1' -File).Name -join ', '
   Write-Output 'Profile      : Windows'
+  Write-Output 'For          : Windows (PowerShell 7) - base tools and configuration'
   Write-Output "Home files   : $homeFiles, nvim/init.lua (shared)"
   Write-Output "Init scripts : $initScripts (Git, Neovim, mise)"
   Write-Output "Extras       : $extraScripts (posh-git, ZLocation; use -Extras)"

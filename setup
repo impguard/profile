@@ -13,6 +13,15 @@ BACKUP_COUNT=0
 show_profile() {
   local directory=$1 file phase label separator
   printf 'Profile      : %s\n' "${directory##*/}"
+  case ${directory##*/} in
+    Common)       printf 'For          : Ubuntu, WSL, macOS - shared Bash, Git, and Neovim configuration\n' ;;
+    Ubuntu)       printf 'For          : Ubuntu (native or WSL) - base tools\n' ;;
+    macOS)        printf 'For          : macOS - base tools and Bash login configuration\n' ;;
+    WSL)          printf 'For          : Ubuntu on WSL - Windows integration; combine with Ubuntu Common\n' ;;
+    Terminal)     printf 'For          : Ubuntu, WSL, macOS - optional terminal tools\n' ;;
+    WSLClipboard) printf 'For          : x86_64 Ubuntu on WSL - optional clipboard sharing\n' ;;
+    Hammerspoon)  printf 'For          : macOS only - optional Hammerspoon window shortcuts\n' ;;
+  esac
   if [[ -d $directory/home ]]; then
     printf 'Home files   : '
     separator=
@@ -58,7 +67,10 @@ Usage:
   ./setup info                       Show system information
   ./setup --help                     Show this summary (also the default)
 
-Example: ./setup install WSL Ubuntu Common
+Base setup:
+  Ubuntu: ./setup install Ubuntu Common
+  WSL:    ./setup install WSL Ubuntu Common
+  macOS:  ./setup install macOS Common
 EOF
 }
 
@@ -211,10 +223,16 @@ case $command in
     script=$(cd "$(dirname "$1")" && pwd)/$(basename "$1") ;;
   install|home|pre|init|post|plan)
     [[ $# -gt 0 ]] || fail 'Specify at least one profile; use ./setup ls to list them.'
-    PROFILES=("$@")
-    for profile in "${PROFILES[@]}"; do
+    PROFILES=()
+    for profile in "$@"; do
+      case $profile in
+        OSX) printf 'OSX is now macOS; using macOS.\n' >&2; profile=macOS ;;
+        MacDesktop) printf 'MacDesktop is now Hammerspoon; using Hammerspoon.\n' >&2; profile=Hammerspoon ;;
+        BuildTools|DotNet|Tilix) fail "$profile has been removed; use ./setup ls to see available profiles." ;;
+      esac
       [[ $profile != *[!a-zA-Z0-9_-]* && -d $PROFILE_DIR/$profile ]] || fail "Unsupported profile: $profile"
       [[ $profile != Windows ]] || fail 'Use setup.ps1 for Windows.'
+      PROFILES+=("$profile")
     done ;;
   *) usage >&2; exit 1 ;;
 esac

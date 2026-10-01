@@ -1,18 +1,33 @@
 # profile
 
-A small development environment for Ubuntu/WSL, macOS, and Windows. The default setup installs Git, curl, Neovim, and **mise** alongside Bash or PowerShell. Language runtimes, compiler libraries, terminal extras, and desktop apps are opt-in.
+A small development environment for Ubuntu/WSL, macOS, and Windows. The default setup installs Git, curl, Neovim, and **mise** alongside Bash or PowerShell. Language runtimes, terminal extras, and desktop apps are opt-in.
 
 ## What gets installed
 
 | Environment | Default tools | Configuration |
 | --- | --- | --- |
 | Ubuntu / WSL | Bash, Git, curl, CA certificates, mise, Neovim | Bash, Git defaults, Neovim Lua config |
-| macOS (`OSX`) | Homebrew Bash, Git, curl, Neovim, mise | Bash login shell, Git defaults, Neovim Lua config |
+| macOS | Homebrew Bash, Git, curl, Neovim, mise | Bash login shell, Git defaults, Neovim Lua config |
 | Windows | Git, Neovim, mise via winget | PowerShell, Git defaults, Neovim Lua config |
 
 Windows uses the built-in curl and requires PowerShell 7. macOS requires Homebrew. Ubuntu uses the official Neovim **v0.12.5** build (x86_64 or ARM64), installed under `~/.local/opt` with a launcher in `~/.local/bin`; no PPA is added. Set `NVIM_VERSION=vX.Y.Z` when running setup to select a different release. Homebrew and winget use their available releases; Windows setup skips tools already on PATH.
 
 Mise is installed, but **no language runtimes are installed automatically**. No Neovim plugins, Python providers, tmux plugins, or employer-specific settings are required.
+
+## Choosing profiles
+
+| Your environment | Base setup | Optional additions |
+| --- | --- | --- |
+| Native Ubuntu | `./setup install Ubuntu Common` | `Terminal` |
+| Ubuntu inside WSL | `./setup install WSL Ubuntu Common` | `Terminal`, `WSLClipboard` (x86_64) |
+| macOS | `./setup install macOS Common` | `Terminal`, `Hammerspoon` |
+| Windows PowerShell | `./setup.ps1 -Install` | `-Extras` |
+
+`Common` supplies shared Bash, Git, and Neovim settings for Ubuntu/WSL and macOS. `Ubuntu` and `macOS` install the corresponding base tools; `WSL` adds Windows integration to Ubuntu. Windows PowerShell uses its own installer and also receives the shared Neovim config.
+
+`macOS` was previously named `OSX`. The optional `Hammerspoon` profile was previously named `MacDesktop`; it only installs Hammerspoon and window shortcuts. The old names still work as aliases, but listings use the clearer names.
+
+The `DotNet` (OmniSharp formatting), `Tilix`, and `BuildTools` profiles have been removed. `Terminal` keeps tmux; Screen and its `.screenrc` are no longer installed. This does not uninstall existing applications or remove their home settings.
 
 ## Ubuntu and WSL
 
@@ -80,8 +95,8 @@ Install [Homebrew](https://brew.sh), including the Command Line Tools it request
 brew install git curl
 git clone https://github.com/impguard/profile.git ~/.profile.d
 cd ~/.profile.d
-bash ./setup plan OSX Common
-bash ./setup install OSX Common
+bash ./setup plan macOS Common
+bash ./setup install macOS Common
 ```
 
 This repository configures **Bash**, not macOS's default Zsh. Configure your terminal to launch `/opt/homebrew/bin/bash -l` on Apple Silicon or `/usr/local/bin/bash -l` on Intel. The login profile loads Homebrew and `.bashrc`; changing your account's default shell is not required.
@@ -92,19 +107,14 @@ Append only the profiles you need to the install command, or install them later.
 
 ```bash
 bash ./setup install WSL Ubuntu Common Terminal WSLClipboard
-# Later, install only compiler dependencies:
-bash ./setup install BuildTools
 ```
 
-| Profile / switch | Adds |
-| --- | --- |
-| `Terminal` (Ubuntu/macOS) | tmux, Screen, fzf, ripgrep, autojump, ShellCheck, Bash completion; tmux and Screen configs |
-| `BuildTools` (Ubuntu/macOS) | Compiler / Python source-build libraries; macOS uses Command Line Tools supplied with Homebrew |
-| `WSLClipboard` | win32yank v0.1.1 for Neovim clipboard sharing; x86_64 WSL only; installs unzip if missing |
-| `DotNet` | OmniSharp formatting settings in the current Linux/macOS home only; no SDK or Windows copy |
-| `Tilix` (Ubuntu) | Tilix terminal and Gruvbox theme |
-| `MacDesktop` | Hammerspoon and its window-management configuration |
-| Windows `-Extras` | Current-user posh-git and ZLocation PowerShell modules |
+| Profile / switch | Operating systems | Adds |
+| --- | --- | --- |
+| `Terminal` | Ubuntu, Ubuntu on WSL, macOS | tmux, fzf, ripgrep, autojump, ShellCheck, Bash completion; tmux config |
+| `WSLClipboard` | x86_64 Ubuntu on WSL | win32yank v0.1.1 for Neovim clipboard sharing; installs unzip if missing |
+| `Hammerspoon` | macOS only | Hammerspoon and its window-management shortcuts |
+| `-Extras` | Windows PowerShell only | Current-user posh-git and ZLocation modules |
 
 ```powershell
 ./setup.ps1 -Install -Extras
@@ -126,7 +136,7 @@ mise ls
 
 For a project, run `mise use node@22 python@3.13` in its directory to write a `mise.toml`. Commit that file to share version requirements. For an existing project's configuration, review it, run `mise trust` if requested, then `mise install`. `mise exec -- <command>` also works in scripts without interactive shell activation. See [mise documentation](https://mise.jdx.dev/getting-started.html).
 
-Use `python -m venv .venv` for Python virtual environments. No `en` or `pvenv` helper is needed. The old pyenv, nodenv, goenv, jenv, and NVM initialization is removed; existing manager directories and installed runtimes are left intact. Review your own `.bashrc.d`, PowerShell overrides, and project version files during migration. Install `BuildTools` if a runtime needs to compile from source.
+Use `python -m venv .venv` for Python virtual environments. No `en` or `pvenv` helper is needed. The old pyenv, nodenv, goenv, jenv, and NVM initialization is removed; existing manager directories and installed runtimes are left intact. Review your own `.bashrc.d`, PowerShell overrides, and project version files during migration. If a runtime needs to compile from source, install its compiler and library dependencies separately using that runtime's documentation.
 
 ## Neovim
 
