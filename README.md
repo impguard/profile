@@ -59,9 +59,12 @@ Open **PowerShell 7** (`pwsh`) so the updated PATH is loaded:
 ```powershell
 git clone https://github.com/impguard/profile.git "$HOME\.profile.d"
 Set-Location "$HOME\.profile.d"
+./setup.ps1 -Help
 ./setup.ps1 -Plan
 ./setup.ps1 -Install
 ```
+
+Running `./setup.ps1` without arguments shows the same help as `-Help` (also `-h` or `-?`): options, descriptions, and examples. `-Plan` shows the selected tools and actual destination paths without making changes. `-Install` performs setup and prints progress and results.
 
 Setup does not require gsudo or symbolic-link privileges. Winget may request elevation for individual packages. If your execution policy blocks local scripts, use `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` if allowed by your machine's policy. Reopen PowerShell after installation so Git, Neovim, and mise are on PATH.
 

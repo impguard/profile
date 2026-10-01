@@ -1,5 +1,48 @@
+<#
+.SYNOPSIS
+Set up a minimal Windows development environment.
+.DESCRIPTION
+Installs Git, Neovim, and mise, and configures PowerShell, Git, and Neovim.
+Requires PowerShell 7 and winget. Language runtimes are not installed automatically.
+
+Configuration files are copied, with backups under ~/.profile-backups/.
+Existing Git identity and settings are preserved. Setup stops on failure.
+
+Run without arguments or with -Help to show this help. Use -Plan to preview
+the selected tools and destination paths without making changes.
+.PARAMETER Help
+Show usage, available options, and examples. Also available as -h or -?.
+.PARAMETER Install
+Install core tools, then copy home configuration files.
+.PARAMETER CopyHome
+Copy configuration files only, backing up changed destinations.
+.PARAMETER Init
+Install tools only, without copying home configuration files.
+.PARAMETER Plan
+Preview tools and configuration destinations without installing or copying anything.
+.PARAMETER Extras
+Include the optional posh-git and ZLocation modules with -Install, -Init, or -Plan.
+.PARAMETER HomeDirectory
+Override the destination home directory. Defaults to your current home directory.
+.PARAMETER ProfilePath
+Override the destination PowerShell profile path. Defaults to the current user's
+profile for this host, or a path under HomeDirectory when that is overridden.
+.EXAMPLE
+./setup.ps1 -Plan
+Preview the default setup without making changes.
+.EXAMPLE
+./setup.ps1 -Install
+Install Git, Neovim, and mise, then configure PowerShell, Git, and Neovim.
+.EXAMPLE
+./setup.ps1 -Install -Extras
+Install the default setup plus posh-git and ZLocation.
+.EXAMPLE
+./setup.ps1 -CopyHome
+Apply configuration files without installing tools.
+#>
 [CmdletBinding(DefaultParameterSetName = 'Help')]
 param(
+  [Parameter(ParameterSetName = 'Help')][Alias('h')][switch]$Help,
   [Parameter(ParameterSetName = 'Home', Mandatory)][switch]$CopyHome,
   [Parameter(ParameterSetName = 'Install', Mandatory)][switch]$Install,
   [Parameter(ParameterSetName = 'Init', Mandatory)][switch]$Init,
@@ -11,6 +54,10 @@ param(
 #requires -Version 7.0
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
+if ($PSCmdlet.ParameterSetName -eq 'Help') {
+  Get-Help -Name $PSCommandPath -Detailed
+  return
+}
 $profileRoot = Join-Path $PSScriptRoot 'profile'
 $script:backupDirectory = $null
 $script:copiedCount = 0
@@ -129,7 +176,7 @@ if ($Plan) {
 } elseif ($Init) {
   Install-Tools
 } else {
-  Write-Output 'Usage: ./setup.ps1 -Install | -CopyHome | -Init | -Plan [-Extras]'
+  Get-Help -Name $PSCommandPath -Detailed
 }
 
 if ($Install -or $CopyHome -or $Init) {
