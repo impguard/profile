@@ -122,7 +122,7 @@ bash ./setup install WSL Ubuntu Common Terminal WSLClipboard
 
 Optional package installs can add dependencies through their package manager. Setup never removes previously installed tools or runtimes.
 
-Directory jumping uses **zoxide** on every platform, replacing autojump and ZLocation. Install `Terminal` on Ubuntu/WSL/macOS or use `-Extras` on Windows, then open a new shell. Both Bash and PowerShell use `j project` to jump to a previously visited directory matching `project`. Windows and WSL keep separate directory histories. Existing autojump/ZLocation packages and history are left intact; setup stops loading them, and a Common profile refresh backs up and removes the old `~/.source/autojump.sh` loader.
+Directory jumping uses **zoxide** on every platform, replacing autojump and ZLocation. Install `Terminal` on Ubuntu/WSL/macOS or use `-Extras` on Windows, then open a new shell. Both Bash and PowerShell use the default `z project` command to jump to a previously visited directory matching `project`; `zi` selects interactively when fzf is installed. Windows and WSL keep separate directory histories. Existing autojump/ZLocation packages and history are left intact; setup stops loading them, and a Common profile refresh backs up and removes the old `~/.source/autojump.sh` loader.
 
 ## Languages with mise
 

@@ -39,7 +39,7 @@ if [[ $(uname -s) == Darwin ]]; then alias ls='ls -G'; else alias ls='ls --color
 alias hr='history -a; history -n'
 
 if command -v zoxide >/dev/null 2>&1; then
-  eval "$(zoxide init bash --cmd j)"
+  eval "$(zoxide init bash)"
 fi
 
 # Local overrides run last. Empty directories and non-files are harmless.

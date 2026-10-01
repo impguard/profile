@@ -12,7 +12,7 @@ if (Get-Module -ListAvailable PSReadLine) {
 if (Get-Command nvim -ErrorAction SilentlyContinue) { $env:EDITOR = 'nvim' }
 Set-Alias -Name open -Value Start-Process
 if (Get-Command zoxide -ErrorAction SilentlyContinue) {
-  zoxide init powershell --cmd j | Out-String | Invoke-Expression
+  zoxide init powershell | Out-String | Invoke-Expression
 }
 if (Get-Command mise -ErrorAction SilentlyContinue) {
   mise activate pwsh | Out-String | Invoke-Expression
