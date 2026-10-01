@@ -1,10 +1,6 @@
 [color]
     ui = true
 
-[user]
-    name = Kevin Wu
-    email = contact@kevinwu.io
-
 [alias]
     st = status
     ci = commit

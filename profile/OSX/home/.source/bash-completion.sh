@@ -1,28 +1,9 @@
 #!/usr/bin/env bash
-
-# bash completions
-if [[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]]; then
-  source "/opt/homebrew/etc/profile.d/bash_completion.sh"
-fi
-
-# git completions
-if [ -d /opt/homebrew/etc/bash_completion.d ]; then
-  source /opt/homebrew/etc/bash_completion.d/git-completion.bash
-  source /opt/homebrew/etc/bash_completion.d/git-prompt.sh
-fi
-
-# tmux completion
-if [ -d /opt/homebrew/etc/bash_completion.d ]; then
-  source /opt/homebrew/etc/bash_completion.d/tmux
-fi
-
-# docker completion
-if [ -d /opt/homebrew/etc/bash_completion.d ]; then
-  source /opt/homebrew/etc/bash_completion.d/docker
-  # source /opt/homebrew/etc/bash_completion.d/docker-compose
-fi
-
-# Homebrew
-if [ -d /opt/homebrew/etc/bash_completion.d ]; then
-  source /opt/homebrew/etc/bash_completion.d/brew
-fi
+# Completion is optional. Support both Homebrew installation prefixes.
+for completion in /opt/homebrew/etc/profile.d/bash_completion.sh /usr/local/etc/profile.d/bash_completion.sh; do
+  if [[ -r $completion && ${BASH_VERSINFO[0]} -ge 4 ]]; then
+    source "$completion"
+    break
+  fi
+done
+unset completion

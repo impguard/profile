@@ -1,4 +1,3 @@
 #!/usr/bin/env bash
-
-mkdir -p "$HOME/.bashrc.d"
-mkdir -p "$HOME/code"
+set -euo pipefail
+mkdir -p "$HOME/.bashrc.d" "$HOME/.bin" "$HOME/code"

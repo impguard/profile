@@ -1,136 +1,170 @@
 # profile
 
-Helps setup my personal profile based on the OS being used.
+A small development environment for Ubuntu/WSL, macOS, and Windows. The default setup installs Git, curl, Neovim, and **mise** alongside Bash or PowerShell. Language runtimes, compiler libraries, terminal extras, and desktop apps are opt-in.
 
-## OS-specific Instructions
+## What gets installed
 
-### linux (ubuntu-flavor)
+| Environment | Default tools | Configuration |
+| --- | --- | --- |
+| Ubuntu / WSL | Bash, Git, curl, CA certificates, mise, Neovim | Bash, Git defaults, Neovim Lua config |
+| macOS (`OSX`) | Homebrew Bash, Git, curl, Neovim, mise | Bash login shell, Git defaults, Neovim Lua config |
+| Windows | Git, Neovim, mise via winget | PowerShell, Git defaults, Neovim Lua config |
 
-1. [Setup Github SSH Key](https://help.github.com/en/enterprise/2.15/user/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
-2. Run the following commands to run setup
+Windows uses the built-in curl and requires PowerShell 7. macOS requires Homebrew. Ubuntu uses the official Neovim **v0.12.5** build (x86_64 or ARM64), installed under `~/.local/opt` with a launcher in `~/.local/bin`; no PPA is added. Set `NVIM_VERSION=vX.Y.Z` when running setup to select a different release. Homebrew and winget use their available releases; Windows setup skips tools already on PATH.
 
-```bash
-# Base dependencies
-apt update
-apt install curl git tilix
+Mise is installed, but **no language runtimes are installed automatically**. No Neovim plugins, Python providers, tmux plugins, or employer-specific settings are required.
 
-# Get Profile Dir
-bash -c "$(curl https://raw.githubusercontent.com/impguard/profile/master/install)"
+## Ubuntu and WSL
 
-# Run setup
-cd ~/.profile.d
-./setup install Ubuntu Common
-```
-
-3. Startup Tilix (Note: after installation, make sure you change the Tilix
-   theme to match nvim)
-
-### windows
-
-#### Install Common Tools
-
-1. Go to https://github.com/microsoft/terminal/releases and pick a release to install
-2. Go do https://cloud-images.ubuntu.com/releases/ and select a version to install
-3. Look for a file named like
-   https://cloud-images.ubuntu.com/releases/jammy/release/ubuntu-22.04-server-cloudimg-amd64-wsl.rootfs.tar.gz
-   and download it
-4. Run `wsl.exe --import Ubuntu <Install Folder> <.TAR.GZ File Path>`
-   - Distribution Name: A friendly name. eg Ubuntu
-   - Install folder: a place to put the virtual hard disk, this will not contain human readable files
-5. Start the distro and run the following
-
-```
-NEW_USER=impguard
-adduser "${NEW_USER}"
-adduser "${NEW_USER}" sudo
-tee /etc/wsl.conf <<_EOF
-[user]
-default=${NEW_USER}
-_EOF
-```
-
-6. _Care: this will exit all distros._ Exit the session, then fully shutdown the distro using wsl --shutdown Ubuntu
-
-#### Run Windows setup
-
-1. [Setup Github SSH Key](https://help.github.com/en/enterprise/2.15/user/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
-2. Run the following commands to run setup (in powershell)
+For a new WSL installation, run this from an **administrator PowerShell** terminal:
 
 ```powershell
-# Install git and Powershell
-winget install -e --id gerardog.gsudo
-winget install -e --id Microsoft.PowerShell
-winget install -e --id Git.Git
-
-# Get Profile (within Powershell, not Windows Powershell)
-iex (iwr -UseBasicParsing -URI 'https://raw.githubusercontent.com/impguard/profile/master/install.ps1')
-
-# Run setup (in new Powershell)
-cd ~./profile.d
-sudo ./setup.ps1 -Install
+wsl --install -d Ubuntu
 ```
 
-#### Run WSL setup
+Restart if requested, launch Ubuntu, and complete its username/password setup. An existing WSL installation can use `wsl --list --online` and `wsl --install -d <name>` to add another distribution. See [Microsoft's WSL instructions](https://learn.microsoft.com/windows/wsl/install).
 
-1. [Setup Github SSH Key](https://help.github.com/en/enterprise/2.15/user/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
-2. May want to setup a Github key for the Windows side as well
-3. [Setup WSL 2](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
-4. Run the following commands to run setup
+Inside Ubuntu (Ubuntu 22.04 or newer):
 
-```
-# Base dependencies
-apt update
-apt install curl git
-
-# Get Profile
-bash -c "$(curl https://raw.githubusercontent.com/impguard/profile/master/install)"
-
-# Run setup
+```bash
+sudo apt-get update
+sudo apt-get install --no-install-recommends -y ca-certificates curl git
+git clone https://github.com/impguard/profile.git ~/.profile.d
 cd ~/.profile.d
-./setup install WSL Ubuntu Common
+
+# Inspect what will run; no changes are made by plan.
+bash ./setup plan WSL Ubuntu Common
+bash ./setup install WSL Ubuntu Common
 ```
 
-### OSX
+On native Ubuntu, omit `WSL`:
 
-1. [Setup Github SSH Key](https://help.github.com/en/enterprise/2.15/user/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
-2. Run the following commands to run setup
-
+```bash
+bash ./setup install Ubuntu Common
 ```
-# Base dependencies
-/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-brew install curl git coreutils
 
-# Setup coreutils temporarily
-PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+Open a new terminal after installation. Keep Linux projects under `~/code` for WSL filesystem performance. The WSL profile adds `open` for Explorer when available; it uses Linux Git and does not copy files into your Windows home.
 
-# Get Profile
-bash -c "$(curl https://raw.githubusercontent.com/impguard/profile/master/install)"
+## Windows
 
-# Run setup
+Install [App Installer / winget](https://learn.microsoft.com/windows/package-manager/winget/) if it is not already available. In PowerShell:
+
+```powershell
+winget install --exact --id Microsoft.PowerShell --source winget
+winget install --exact --id Git.Git --source winget
+```
+
+Open **PowerShell 7** (`pwsh`) so the updated PATH is loaded:
+
+```powershell
+git clone https://github.com/impguard/profile.git "$HOME\.profile.d"
+Set-Location "$HOME\.profile.d"
+./setup.ps1 -Plan
+./setup.ps1 -Install
+```
+
+Setup does not require gsudo or symbolic-link privileges. Winget may request elevation for individual packages. If your execution policy blocks local scripts, use `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` if allowed by your machine's policy. Reopen PowerShell after installation so Git, Neovim, and mise are on PATH.
+
+The profile is installed at `$PROFILE.CurrentUserCurrentHost` (the usual `$PROFILE`), and Neovim uses `%LOCALAPPDATA%\nvim\init.lua`. Existing profiles for other PowerShell hosts remain untouched. Personal additions can go in `~/.profile.local.ps1`.
+
+Windows and WSL have separate mise installations, runtimes, and home configurations. Run each setup in its own environment.
+
+## macOS
+
+Install [Homebrew](https://brew.sh), including the Command Line Tools it requests. Then:
+
+```bash
+brew install git curl
+git clone https://github.com/impguard/profile.git ~/.profile.d
 cd ~/.profile.d
-./setup install OSX Common
+bash ./setup plan OSX Common
+bash ./setup install OSX Common
 ```
 
-To setup the rest of the computer:
+This repository configures **Bash**, not macOS's default Zsh. Configure your terminal to launch `/opt/homebrew/bin/bash -l` on Apple Silicon or `/usr/local/bin/bash -l` on Intel. The login profile loads Homebrew and `.bashrc`; changing your account's default shell is not required.
 
-1. Make sure you open `System Preferences > Trackpad` settings and adjust
-   accordingly.
-2. Make sure you open `System Preferences > Keyboard > Shortcuts` and adjust
-   the defaults for ctrl-left, right, up and down. All mission control settings
-   should be adjusted to `ctrl-cmd` instead of `ctrl`, and `Application Windows` should be disabled.
-3. In the same preferences panel, change `Full Keyboard Access` to `All Controls`
-4. Change the iTerm2 profile to leverage Solarized with the Minimal theme
-5. Once installed, launch hammerspoon and adjust its settings accordingly
+## Optional profiles
 
-# TODO
+Append only the profiles you need to the install command, or install them later. For example:
 
-- Need to verify Windows instructions with winget
-    - Powertoys
-    - Posh Git
-    - Zlocation
-    - Nanazip
-    - Neovim
+```bash
+bash ./setup install WSL Ubuntu Common Terminal WSLClipboard
+# Later, install only compiler dependencies:
+bash ./setup install BuildTools
+```
 
-- Need to revamp setup for neovim since it's been modernized and lightened
-- Need to clean up and document what's actually being installed
+| Profile / switch | Adds |
+| --- | --- |
+| `Terminal` (Ubuntu/macOS) | tmux, Screen, fzf, ripgrep, autojump, ShellCheck, Bash completion; tmux and Screen configs |
+| `BuildTools` (Ubuntu/macOS) | Compiler / Python source-build libraries; macOS uses Command Line Tools supplied with Homebrew |
+| `WSLClipboard` | win32yank v0.1.1 for Neovim clipboard sharing; x86_64 WSL only; installs unzip if missing |
+| `DotNet` | OmniSharp formatting settings in the current Linux/macOS home only; no SDK or Windows copy |
+| `Tilix` (Ubuntu) | Tilix terminal and Gruvbox theme |
+| `MacDesktop` | Hammerspoon and its window-management configuration |
+| Windows `-Extras` | Current-user posh-git and ZLocation PowerShell modules |
 
+```powershell
+./setup.ps1 -Install -Extras
+```
+
+Optional package installs can add dependencies through their package manager. Setup never removes previously installed tools or runtimes.
+
+## Languages with mise
+
+Bash and PowerShell activate mise when it is installed. Choose your own global defaults:
+
+```text
+mise use --global node@lts
+mise use --global python@latest
+mise use --global go@latest
+mise use --global java@lts
+mise ls
+```
+
+For a project, run `mise use node@22 python@3.13` in its directory to write a `mise.toml`. Commit that file to share version requirements. For an existing project's configuration, review it, run `mise trust` if requested, then `mise install`. `mise exec -- <command>` also works in scripts without interactive shell activation. See [mise documentation](https://mise.jdx.dev/getting-started.html).
+
+Use `python -m venv .venv` for Python virtual environments. No `en` or `pvenv` helper is needed. The old pyenv, nodenv, goenv, jenv, and NVM initialization is removed; existing manager directories and installed runtimes are left intact. Review your own `.bashrc.d`, PowerShell overrides, and project version files during migration. Install `BuildTools` if a runtime needs to compile from source.
+
+## Neovim
+
+The shared config is now `profile/Common/home/.config/nvim/init.lua`, using Neovim's Lua API and modern built-in defaults. It provides two-space indentation, case-aware search, sensible splits, persistent undo, clipboard integration when a provider exists, and a few mappings:
+
+| Mapping | Action |
+| --- | --- |
+| `,e` | Browse files with built-in netrw |
+| `,w` / `,q` | Save / close window |
+| `,d` | Show the current diagnostic |
+| `Esc` | Clear search highlighting |
+
+Start with `:Tutor`, `:checkhealth`, and `:help nvim-defaults`. The old Vim-Plug config, Tokyo Night theme, tree/search plugins, automatic whitespace removal, and local-directory config loading are gone. There is no plugin bootstrap step. Neovim's built-in LSP, diagnostics, and completion are available; language servers and their configuration remain opt-in. On Neovim 0.11+, use `vim.lsp.config()` and `vim.lsp.enable()` when adding a language. A future plugin setup can build on this file without being needed for startup today.
+
+Personal additions can live in `lua/local_config.lua` inside the Neovim config directory. Desktop Linux clipboard support needs an appropriate provider such as `wl-clipboard` or `xclip`; WSL can use `WSLClipboard`. The old `init.vim` is backed up when installing `init.lua`, since Neovim cannot load both as its primary config.
+
+## Backups, updates, and local settings
+
+- Home configs are **copies**, not links into this repository. Updating the checkout does not immediately alter your active configuration.
+- Changed destination files are backed up under `~/.profile-backups/<run>/` before replacement. Unchanged files are skipped. The printed backup location is the place to recover prior settings.
+- Git defaults are installed as `~/.config/git/profile.gitconfig` and included at the beginning of `~/.gitconfig`. Existing identity, credentials, and settings stay in that file and override the defaults. No name/email is hardcoded. On a new machine, run `git config --global user.name "Your Name"` and `git config --global user.email "you@example.com"`.
+- Bash sources readable files in `~/.source/`, then `~/.bashrc.d/`. Put private or machine-specific overrides in the latter. Git's prompt helper is loaded when available; it is optional.
+- Rerunning setup reapplies repository configs, so keep local edits in the documented override files or review your backup afterward. It does not remove unrelated home files or uninstall tools.
+- The obsolete `~/.source/enable.sh` and Neovim `init.vim` are backed up and retired during migration. Old plugin downloads and language-manager directories are left in place.
+- Windows refuses directory symlinks at config destinations instead of writing through them. Replace those directory links with real directories before running setup; individual file links from the old installer are migrated to copies.
+
+To update, pull this repository and rerun the relevant setup command. Ubuntu's Neovim version is pinned above; mise runtimes update only when you ask mise to update them. Setup stops on the first failed script and reports its path. A failure can leave earlier steps installed; fix it and rerun. Bash script workspaces are retained on failure for inspection. There is no automatic rollback of package-manager changes.
+
+Useful commands:
+
+```bash
+bash ./setup ls
+bash ./setup plan Ubuntu Common
+bash ./setup home Common        # configuration only
+bash ./setup pre Ubuntu         # package prerequisites only
+bash ./setup script path/to/script.sh
+bash tests/setup.sh             # isolated installer regression tests
+```
+
+```powershell
+./setup.ps1 -CopyHome           # configuration only
+./setup.ps1 -Init               # tools only
+./tests/setup.ps1               # isolated Windows regression tests
+```

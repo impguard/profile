@@ -1,9 +1,5 @@
-$name  = Read-Host "Github Name"
-$email = Read-Host "Github Email"
-
-git config --global user.name "$name"
-git config --global user.email "$email"
-
-git clone git@github.com:impguard/profile.git "$HOME\.profile.d"
+$ErrorActionPreference = 'Stop'
+git clone https://github.com/impguard/profile.git "$HOME\.profile.d"
+if ($LASTEXITCODE -ne 0) { throw "git clone failed ($LASTEXITCODE)" }
 
 Write-Output "Please 'cd $HOME\.profile.d' and run the setup manually."

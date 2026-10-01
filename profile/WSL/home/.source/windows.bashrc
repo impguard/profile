@@ -1,7 +1,2 @@
 #!/usr/bin/env bash
-
-# export USERPROFILE
-
-# USERPROFILE=$(wslpath "$(wslvar USERPROFILE 2>/dev/null)")
-
-alias open=explorer.exe
+if command -v explorer.exe >/dev/null 2>&1; then alias open=explorer.exe; fi

@@ -1,310 +1,191 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC2154
+set -euo pipefail
+shopt -s nullglob dotglob
 
-DOC="Profile setup tool.
+ROOT=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+PROFILE_DIR=$ROOT/profile
+BACKUP_DIR=
+WORK_DIR=
 
+usage() {
+  cat <<'EOF'
 Usage:
-  ./setup install [PROFILES...]
-  ./setup (home|pre|init|post) [PROFILES...]
+  ./setup (install|home|pre|init|post|plan) PROFILE...
   ./setup script SCRIPT_PATH
   ./setup (ls|info)
 
-Commands:
-  install   Installs all listed profiles
-  home      Copies home files for the selected profiles
-  pre       Performs pre-initialization for the selected profiles
-  init      Performs initialization for the selected profiles
-  post      Performs post-initialization for the selected profiles
-  ls        List all available profiles and installation scripts
-  info      Shows information about current system
-"
-# docopt parser below, refresh this parser with `docopt.sh setup`
-# shellcheck disable=2016,1075,2154
-docopt() { parse() { if ${DOCOPT_DOC_CHECK:-true}; then local doc_hash
-if doc_hash=$(printf "%s" "$DOC" | (sha256sum 2>/dev/null || shasum -a 256)); then
-if [[ ${doc_hash:0:5} != "$digest" ]]; then
-stderr "The current usage doc (${doc_hash:0:5}) does not match \
-what the parser was generated with (${digest})
-Run \`docopt.sh\` to refresh the parser."; _return 70; fi; fi; fi
-local root_idx=$1; shift; argv=("$@"); parsed_params=(); parsed_values=()
-left=(); testdepth=0; local arg; while [[ ${#argv[@]} -gt 0 ]]; do
-if [[ ${argv[0]} = "--" ]]; then for arg in "${argv[@]}"; do
-parsed_params+=('a'); parsed_values+=("$arg"); done; break
-elif [[ ${argv[0]} = --* ]]; then parse_long
-elif [[ ${argv[0]} = -* && ${argv[0]} != "-" ]]; then parse_shorts
-elif ${DOCOPT_OPTIONS_FIRST:-false}; then for arg in "${argv[@]}"; do
-parsed_params+=('a'); parsed_values+=("$arg"); done; break; else
-parsed_params+=('a'); parsed_values+=("${argv[0]}"); argv=("${argv[@]:1}"); fi
-done; local idx; if ${DOCOPT_ADD_HELP:-true}; then
-for idx in "${parsed_params[@]}"; do [[ $idx = 'a' ]] && continue
-if [[ ${shorts[$idx]} = "-h" || ${longs[$idx]} = "--help" ]]; then
-stdout "$trimmed_doc"; _return 0; fi; done; fi
-if [[ ${DOCOPT_PROGRAM_VERSION:-false} != 'false' ]]; then
-for idx in "${parsed_params[@]}"; do [[ $idx = 'a' ]] && continue
-if [[ ${longs[$idx]} = "--version" ]]; then stdout "$DOCOPT_PROGRAM_VERSION"
-_return 0; fi; done; fi; local i=0; while [[ $i -lt ${#parsed_params[@]} ]]; do
-left+=("$i"); ((i++)) || true; done
-if ! required "$root_idx" || [ ${#left[@]} -gt 0 ]; then error; fi; return 0; }
-parse_shorts() { local token=${argv[0]}; local value; argv=("${argv[@]:1}")
-[[ $token = -* && $token != --* ]] || _return 88; local remaining=${token#-}
-while [[ -n $remaining ]]; do local short="-${remaining:0:1}"
-remaining="${remaining:1}"; local i=0; local similar=(); local match=false
-for o in "${shorts[@]}"; do if [[ $o = "$short" ]]; then similar+=("$short")
-[[ $match = false ]] && match=$i; fi; ((i++)) || true; done
-if [[ ${#similar[@]} -gt 1 ]]; then
-error "${short} is specified ambiguously ${#similar[@]} times"
-elif [[ ${#similar[@]} -lt 1 ]]; then match=${#shorts[@]}; value=true
-shorts+=("$short"); longs+=(''); argcounts+=(0); else value=false
-if [[ ${argcounts[$match]} -ne 0 ]]; then if [[ $remaining = '' ]]; then
-if [[ ${#argv[@]} -eq 0 || ${argv[0]} = '--' ]]; then
-error "${short} requires argument"; fi; value=${argv[0]}; argv=("${argv[@]:1}")
-else value=$remaining; remaining=''; fi; fi; if [[ $value = false ]]; then
-value=true; fi; fi; parsed_params+=("$match"); parsed_values+=("$value"); done
-}; parse_long() { local token=${argv[0]}; local long=${token%%=*}
-local value=${token#*=}; local argcount; argv=("${argv[@]:1}")
-[[ $token = --* ]] || _return 88; if [[ $token = *=* ]]; then eq='='; else eq=''
-value=false; fi; local i=0; local similar=(); local match=false
-for o in "${longs[@]}"; do if [[ $o = "$long" ]]; then similar+=("$long")
-[[ $match = false ]] && match=$i; fi; ((i++)) || true; done
-if [[ $match = false ]]; then i=0; for o in "${longs[@]}"; do
-if [[ $o = $long* ]]; then similar+=("$long"); [[ $match = false ]] && match=$i
-fi; ((i++)) || true; done; fi; if [[ ${#similar[@]} -gt 1 ]]; then
-error "${long} is not a unique prefix: ${similar[*]}?"
-elif [[ ${#similar[@]} -lt 1 ]]; then
-[[ $eq = '=' ]] && argcount=1 || argcount=0; match=${#shorts[@]}
-[[ $argcount -eq 0 ]] && value=true; shorts+=(''); longs+=("$long")
-argcounts+=("$argcount"); else if [[ ${argcounts[$match]} -eq 0 ]]; then
-if [[ $value != false ]]; then
-error "${longs[$match]} must not have an argument"; fi
-elif [[ $value = false ]]; then
-if [[ ${#argv[@]} -eq 0 || ${argv[0]} = '--' ]]; then
-error "${long} requires argument"; fi; value=${argv[0]}; argv=("${argv[@]:1}")
-fi; if [[ $value = false ]]; then value=true; fi; fi; parsed_params+=("$match")
-parsed_values+=("$value"); }; required() { local initial_left=("${left[@]}")
-local node_idx; ((testdepth++)) || true; for node_idx in "$@"; do
-if ! "node_$node_idx"; then left=("${initial_left[@]}"); ((testdepth--)) || true
-return 1; fi; done; if [[ $((--testdepth)) -eq 0 ]]; then
-left=("${initial_left[@]}"); for node_idx in "$@"; do "node_$node_idx"; done; fi
-return 0; }; either() { local initial_left=("${left[@]}"); local best_match_idx
-local match_count; local node_idx; ((testdepth++)) || true
-for node_idx in "$@"; do if "node_$node_idx"; then
-if [[ -z $match_count || ${#left[@]} -lt $match_count ]]; then
-best_match_idx=$node_idx; match_count=${#left[@]}; fi; fi
-left=("${initial_left[@]}"); done; ((testdepth--)) || true
-if [[ -n $best_match_idx ]]; then "node_$best_match_idx"; return 0; fi
-left=("${initial_left[@]}"); return 1; }; optional() { local node_idx
-for node_idx in "$@"; do "node_$node_idx"; done; return 0; }; oneormore() {
-local i=0; local prev=${#left[@]}; while "node_$1"; do ((i++)) || true
-[[ $prev -eq ${#left[@]} ]] && break; prev=${#left[@]}; done
-if [[ $i -ge 1 ]]; then return 0; fi; return 1; }; _command() { local i
-local name=${2:-$1}; for i in "${!left[@]}"; do local l=${left[$i]}
-if [[ ${parsed_params[$l]} = 'a' ]]; then
-if [[ ${parsed_values[$l]} != "$name" ]]; then return 1; fi
-left=("${left[@]:0:$i}" "${left[@]:((i+1))}")
-[[ $testdepth -gt 0 ]] && return 0; if [[ $3 = true ]]; then
-eval "((var_$1++)) || true"; else eval "var_$1=true"; fi; return 0; fi; done
-return 1; }; value() { local i; for i in "${!left[@]}"; do local l=${left[$i]}
-if [[ ${parsed_params[$l]} = "$2" ]]; then
-left=("${left[@]:0:$i}" "${left[@]:((i+1))}")
-[[ $testdepth -gt 0 ]] && return 0; local value
-value=$(printf -- "%q" "${parsed_values[$l]}"); if [[ $3 = true ]]; then
-eval "var_$1+=($value)"; else eval "var_$1=$value"; fi; return 0; fi; done
-return 1; }; stdout() { printf -- "cat <<'EOM'\n%s\nEOM\n" "$1"; }; stderr() {
-printf -- "cat <<'EOM' >&2\n%s\nEOM\n" "$1"; }; error() {
-[[ -n $1 ]] && stderr "$1"; stderr "$usage"; _return 1; }; _return() {
-printf -- "exit %d\n" "$1"; exit "$1"; }; set -e; trimmed_doc=${DOC:0:572}
-usage=${DOC:21:132}; digest=e090a; shorts=(); longs=(); argcounts=(); node_0(){
-value PROFILES a true; }; node_1(){ value SCRIPT_PATH a; }; node_2(){
-_command install; }; node_3(){ _command home; }; node_4(){ _command pre; }
-node_5(){ _command init; }; node_6(){ _command post; }; node_7(){
-_command script; }; node_8(){ _command ls; }; node_9(){ _command info; }
-node_10(){ oneormore 0; }; node_11(){ optional 10; }; node_12(){ required 2 11
-}; node_13(){ either 3 4 5 6; }; node_14(){ required 13; }; node_15(){
-required 14 11; }; node_16(){ required 7 1; }; node_17(){ either 8 9; }
-node_18(){ required 17; }; node_19(){ required 18; }; node_20(){
-either 12 15 16 19; }; node_21(){ required 20; }; cat <<<' docopt_exit() {
-[[ -n $1 ]] && printf "%s\n" "$1" >&2; printf "%s\n" "${DOC:21:132}" >&2; exit 1
-}'; unset var_PROFILES var_SCRIPT_PATH var_install var_home var_pre var_init \
-var_post var_script var_ls var_info; parse 21 "$@"
-local prefix=${DOCOPT_PREFIX:-''}; unset "${prefix}PROFILES" \
-"${prefix}SCRIPT_PATH" "${prefix}install" "${prefix}home" "${prefix}pre" \
-"${prefix}init" "${prefix}post" "${prefix}script" "${prefix}ls" "${prefix}info"
-if declare -p var_PROFILES >/dev/null 2>&1; then
-eval "${prefix}"'PROFILES=("${var_PROFILES[@]}")'; else
-eval "${prefix}"'PROFILES=()'; fi
-eval "${prefix}"'SCRIPT_PATH=${var_SCRIPT_PATH:-}'
-eval "${prefix}"'install=${var_install:-false}'
-eval "${prefix}"'home=${var_home:-false}'
-eval "${prefix}"'pre=${var_pre:-false}'
-eval "${prefix}"'init=${var_init:-false}'
-eval "${prefix}"'post=${var_post:-false}'
-eval "${prefix}"'script=${var_script:-false}'
-eval "${prefix}"'ls=${var_ls:-false}'; eval "${prefix}"'info=${var_info:-false}'
-local docopt_i=1; [[ $BASH_VERSION =~ ^4.3 ]] && docopt_i=2
-for ((;docopt_i>0;docopt_i--)); do declare -p "${prefix}PROFILES" \
-"${prefix}SCRIPT_PATH" "${prefix}install" "${prefix}home" "${prefix}pre" \
-"${prefix}init" "${prefix}post" "${prefix}script" "${prefix}ls" "${prefix}info"
-done; }
-# docopt parser above, complete command for generating this parser is `docopt.sh setup`
-
-eval "$(docopt "$@")"
-
-set -euo pipefail
-shopt -s nullglob
-
-ROOT=$HOME/.profile.d
-PROFILE_DIR=$ROOT/profile
-STAGING_DIR=$ROOT/staging
-INSTALL_DIR=$ROOT/staging/install
-
-########################################
-# Helpers
-########################################
-
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-CLEAR='\033[0m'
-
-function log
-{
-  local message=$1
-  echo -e "$GREEN$message$CLEAR"
+Profiles are applied in order; later profiles override matching home files.
+Install runs pre -> home -> init -> post, stopping on the first failure.
+Home files are copied. Replaced files are backed up under ~/.profile-backups/.
+Plan lists files and scripts without changing anything.
+EOF
 }
 
-function logerror
-{
-  local message=$1
-  echo -e "$RED$message$CLEAR"
+fail() { printf '%s\n' "$*" >&2; exit 1; }
+
+backup() {
+  local target=$1 relative=$2
+  if [[ -e $target || -L $target ]]; then
+    if [[ -z $BACKUP_DIR ]]; then
+      mkdir -p "$HOME/.profile-backups"
+      BACKUP_DIR=$(mktemp -d "$HOME/.profile-backups/$(date +%Y%m%d-%H%M%S).XXXXXX")
+      printf 'Backups: %s\n' "$BACKUP_DIR"
+    fi
+    mkdir -p "$(dirname "$BACKUP_DIR/$relative")"
+    if [[ -L $target && -e $target ]]; then
+      # Snapshot the contents; a backed-up link alone can change with the repo.
+      cp -RLp -- "$target" "$BACKUP_DIR/$relative"
+      rm -- "$target"
+    else
+      mv -- "$target" "$BACKUP_DIR/$relative"
+    fi
+  fi
 }
 
-function pushd
-{
-  command pushd "$@" > /dev/null
+# Replace directory symlinks too, so writes never flow back into a checkout.
+ensure_directory() {
+  local relative=$1 preserved=
+  [[ $relative != . ]] || return 0
+  ensure_directory "$(dirname "$relative")"
+  if [[ -L $HOME/$relative && -d $HOME/$relative ]]; then
+    preserved=$(mktemp -d "$WORK_DIR/preserved.XXXXXX")
+    cp -RLp "$HOME/$relative/." "$preserved/"
+  fi
+  if [[ -L $HOME/$relative || ( -e $HOME/$relative && ! -d $HOME/$relative ) ]]; then
+    # Use a separate path so subsequent per-file backups cannot overwrite it.
+    backup "$HOME/$relative" "directory-links/$relative"
+  fi
+  mkdir -p "$HOME/$relative"
+  if [[ -n $preserved ]]; then cp -Rp "$preserved/." "$HOME/$relative/"; fi
 }
 
-function popd
-{
-  command popd > /dev/null
+copy_file() {
+  local source=$1 relative=$2 target=$HOME/$2
+  ensure_directory "$(dirname "$relative")"
+  if [[ ! -L $target && -f $target ]] && cmp -s "$source" "$target"; then
+    return 0
+  fi
+  backup "$target" "$relative"
+  cp -p -- "$source" "$target"
+  printf 'Copied %s\n' "$relative"
 }
 
-function stage
-{
-  for profile in "${PROFILES[@]}"; do
-    cp -vfrs "$PROFILE_DIR/$profile/." "$STAGING_DIR"
-  done
+install_git_config() {
+  local source=$1 defaults='~/.config/git/profile.gitconfig' temporary
+  copy_file "$source" .config/git/profile.gitconfig
+  # Defaults come first; identity and personal settings stay in their original
+  # location and take precedence. Detach links created by the old installer.
+  if [[ ! -L $HOME/.gitconfig && -f $HOME/.gitconfig ]] &&
+      git config --file "$HOME/.gitconfig" --get-all include.path | grep -Fxq "$defaults"; then
+    return 0
+  fi
+  temporary=$WORK_DIR/gitconfig
+  printf '[include]\n    path = %s\n' "$defaults" > "$temporary"
+  chmod 600 "$temporary"
+  if [[ -f $HOME/.gitconfig ]]; then
+    cat "$HOME/.gitconfig" >> "$temporary"
+  elif [[ -e $HOME/.gitconfig && ! -L $HOME/.gitconfig ]]; then
+    fail "$HOME/.gitconfig must be a file"
+  fi
+  copy_file "$temporary" .gitconfig
 }
 
-function verify_profiles
-{
-  for profile in "${PROFILES[@]}"; do
-    if [ ! -d "$PROFILE_DIR/$profile" ]; then
-      logerror "$profile is not a supported profile"
-      return 1
+copy_tree() {
+  local source=$1 relative=${2:-} item name
+  for item in "$source"/*; do
+    name=${item##*/}
+    if [[ -d $item ]]; then
+      ensure_directory "$relative$name"
+      copy_tree "$item" "$relative$name/"
+    elif [[ $relative$name == .gitconfig ]]; then
+      install_git_config "$item"
+    else
+      copy_file "$item" "$relative$name"
     fi
   done
 }
 
-function run_script
-{
-  local type script real_script script_name workspace
-
-  type=$1
-  script=$2
-
-  if [ ! -f "$script" ]; then
-    logerror "Not a valid script to run $script"
-    return
+run_script() {
+  local script=$1 workspace status
+  [[ -f $script ]] || fail "Not a script: $script"
+  workspace=$(mktemp -d "$WORK_DIR/script.XXXXXX")
+  printf 'Running %s\n' "$script"
+  # A separate Bash process preserves errexit even in this conditional.
+  if (cd "$workspace" && bash -euo pipefail "$script"); then
+    return 0
+  else
+    status=$?
+    printf 'Failed (%s): %s\nWorkspace retained: %s\n' "$status" "$script" "$WORK_DIR" >&2
+    exit "$status"
   fi
-
-  script_name=$(basename "$script")
-  real_script=$(realpath "$script")
-  workspace=$INSTALL_DIR/$type/$script_name
-
-  rm -rf "$workspace"
-  mkdir -p "$workspace"
-  pushd "$workspace"
-  log "Running script $script_name"
-  $real_script || logerror "Install failed. Workspace at $workspace"
-  popd
 }
 
-########################################
-# Commands
-########################################
-
-function install
-{
-  home
-  pre
-  init
-  post
-}
-
-function home
-{
-  log "Linking home files"
-  cp -a "$STAGING_DIR/home/." "$HOME/"
-}
-
-function pre
-{
-  log "Running pre initialization"
-  for script in "$STAGING_DIR/pre"/*; do
-    run_script pre "$script"
+run_phase() {
+  local phase=$1 profile script
+  for profile in "${PROFILES[@]}"; do
+    for script in "$PROFILE_DIR/$profile/$phase"/*.sh; do
+      run_script "$script"
+    done
   done
 }
 
-function init
-{
-  log "Running initialization"
-  for script in "$STAGING_DIR/init"/*; do
-    run_script init "$script"
+stage_home() {
+  local profile
+  mkdir -p "$WORK_DIR/home"
+  for profile in "${PROFILES[@]}"; do
+    if [[ -d $PROFILE_DIR/$profile/home ]]; then
+      cp -R "$PROFILE_DIR/$profile/home/." "$WORK_DIR/home/"
+    fi
   done
+  if [[ -f $WORK_DIR/home/.config/nvim/init.lua ]]; then
+    ensure_directory .config/nvim
+    backup "$HOME/.config/nvim/init.vim" .config/nvim/init.vim
+  fi
+  # Retire the old activation helper so copied installations cannot keep using it.
+  if [[ -f $WORK_DIR/home/.bashrc ]]; then
+    ensure_directory .source
+    backup "$HOME/.source/enable.sh" .source/enable.sh
+  fi
+  copy_tree "$WORK_DIR/home"
 }
 
-function post
-{
-  log "Running post initialization"
-  for script in "$STAGING_DIR/post"/*; do
-    run_script post "$script"
-  done
-}
+command=${1:---help}
+[[ $# == 0 ]] || shift
+case $command in
+  -h|--help) usage; exit 0 ;;
+  info) uname -a; exit 0 ;;
+  ls)
+    for profile in "$PROFILE_DIR"/*; do
+      [[ -d $profile ]] && printf '%s\n' "${profile##*/}"
+    done
+    exit 0 ;;
+  script)
+    [[ $# == 1 && -f $1 ]] || fail 'Usage: ./setup script SCRIPT_PATH'
+    script=$(cd "$(dirname "$1")" && pwd)/$(basename "$1") ;;
+  install|home|pre|init|post|plan)
+    [[ $# -gt 0 ]] || fail 'Specify at least one profile; use ./setup ls to list them.'
+    PROFILES=("$@")
+    for profile in "${PROFILES[@]}"; do
+      [[ $profile != *[!a-zA-Z0-9_-]* && -d $PROFILE_DIR/$profile ]] || fail "Unsupported profile: $profile"
+      [[ $profile != Windows ]] || fail 'Use setup.ps1 for Windows.'
+    done ;;
+  *) usage >&2; exit 1 ;;
+esac
 
-if $install; then
-  verify_profiles
-  stage
-  install
-elif $home; then
-  verify_profiles
-  stage
-  home
-elif $pre; then
-  verify_profiles
-  stage
-  pre
-elif $init; then
-  verify_profiles
-  stage
-  init
-elif $post; then
-  verify_profiles
-  stage
-  post
-elif $script; then
-  run_script manual "$SCRIPT_PATH"
-elif $ls; then
-  for profile_path in $PROFILE_DIR/*; do
-    profile=$(basename "$profile_path")
-    echo "Profile      : $profile"
-    # shellcheck disable=2012
-    echo "Pre Scripts  : $(ls "$profile_path/pre" 2>/dev/null | tr "\n" " ")"
-    # shellcheck disable=2012
-    echo "Init Scripts : $(ls "$profile_path/init" 2>/dev/null | tr "\n" " ")"
-    # shellcheck disable=2012
-    echo "Post Scripts : $(ls "$profile_path/post" 2>/dev/null | tr "\n" " ")"
-    echo
+if [[ $command == plan ]]; then
+  for profile in "${PROFILES[@]}"; do
+    printf '\nProfile: %s\n' "$profile"
+    find "$PROFILE_DIR/$profile" -type f -print
   done
-elif $info; then
-  echo "This lists your platform information, which may inform what you want to install."
-  uname
+  exit 0
 fi
+
+WORK_DIR=$(mktemp -d "${TMPDIR:-/tmp}/profile-setup.XXXXXX")
+case $command in
+  install) run_phase pre; stage_home; run_phase init; run_phase post ;;
+  home) stage_home ;;
+  pre|init|post) run_phase "$command" ;;
+  script) run_script "$script" ;;
+esac
+rm -rf -- "$WORK_DIR"
+printf 'Setup completed.\n'

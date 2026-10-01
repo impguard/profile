@@ -1,14 +1,8 @@
 #!/usr/bin/env bash
 
-set -eu
+set -euo pipefail
 
-read -rp "Github Name : " name
-read -rp "Github Email: " email
-
-git config --global user.name "$name"
-git config --global user.email "$email"
-
-git clone git@github.com:impguard/profile.git "$HOME/.profile.d"
+git clone https://github.com/impguard/profile.git "$HOME/.profile.d"
 
 cd "$HOME/.profile.d"
 echo "Please 'cd $HOME/.profile.d' and run the setup manually."
