@@ -4,10 +4,6 @@ if (Get-Module -ListAvailable posh-git) {
   $GitPromptSettings.EnableFileStatus = $false
   $GitPromptSettings.DefaultPromptAbbreviateHomeDirectory = $true
 }
-if (Get-Module -ListAvailable ZLocation) {
-  Import-Module ZLocation
-  Set-Alias -Name j Invoke-ZLocation
-}
 if (Get-Module -ListAvailable PSReadLine) {
   Import-Module PSReadLine
   Set-PSReadLineOption -EditMode Emacs
@@ -15,6 +11,9 @@ if (Get-Module -ListAvailable PSReadLine) {
 }
 if (Get-Command nvim -ErrorAction SilentlyContinue) { $env:EDITOR = 'nvim' }
 Set-Alias -Name open -Value Start-Process
+if (Get-Command zoxide -ErrorAction SilentlyContinue) {
+  zoxide init powershell --cmd j | Out-String | Invoke-Expression
+}
 if (Get-Command mise -ErrorAction SilentlyContinue) {
   mise activate pwsh | Out-String | Invoke-Expression
 }

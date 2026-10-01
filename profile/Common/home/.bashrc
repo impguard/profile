@@ -38,6 +38,10 @@ fi
 if [[ $(uname -s) == Darwin ]]; then alias ls='ls -G'; else alias ls='ls --color=auto'; fi
 alias hr='history -a; history -n'
 
+if command -v zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init bash --cmd j)"
+fi
+
 # Local overrides run last. Empty directories and non-files are harmless.
 for file in "$HOME"/.source/* "$HOME"/.bashrc.d/*; do
   [[ -f $file && -r $file ]] && source "$file"

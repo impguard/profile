@@ -208,6 +208,7 @@ stage_home() {
   if [[ -f $WORK_DIR/home/.bashrc ]]; then
     ensure_directory .source
     backup "$HOME/.source/enable.sh" .source/enable.sh
+    backup "$HOME/.source/autojump.sh" .source/autojump.sh
   fi
   copy_tree "$WORK_DIR/home"
 }

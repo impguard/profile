@@ -111,16 +111,18 @@ bash ./setup install WSL Ubuntu Common Terminal WSLClipboard
 
 | Profile / switch | Operating systems | Adds |
 | --- | --- | --- |
-| `Terminal` | Ubuntu, Ubuntu on WSL, macOS | tmux, fzf, ripgrep, autojump, ShellCheck, Bash completion; tmux config |
+| `Terminal` | Ubuntu, Ubuntu on WSL, macOS | tmux, fzf, ripgrep, zoxide, ShellCheck, Bash completion; tmux config |
 | `WSLClipboard` | x86_64 Ubuntu on WSL | win32yank v0.1.1 for Neovim clipboard sharing; installs unzip if missing |
 | `Hammerspoon` | macOS only | Hammerspoon and its window-management shortcuts |
-| `-Extras` | Windows PowerShell only | Current-user posh-git and ZLocation modules |
+| `-Extras` | Windows PowerShell only | Current-user posh-git module and zoxide via winget |
 
 ```powershell
 ./setup.ps1 -Install -Extras
 ```
 
 Optional package installs can add dependencies through their package manager. Setup never removes previously installed tools or runtimes.
+
+Directory jumping uses **zoxide** on every platform, replacing autojump and ZLocation. Install `Terminal` on Ubuntu/WSL/macOS or use `-Extras` on Windows, then open a new shell. Both Bash and PowerShell use `j project` to jump to a previously visited directory matching `project`. Windows and WSL keep separate directory histories. Existing autojump/ZLocation packages and history are left intact; setup stops loading them, and a Common profile refresh backs up and removes the old `~/.source/autojump.sh` loader.
 
 ## Languages with mise
 

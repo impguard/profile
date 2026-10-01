@@ -11,6 +11,7 @@ cp -R "$root/profile/Common" "$repo/profile/"
 printf 'old bashrc\n' > "$test_home/.bashrc"
 printf 'old editor\n' > "$test_home/.config/nvim/init.vim"
 printf 'old helper\n' > "$test_home/.source/enable.sh"
+printf 'j() { printf "old jump\\n"; }\n' > "$test_home/.source/autojump.sh"
 printf 'unrelated\n' > "$test_home/.config/nvim/keep.txt"
 printf '[user]\n name = Test User\n email = test@example.com\n[core]\n editor = personal-editor\n' > "$test_home/.gitconfig"
 
@@ -26,6 +27,7 @@ assert test ! -L "$test_home/.bashrc"
 assert test -f "$test_home/.config/nvim/init.lua"
 assert test ! -e "$test_home/.config/nvim/init.vim"
 assert test ! -e "$test_home/.source/enable.sh"
+assert test ! -e "$test_home/.source/autojump.sh"
 assert test -f "$test_home/.config/nvim/keep.txt"
 assert test "$(env HOME="$test_home" git config --global user.email)" = test@example.com
 assert test "$(env HOME="$test_home" git config --global core.editor)" = personal-editor
@@ -34,6 +36,7 @@ backup=$(find "$test_home/.profile-backups" -mindepth 1 -maxdepth 1 -type d | he
 assert grep -q 'old bashrc' "$backup/.bashrc"
 assert grep -q 'old editor' "$backup/.config/nvim/init.vim"
 assert grep -q 'old helper' "$backup/.source/enable.sh"
+assert grep -q 'old jump' "$backup/.source/autojump.sh"
 before=$(find "$test_home/.profile-backups" -type f | wc -l)
 run_setup home Common
 assert test "$before" = "$(find "$test_home/.profile-backups" -type f | wc -l)"

@@ -24,7 +24,7 @@ function Show-Profiles {
   Write-Output 'For          : Windows (PowerShell 7) - base tools and configuration'
   Write-Output "Home files   : $homeFiles, nvim/init.lua (shared)"
   Write-Output "Init scripts : $initScripts (Git, Neovim, mise)"
-  Write-Output "Extras       : $extraScripts (posh-git, ZLocation; use -Extras)"
+  Write-Output "Extras       : $extraScripts (posh-git, zoxide; use -Extras)"
 }
 
 function Show-Usage {
@@ -138,9 +138,9 @@ function Install-Home {
 
 function Install-Tools {
   Write-Host "`n[Tools] Checking Git, Neovim, and mise" -ForegroundColor Cyan
-  if ($Extras) { Write-Host 'Optional modules: posh-git, ZLocation' }
+  if ($Extras) { Write-Host 'Optional extras: posh-git, zoxide' }
   $scripts = @(Join-Path $profileRoot 'Windows/init/apps.ps1')
-  if ($Extras) { $scripts += Join-Path $profileRoot 'Windows/extras/modules.ps1' }
+  if ($Extras) { $scripts += Join-Path $profileRoot 'Windows/extras/tools.ps1' }
   foreach ($scriptPath in $scripts) {
     Write-Host "Running: $scriptPath"
     & (Join-Path $PSHOME 'pwsh.exe') -NoProfile -NonInteractive -File $scriptPath
@@ -157,7 +157,7 @@ if ($Plan) {
   Write-Output "PowerShell profile: $ProfilePath"
   Write-Output "Neovim config: $(Join-Path $nvimDirectory 'init.lua')"
   Write-Output "Backup directory: $(Join-Path $HomeDirectory '.profile-backups') (created only when needed)"
-  if ($Extras) { Write-Output 'Extras: posh-git, ZLocation (CurrentUser modules).' }
+  if ($Extras) { Write-Output 'Extras: posh-git (CurrentUser module), zoxide (winget).' }
 } elseif ($Install) {
   Install-Tools
   Install-Home
