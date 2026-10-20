@@ -32,6 +32,25 @@ try {
   Assert (@(Select-String -LiteralPath $gitConfig -SimpleMatch 'path = ~/.config/git/profile.gitconfig').Count -eq 1) 'Duplicate Git include'
   Assert (@(Get-ChildItem -LiteralPath $backups -Filter init.vim -Recurse -Force).Count -eq 1) 'Missing legacy editor backup'
 
+  # Re-running with -Extras when winget reports packages are already installed must succeed and reach extras.
+  $mockBin = Join-Path $testRoot 'mock-bin'
+  $mockModules = Join-Path $testRoot 'mock-modules/posh-git'
+  $wingetLog = Join-Path $testRoot 'winget.log'
+  New-Item -ItemType Directory -Path $mockBin, $mockModules -Force | Out-Null
+  Set-Content -LiteralPath (Join-Path $mockModules 'posh-git.psm1') -Value ''
+  Set-Content -LiteralPath (Join-Path $mockBin 'winget.cmd') -Value "@echo %*>> `"$wingetLog`"`r`n@exit /b -1978335189"
+  $savedPath = $env:PATH
+  $savedModulePath = $env:PSModulePath
+  try {
+    $env:PATH = "$mockBin;$PSHOME;$env:SystemRoot\System32"
+    $env:PSModulePath = "$(Join-Path $testRoot 'mock-modules');$savedModulePath"
+    & $setup -Init -Extras -HomeDirectory $testHome
+  } finally {
+    $env:PATH = $savedPath
+    $env:PSModulePath = $savedModulePath
+  }
+  Assert (@(Select-String -LiteralPath $wingetLog -SimpleMatch 'ajeetdsouza.zoxide').Count -eq 1) 'Extras did not run after already-installed core apps'
+
   $mock = Join-Path $repo 'profile/Windows/init/apps.ps1'
   Set-Content -LiteralPath $mock -Value "throw 'intentional failure'"
   $caught = $false

@@ -136,15 +136,28 @@ function Install-Home {
   Copy-ManagedFile (Join-Path $profileRoot 'Common/home/.config/nvim/init.lua') (Join-Path $nvimDirectory 'init.lua') 'nvim/init.lua'
 }
 
+function Update-SessionPath {
+  if ($HomeDirectory -ne $HOME) { return }
+  foreach ($scope in 'Machine', 'User') {
+    foreach ($entry in ([Environment]::GetEnvironmentVariable('Path', $scope) -split ';')) {
+      if ($entry -and ($env:PATH -split ';') -notcontains $entry) {
+        $env:PATH += ";$entry"
+      }
+    }
+  }
+}
+
 function Install-Tools {
   Write-Host "`n[Tools] Checking Git, Neovim, and mise" -ForegroundColor Cyan
   if ($Extras) { Write-Host 'Optional extras: posh-git, zoxide' }
+  Update-SessionPath
   $scripts = @(Join-Path $profileRoot 'Windows/init/apps.ps1')
   if ($Extras) { $scripts += Join-Path $profileRoot 'Windows/extras/tools.ps1' }
   foreach ($scriptPath in $scripts) {
     Write-Host "Running: $scriptPath"
     & (Join-Path $PSHOME 'pwsh.exe') -NoProfile -NonInteractive -File $scriptPath
     if ($LASTEXITCODE -ne 0) { throw "Failed ($LASTEXITCODE): $scriptPath" }
+    Update-SessionPath
     Write-Host "Completed: $(Split-Path $scriptPath -Leaf)"
   }
 }
